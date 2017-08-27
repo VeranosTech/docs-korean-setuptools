@@ -59,7 +59,7 @@ extra
     릴리즈를 나열한다.
 
 environment
-    잠재적으로 임포트 가능하지만, 반드시 활성화 되지는 않는 배포판의 집합. 주어진 프로젝트를 위해서
+    잠재적으로 임포트 가능하지만, 반드시 유효하지는 않는 배포판의 집합. 주어진 프로젝트를 위해서
     하나 이상의 배포판(릴리즈 버전)이 환경에 존재할 수도 있다.
 
 working set
@@ -151,8 +151,8 @@ See the section below on `Supporting Custom Importers`_ for details.
 ``WorkingSet`` 객체
 ======================
 
-``WorkingSet`` 클래스틑 "활성화된" 디스트리뷰션 집합에 접근할 수 있게 해준다. 일반적으로
-의미있는 ``WorkingSet`` 인스턴스는 하나다: 그 인스턴스가 ``sys.path``\ 에서 현재 활성화되어 있는
+``WorkingSet`` 클래스틑 "유효한" 디스트리뷰션 집합에 접근할 수 있게 해준다. 일반적으로
+의미있는 ``WorkingSet`` 인스턴스는 하나다: 그 인스턴스가 ``sys.path``\ 에서 현재 유효한
 디스트리뷰션을 나타낸다. 이 전역 인스턴스는 ``pkg_resources`` 모듈 내의 ``working_set`` 이름
 하에서 이용 가능하다. 그러나 전문 도구는 ``sys.path``와 일치하지 않는 working set 조작하려고
 할 수 있다. 그래서 다른 ``WorkingSet`` 인스턴스를 생성하려고 할 수 있다.
@@ -234,7 +234,7 @@ pkg_resources.require()``\ 를 ``pkg_resources.working_set.require()``\ 의
 
     `name`\ 이 None이면, working set에 있는 모든 디스트리뷰션의 `group`의 모든 엔트리
     포인트를 산출하고 아니면 `group`과 `name` 모두와 일치하는 엔트리포인트만 산출한다.
-    엔트리 포인트는 디스트리뷰션이 working set에 나타나는 순서대로 활성화된 디스트리뷰션에서
+    엔트리 포인트는 디스트리뷰션이 working set에 나타나는 순서대로 유효한 디스트리뷰션에서
     산출된다. (전역 ``working_set``\ 의 경우 ``sys.path``\ 에 리스트 되어있는 순서와 같다.)
     개별 디스트리뷰션에 의해 선전되는 엔트리 포인트 사이에서는 특별한 순서가 존재하지 않는다.
 
@@ -259,289 +259,248 @@ pkg_resources.require()``\ 를 ``pkg_resources.working_set.require()``\ 의
     ``entries`` 특성이 이 부분을 반영할 수 있어야 하기 때문이다.)
 
 ``__contains__(dist)``
-    True if `dist` is active in this ``WorkingSet``.  Note that only one
-    distribution for a given project can be active in a given ``WorkingSet``.
+    이 ``WorkingSet``\ 에서 `dist`가 유효하면 True. 주어진 프로젝트의 하나의
+    디스트리뷰션만이 주어진 ``WorkingSet``\ 에서 유효하다.
 
 ``__iter__()``
-    Yield distributions for non-duplicate projects in the working set.
-    The yield order is the order in which the items' path entries were
-    added to the working set.
+    working set에서 중복되지 않은 프로젝트를 위한 디스트리뷰션을 산출한다. 산출 순서는
+    항목의 경로 엔트리가 working set에 추가된 순서를 따른다.
 
 ``find(req)``
-    Find a distribution matching `req` (a ``Requirement`` instance).
-    If there is an active distribution for the requested project, this
-    returns it, as long as it meets the version requirement specified by
-    `req`.  But, if there is an active distribution for the project and it
-    does *not* meet the `req` requirement, ``VersionConflict`` is raised.
-    If there is no active distribution for the requested project, ``None``
-    is returned.
+    `req` (``Requirement`` 인스턴스)와 일치하는 디스트리뷰션을 찾는다. `req`\ 에 의해 지정된
+    버전 요구조건이 충족 되는 한 요청된 프로젝트의 유효한 디스트리뷰션이 있으면 그것을 반환한다.
+    하지만 `req` 요구조건을 충족하지 *못* 하면서 프로젝트의 유효한 디스트리뷰션이 있으aus
+    ``VersionConflict``\ 가 발생한다. 요청된 프로젝트의 유효한 디스트리뷰션이 없으면
+    ``None``\ 이 반환된다.
 
 ``resolve(requirements, env=None, installer=None)``
-    List all distributions needed to (recursively) meet `requirements`
+    (재귀적으로) `requirements`\ 를 충족할 필요가 있는 모든 디스트리뷰션을 나열한다.
 
-    `requirements` must be a sequence of ``Requirement`` objects.  `env`,
-    if supplied, should be an ``Environment`` instance.  If
-    not supplied, an ``Environment`` is created from the working set's
-    ``entries``.  `installer`, if supplied, will be invoked with each
-    requirement that cannot be met by an already-installed distribution; it
-    should return a ``Distribution`` or ``None``.  (See the ``obtain()`` method
-    of `Environment Objects`_, below, for more information on the `installer`
+    `requirements`\ 는 반드시 ``Requirement`` 객체의 시퀀스여야 한다. 만약 입력되면,
+    `env`\ 는 ``Environment`` 인스턴스여야 한. 만약 입력되지 않음연 ``Environment``\ 가
+    working set의 ``entries``\ 로부터 생성된다. 만약 입력되면 `installer`\ 는 이미 설치
+    되어있는 디스트리뷰션에 의해 충족되지 못 하는 각 요구조건과 함께 호출될 것이다; 그것은 반드시
+    ``Distribution``\ 이나 ``None``\ 을 반환해야 된다. (`installer`에 대한 자세한 정보는
+    아래 `Environment Objects`_\ 의 ``obtain()`` 메서드를 참고하라.)
     argument.)
 
 ``add(dist, entry=None)``
-    Add `dist` to working set, associated with `entry`
+    `dist`\ 를 `entry`\ 와 연관된 working set에 추가한다.
 
-    If `entry` is unspecified, it defaults to ``dist.location``.  On exit from
-    this routine, `entry` is added to the end of the working set's ``.entries``
-    (if it wasn't already present).
+    `entry`\ 가 지정되있지 않으면 ``dist.location``\ 이 디폴트로 설정된다. 이 루틴이 종료될
+    때 `entry`\ 가 working set의 ``.entries``\ 의 끝에 추가된다 (아직 없는 경우).
 
-    `dist` is only added to the working set if it's for a project that
-    doesn't already have a distribution active in the set.  If it's
-    successfully added, any  callbacks registered with the ``subscribe()``
-    method will be called.  (See `Receiving Change Notifications`_, below.)
+    set에 유효한 디스트리뷰션을 아직 프로젝트의 경우에 `dist`\ 는 working set에 추가만 된다.
+    성공적으로 추가되었으면 ``subscribe()`` 메서드에 등록된 모든 콜백이 호출된다.
+    (아래의 `변경 알람 받기`_ 참고)
 
-    Note: ``add()`` is automatically called for you by the ``require()``
-    method, so you don't normally need to use this method directly.
+    Note: ``add()``\ 는 ``require()`` 메서드에 의해서 자동적으로 호출되서 당신이
+    일반적으로 이 메서드를 직접 사용할 필요는 없다.
 
 ``entries``
-    This attribute represents a "shadow" ``sys.path``, primarily useful for
-    debugging.  If you are experiencing import problems, you should check
-    the global ``working_set`` object's ``entries`` against ``sys.path``, to
-    ensure that they match.  If they do not, then some part of your program
-    is manipulating ``sys.path`` without updating the ``working_set``
-    accordingly.  IMPORTANT NOTE: do not directly manipulate this attribute!
-    Setting it equal to ``sys.path`` will not fix your problem, any more than
-    putting black tape over an "engine warning" light will fix your car!  If
-    this attribute is out of sync with ``sys.path``, it's merely an *indicator*
-    of the problem, not the cause of it.
+    이 특성은 "그림자" ``sys.path``\ 를 나타내며, 주로 디버깅에 유용하다. 임포트에 문제를
+    겪고 있다면 전역 ``working_set`` 객체의 ``sys.path`` 에 대한 ``entries``\ 를
+    일치하는지 보기 위해 확인해야 한다. 만약 일치하지 않는 경우, 당신의 프로그램이
+    ``working_set``\ 업데이트 하지 않고 ``sys.path``\ 를 조작하고 있다는 의미다.
+    중요한 주석: 직접 이 특성을 조작하지마라! ``sys.path``\ 와 동일하게 설정한다고 해서 문제를
+    해결해주지 않는다. 엔진 경고에 검은 테이프를 붙이는 것이 차를 고쳐준다고 믿는 것과 똑같다!.
+    만약 이 특성이 ``sys.path``\ 싱크가 맞지 않는다면 이것은 단지 문제가 있다는 *표시*\ 지
+    문제의 원인이 아니다.
 
 
-Receiving Change Notifications
+변경 알람 받기
 ------------------------------
 
-Extensible applications and frameworks may need to receive notification when
-a new distribution (such as a plug-in component) has been added to a working
-set.  This is what the ``subscribe()`` method and ``add_activation_listener()``
-function are for.
+확장가능한 어플리케이션과 프레임워크는 (플러그인 구성 요소 같은) 새로운 디스트리뷰션이 working set에
+추가되었을 때 알림을 받을 필요가 있다. 이런 경우를 위해``subscribe()`` 메서드와 ``add_activation_listener()``
+함수가 있다.
 
 ``subscribe(callback)``
-    Invoke ``callback(distribution)`` once for each active distribution that is
-    in the set now, or gets added later.  Because the callback is invoked for
-    already-active distributions, you do not need to loop over the working set
-    yourself to deal with the existing items; just register the callback and
-    be prepared for the fact that it will be called immediately by this method.
+    현재 set에 있거나 나중에 추가될 각각의 유효한 디스트리뷰션에 대해 한 번씩
+    ``callback(distribution)``\ 를 호출한다. 왜냐하면 콜백이 이미 유효한 디스트리뷰션에
+    대해 호출되기 때문에 있는 항목들을 처리하기 위해 working set에서 루프를 돌릴 필요는 없다;
+    콜백을 등록하고 이 메서드에 의해 즉시 호출 된다는 사실을 대비해야 한다.
 
-    Note that callbacks *must not* allow exceptions to propagate, or they will
-    interfere with the operation of other callbacks and possibly result in an
-    inconsistent working set state.  Callbacks should use a try/except block
-    to ignore, log, or otherwise process any errors, especially since the code
-    that caused the callback to be invoked is unlikely to be able to handle
-    the errors any better than the callback itself.
+    콜백은 절대 예외가 전파되는 것을 허용해서는 안된다, 만약 전파되면 다른 콜백 작업을 방해해서
+    woriking set 상태의 일관성을 없애버릴 수 있다. 무시하거나 로그를 남기고 또는 에러를
+    처리하기 위해서, 특히 콜백을 호출하는 코드가 콜백 자신보다 에러 처리를 잘 하지 못할 때
+    콜백은 try/except 블럭을 써야 한다.
 
 ``pkg_resources.add_activation_listener()`` is an alternate spelling of
 ``pkg_resources.working_set.subscribe()``.
 
 
-Locating Plugins
+플러그인 찾기
 ----------------
 
-Extensible applications will sometimes have a "plugin directory" or a set of
-plugin directories, from which they want to load entry points or other
-metadata.  The ``find_plugins()`` method allows you to do this, by scanning an
-environment for the newest version of each project that can be safely loaded
-without conflicts or missing requirements.
+확장성 있는 어플리케이션은 종종 엔트리포인트나 다른 메타데이터를 로드하고 싶은 플러그인 디렉토리 set이나
+플러그인 디렉토리를 가지는 경우가 있다. ``find_plugins()`` 메서드가 충돌이나 요구조건 누락 없이
+로드 될 수 있는 최신 버전 프로젝트를 위한 환경을 스캔함을써 이러한 일을 가능하게 해준다.
 
 ``find_plugins(plugin_env, full_env=None, fallback=True)``
-   Scan `plugin_env` and identify which distributions could be added to this
-   working set without version conflicts or missing requirements.
+   `plugin_env`\ 을 스캔하고 어떤 디스트리뷰션이 이 working set에 버전 충돌이나 요구 조건
+   누락 없이 추가 될 수 있는지 식별한다.
 
-   Example usage::
+   사용 예시::
 
        distributions, errors = working_set.find_plugins(
            Environment(plugin_dirlist)
        )
-       map(working_set.add, distributions)  # add plugins+libs to sys.path
-       print "Couldn't load", errors        # display errors
+       map(working_set.add, distributions)  # sys.path에 플러그인 추가
+       print "Couldn't load", errors        # 에러 출력
 
-   The `plugin_env` should be an ``Environment`` instance that contains only
-   distributions that are in the project's "plugin directory" or directories.
-   The `full_env`, if supplied, should be an ``Environment`` instance that
-   contains all currently-available distributions.
+   `plugin_env`\ 는 프로젝트의 "plugin directory" 또는 디렉토리에 있는 디스트리뷰션만
+   포함하고 있는 ``Environment`` 인스턴스가 될 것이다.
+   `full_env`\ 가 입력되면 현재 이용가능한 모든 디스트리뷰션을 포함한 ``Environment``
+   인스턴스가 될 것이다.
 
-   If `full_env` is not supplied, one is created automatically from the
-   ``WorkingSet`` this method is called on, which will typically mean that
-   every directory on ``sys.path`` will be scanned for distributions.
+   `full_env`\ 입력되지 않으면 하나가 ``WorkingSet``\ 에서 자동적으로 생성되는데,
+   이 메서드가 호출된다는 것은 ``sys.path``\ 에 있는 모든 디렉토리는 디스트리뷰션을 위해 스캔될 될 것이라는
+   것을 의미한다.
 
-   This method returns a 2-tuple: (`distributions`, `error_info`), where
-   `distributions` is a list of the distributions found in `plugin_env` that
-   were loadable, along with any other distributions that are needed to resolve
-   their dependencies.  `error_info` is a dictionary mapping unloadable plugin
-   distributions to an exception instance describing the error that occurred.
-   Usually this will be a ``DistributionNotFound`` or ``VersionConflict``
-   instance.
+   이 메서드는 요소가 2개인 튜플을 반환한다: (`distributions`, `error_info`),
+   `distributions`\ 은 의존성을 해결하기 위해 필요한 다른 모든 디스트리뷰션과
+   로드할 수 있는 `plugin_env`\ 에서 찾은 디스트리뷰션의 리스트다. `error_info`\ 는
+   로드할 수 없는 플러그인과 발생한 에러를 설명하는 예외 인스턴스를 맵핑한 사전이다. 일반적으로
+   에러는 ``DistributionNotFound`` 또는 ``VersionConflict`` 인스턴스가 될 것이다.
 
-   Most applications will use this method mainly on the master ``working_set``
-   instance in ``pkg_resources``, and then immediately add the returned
-   distributions to the working set so that they are available on sys.path.
-   This will make it possible to find any entry points, and allow any other
-   metadata tracking and hooks to be activated.
+   대부분의 어플리케이션은 주로 ``pkg_resource``\ 에 있는 마스터 ``working_set`` 인스턴스에
+   있는 메서드를 사용할 것이다. 그리고 즉시 반환된 디스트리뷰션을 working set에 추가해서
+   sys.path에서 이용할 수 있게 될 것이다. 이것은 모든 엔트리 포인트의 탐색을 가능하게 하고
+   모든 다른 메타데이터 트래킹이나 훅을 활성화한다.
 
-   The resolution algorithm used by ``find_plugins()`` is as follows.  First,
-   the project names of the distributions present in `plugin_env` are sorted.
-   Then, each project's eggs are tried in descending version order (i.e.,
-   newest version first).
+   ``find_plugins()``\ 에서 사용되는 해결 알고리즘은 다음을 따른다. 첫째,
+   `plugin_env`\ 에 존재하는 디스트리뷰션의 프로젝트 이름은 분류된다.
+   그 다음 각 프로젝트의 egg는 내림차숫 버전 순서로 시도된다 (즉, 최신버전이 먼서 시도된다).
 
-   An attempt is made to resolve each egg's dependencies. If the attempt is
-   successful, the egg and its dependencies are added to the output list and to
-   a temporary copy of the working set.  The resolution process continues with
-   the next project name, and no older eggs for that project are tried.
+   시도든 각 egg의 의존성을 해결하기 위해 이루어진다. 만약 시도가 성공하면, egg와 egg의 의존성은
+   출력 리스트와 , working 일시적인 복사본에 추가된다. 해결 프로세스는 다음 프로젝트 이름으로
+   계속 되고 해당 프로젝트의 오래된 egg는 시도되지 않는다.
 
-   If the resolution attempt fails, however, the error is added to the error
-   dictionary.  If the `fallback` flag is true, the next older version of the
-   plugin is tried, until a working version is found.  If false, the resolution
-   process continues with the next plugin project name.
+   그러나 해결시도가 실패하면 에러가 에러사전에 추가된다. `fallback` 플래그가 참이면, 다음으로
+   오래된 버전의 플러그인이 시도되고 작동ㅎ아는 버전을 찾을 때까지 계속된다. 실패하면
+   해결 프로세스는 다음 플러그인 이름으로 해결 과정을 계속한다.
 
-   Some applications may have stricter fallback requirements than others. For
-   example, an application that has a database schema or persistent objects
-   may not be able to safely downgrade a version of a package. Others may want
-   to ensure that a new plugin configuration is either 100% good or else
-   revert to a known-good configuration.  (That is, they may wish to revert to
-   a known configuration if the `error_info` return value is non-empty.)
+   몇몇 어플리케이션은 더 엄격한 대체 요구조건을 가지고 있다. 예를 들면, 데이터베이스 스키마와
+   영속 객체를 가지고 있는 어플리케이션은 패키지의 버전을 안전하게 다운그레이드 할 수가 없을 것이다.
+   다른 사람들은 새로운 플러은 설정이 100% 좋은지 확인하거나 좋다고 알려진 설정으로 돌아가는 것을
+   원할 수 있다. (즉, `error_info` 반환 값이 비어있지 않으면 알려진 설정으로 되돌리고 싶어
+   할 것이다.)
 
-   Note that this algorithm gives precedence to satisfying the dependencies of
-   alphabetically prior project names in case of version conflicts. If two
-   projects named "AaronsPlugin" and "ZekesPlugin" both need different versions
-   of "TomsLibrary", then "AaronsPlugin" will win and "ZekesPlugin" will be
-   disabled due to version conflict.
+   이 알고리즘은 버전 충돌이 일어난 경우 알파벳 순으로 우선하는 프로젝트 이름의 의존성을 만족시키는
+   데에 우선권을 부여한다. 만약 두 프로젝트의 이름이 "AaronsPlugin", "ZekesPlugin"이고
+   둘 다 "TomsLibrary"의 다른 버전을 필요로 하면 "AaronsPlugin"이 이기고 "ZekesPlugin"은
+   버전 충돌로 인해서 사용중단될 것이다.
 
 
-``Environment`` Objects
+``Environment`` 객체
 =======================
 
-An "environment" is a collection of ``Distribution`` objects, usually ones
-that are present and potentially importable on the current platform.
-``Environment`` objects are used by ``pkg_resources`` to index available
-distributions during dependency resolution.
+"environment" 는 ``Distribution``\ 의 집합으로, 현재 플랫폼에 있고 잠재적으로 임포트가
+가능하다. ``Environment`` 객체는 의존성 해결 시에 사용 가능한 디스트리뷰션을 인덱스 하기 위해
+``pkg_resources``\ 에 의해 사용된다.
 
 ``Environment(search_path=None, platform=get_supported_platform(), python=PY_MAJOR)``
-    Create an environment snapshot by scanning `search_path` for distributions
-    compatible with `platform` and `python`.  `search_path` should be a
-    sequence of strings such as might be used on ``sys.path``.  If a
-    `search_path` isn't supplied, ``sys.path`` is used.
+    `platform`, `python`\ 과 호환 가능한 디스트리뷰션의 `search_path`\ 를 스캐닝 함으로써
+    환경 스냅샷을 생성한다. `search_path`\ 는 ``sys.path``\ 에서 사용되는 것 같은
+    문자열의 시퀀스여야 한다. 만약 `search_path`\ 가 입력되지 않으면 ``sys.path``\ 가
+    사용된다.
 
-    `platform` is an optional string specifying the name of the platform
-    that platform-specific distributions must be compatible with.  If
-    unspecified, it defaults to the current platform.  `python` is an
-    optional string naming the desired version of Python (e.g. ``'2.4'``);
-    it defaults to the currently-running version.
+    `platform`\ 은 선색적인 문자열로 플랫폼 지정 디스트리뷰션이 반드시 호환해야 하는 플랫폼의
+    이름을 지정한다. 만약 지정되지 않으면 현재 플랫폼을 디폴트로 설정한다. `python`\ 는
+    선택적인 문자열로 권장되는 파이썬 버전을 지정한다; 현재 실행중인 버전을 디폴트로 설정한다.
 
-    You may explicitly set `platform` (and/or `python`) to ``None`` if you
-    wish to include *all* distributions, not just those compatible with the
-    running platform or Python version.
+    만약 현재 구동중인 플랫폼이나 파이썬 버전과 호환흔 것뿐만 아니라 *모든* 디스트리뷰션을 포함시키고
+    싶으면 명시적으로 `platform` \ (과/또는 `python`)을 ``None``\ 으로 설정하면 된다.
 
-    Note that `search_path` is scanned immediately for distributions, and the
-    resulting ``Environment`` is a snapshot of the found distributions.  It
-    is not automatically updated if the system's state changes due to e.g.
-    installation or removal of distributions.
+    `search_path`\ 는 디스트리뷰션을 위해 즉시 스캔된다. 그리고 결과로 나온
+    ``Environment``\ 는 찾아진 배포판의 스냅샷이다. 디스트리뷰션의 설치, 제거로 인해 시스템의
+    상태가 변화하면 이것은 자동적으로 업데이트 된다.
 
 ``__getitem__(project_name)``
-    Returns a list of distributions for the given project name, ordered
-    from newest to oldest version.  (And highest to lowest format precedence
-    for distributions that contain the same version of the project.)  If there
-    are no distributions for the project, returns an empty list.
+    주어진 프로젝트 이름에 있는 디스트리뷰션의 리스트를 반환하며 순서는 최신부터 가장 오래된
+    버전으로 되어있다. (그리고 형식 우선순위는 같은 버전의 프로젝트를 포함하고 있는 디스트리뷰션이
+    더 높다.) 프로젝트의 디스트리뷰션이 없으면 빈 리스트를 반환한다.
 
 ``__iter__()``
-    Yield the unique project names of the distributions in this environment.
-    The yielded names are always in lower case.
+    환경에 있는 디스트리뷰션의 유일한 프로젝트 이름을 산출한다. 산출된 이름은 항상 소문자로
+    나온다.
 
 ``add(dist)``
-    Add `dist` to the environment if it matches the platform and python version
-    specified at creation time, and only if the distribution hasn't already
-    been added. (i.e., adding the same distribution more than once is a no-op.)
+    생성시에 지정된 파이썬 버전, 플랫폼과 일치하면 환경에 `dist`\ 를 추가한다. 디스트리뷰션이
+    아직 추가되지 않았을 때에만 추가한다. (즉, 한 번 이상 같은 디스트리뷰션이 추가되는 것은
+    안 된다.)
 
 ``remove(dist)``
-    Remove `dist` from the environment.
+    환경에서 `dist`\ 를 제거한다.
 
 ``can_add(dist)``
-    Is distribution `dist` acceptable for this environment?  If it's not
-    compatible with the ``platform`` and ``python`` version values specified
-    when the environment was created, a false value is returned.
+    이 환경에서 `dist`\ 가 허용되는가? 환경이 생성되었을 때 지정된 ``platform``, ``python``
+    버전과 호환되지 않으면 false 값이 반환된다.
 
 ``__add__(dist_or_env)``  (``+`` operator)
-    Add a distribution or environment to an ``Environment`` instance, returning
-    a *new* environment object that contains all the distributions previously
-    contained by both.  The new environment will have a ``platform`` and
-    ``python`` of ``None``, meaning that it will not reject any distributions
-    from being added to it; it will simply accept whatever is added.  If you
-    want the added items to be filtered for platform and Python version, or
-    you want to add them to the *same* environment instance, you should use
-    in-place addition (``+=``) instead.
+    ``Environment`` 인스턴스에 환경이나 디스트리뷰션을 추가하고 *새로운* 환경 객체를 추가하며
+    객체는 둘 모두에 의해 이전에 포함되어 있던 모든 디스트리뷰션을 포함한다. 새로운 환경은 ``platform``\ 과
+    ``None``\ 의 ``python``\ 을 가지고 있으며, 추가되는 어떠한 디스트리뷰션도 거절하지 않는
+    다는 것을 의미한다; 단순히 추가되는 무엇이든 다 승인한다. 플랫폼과 파이썬 버전을 위해
+    추가되는 아이템을 거르고 싶거나 *같은* 환경 인스턴스에 아이템을 추가하고 싶으면,
+    대신 in-place 덧셈 (``+=``)\ 을 사용하라.
 
 ``__iadd__(dist_or_env)``  (``+=`` operator)
-    Add a distribution or environment to an ``Environment`` instance
-    *in-place*, updating the existing instance and returning it.  The
-    ``platform`` and ``python`` filter attributes take effect, so distributions
-    in the source that do not have a suitable platform string or Python version
-    are silently ignored.
+    디스트리뷰션이나 환경을 *가동중인* ``Environment`` 인스턴스에 추가하며 존재하는 인스턴스를
+    업데이트하고 인스턴스를 반환한다. ``platform``, ``python`` 필터 특성이 효력이 있다. 그래서
+    적합한 플랫폼 문자열이나 파이썬 버전을 가지고 있지 않은 소스에 있는 디스트리뷰션은 무시된다.
 
 ``best_match(req, working_set, installer=None)``
-    Find distribution best matching `req` and usable on `working_set`
+    `req`\ 가장 일치하고 ``working_set`\ 에서 사용할 수 있는 디스트리뷰션을 찾는다.
 
-    This calls the ``find(req)`` method of the `working_set` to see if a
-    suitable distribution is already active.  (This may raise
-    ``VersionConflict`` if an unsuitable version of the project is already
-    active in the specified `working_set`.)  If a suitable distribution isn't
-    active, this method returns the newest distribution in the environment
-    that meets the ``Requirement`` in `req`.  If no suitable distribution is
-    found, and `installer` is supplied, then the result of calling
-    the environment's ``obtain(req, installer)`` method will be returned.
+    적합한 디스트리뷰션이 활성화되어 있는지 확인하기 위해서 `working_set`의 ``find(req)``
+    메서드를 호출한다. (특정한 `working_set`\ 에서 적합하지 않은 버전의 프로젝트가 이미
+    활성화되어 있으면 ``VersionConflict``\ 를 일으킬 수 있다.) 적합한 디스트리뷰션이
+    활성화되어있지 않으면 이 메서드는 환경에서 `req`\ 의 ``Requirement``\ 를 충족하는
+    새로운 디스트리뷰션을 반환한다. 적합한 디스트리뷰션이 찾아지지 않고 `installer`\ 가
+    입력되면 환경의 ``obtain(req, installer)`` 메서드 호출 결과가 반환될 것이다.
 
 ``obtain(requirement, installer=None)``
-    Obtain a distro that matches requirement (e.g. via download).  In the
-    base ``Environment`` class, this routine just returns
-    ``installer(requirement)``, unless `installer` is None, in which case
-    None is returned instead.  This method is a hook that allows subclasses
-    to attempt other ways of obtaining a distribution before falling back
-    to the `installer` argument.
+    요구조건과 일치하는 distro를 얻는다 (예, 다운로드를 통함). 기본 ``Environment`` 클래스에서
+    이 루틴은 `installer`\ 가 None이 아니면, ``installer(requirement)``\ 를 반환하고
+    None이면 None을 반환한다. 이 매서드는 하위 클래스가 `installer` 인수로 복귀하기 전에
+    디스트리뷰션을 얻기 위한 다른 방법을 시도하도록 허용하는 훅이다.
 
 ``scan(search_path=None)``
-    Scan `search_path` for distributions usable on `platform`
+    `platform`\ 에서 사용할 디스트리뷰션의 `search_path`\ 를 스캔한다.
 
-    Any distributions found are added to the environment.  `search_path` should
-    be a sequence of strings such as might be used on ``sys.path``.  If not
-    supplied, ``sys.path`` is used.  Only distributions conforming to
-    the platform/python version defined at initialization are added.  This
-    method is a shortcut for using the ``find_distributions()`` function to
-    find the distributions from each item in `search_path`, and then calling
-    ``add()`` to add each one to the environment.
+    찾아진 모든 디스트리뷰션을 환경에 추가한다. `search_path`\ 는 ``sys.path``\ 에서
+    사용되는 것 같은 문자열의 시퀀스여야 한다. 입력되지 않으면 ``sys.path``\ 가 사용된다.
+    초기화에서 정의된 플랫폼/파이썬 버전을 따르는 디스트리뷰션만이 추가된다. 이 메서드는
+    `search_path`\ 에 있는 항목으로부터 디스트리뷰션을 찾고 각각을 환경에 추가하기 위해
+    ``add()``\ 를 호출하는 ``find_distributions()`` 함수의 축약형이다.
 
 
-``Requirement`` Objects
+``Requirement`` 객체
 =======================
 
-``Requirement`` objects express what versions of a project are suitable for
-some purpose.  These objects (or their string form) are used by various
-``pkg_resources`` APIs in order to find distributions that a script or
-distribution needs.
+``Requirement`` 객체는 몇몇 목적에 적합한 프로젝트의 버전을 표현한다. 이 객체 (또는
+문자열 형식)는 스크립트나 디스트리뷰션이 필요로 하는 디스트리뷰션을 찾기 위해 다양한
+``pkg_resources`` API에서 사용된다.
 
 
-Requirements Parsing
+요구조건 파싱
 --------------------
 
 ``parse_requirements(s)``
-    Yield ``Requirement`` objects for a string or iterable of lines.  Each
-    requirement must start on a new line.  See below for syntax.
+    문자열이나 반복가능한 라인인 ``Requirement`` 객체를 산출한다. 각 요구조건은
+    반드시 새 행으로 시작해야 한다. 아래쪽의 신택스를 참고하라.
 
 ``Requirement.parse(s)``
-    Create a ``Requirement`` object from a string or iterable of lines.  A
-    ``ValueError`` is raised if the string or lines do not contain a valid
-    requirement specifier, or if they contain more than one specifier.  (To
-    parse multiple specifiers from a string or iterable of strings, use
-    ``parse_requirements()`` instead.)
+    문자열이나 반복가능한 라인으로부터 ``Requirement``를 생성한다. 문자열이나 라인이
+    유효한 요구조건 지정자를 포함하고 있지 않거나 두 개 이상의 지정자를 포함하고 있으면
+    ``ValueError``\ 를 발생시킨다. (문자열이나 반복가능한 문자열에서 여러 지정자를 파싱하기
+    위해서 ``parse_requirements()``\ 를 사용한다.)
 
-    The syntax of a requirement specifier is defined in full in PEP 508.
+    요구조건 지정자 신택스 전체는 PEP 508에 정의되어 있다.
 
-    Some examples of valid requirement specifiers::
+    유효한 요구조건 지정자의 예시::
 
         FooProject >= 1.2
         Fizzy [foo, bar]

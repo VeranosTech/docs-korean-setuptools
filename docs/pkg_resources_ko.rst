@@ -236,7 +236,7 @@ pkg_resources.require()``\ 를 ``pkg_resources.working_set.require()``\ 의
     포인트를 산출하고 아니면 `group`과 `name` 모두와 일치하는 엔트리포인트만 산출한다.
     엔트리 포인트는 디스트리뷰션이 working set에 나타나는 순서대로 유효한 디스트리뷰션에서
     산출된다. (전역 ``working_set``\ 의 경우 ``sys.path``\ 에 리스트 되어있는 순서와 같다.)
-    개별 디스트리뷰션에 의해 선전되는 엔트리 포인트 사이에서는 특별한 순서가 존재하지 않는다.
+    개별 디스트리뷰션에 의해 선언되는 엔트리 포인트 사이에서는 특별한 순서가 존재하지 않는다.
 
     자세한 정보는 아래의 `Entry Points`_ 섹션을 참고하라.
 
@@ -508,304 +508,256 @@ pkg_resources.require()``\ 를 ``pkg_resources.working_set.require()``\ 의
         SomethingWhoseVersionIDontCareAbout
         SomethingWithMarker[foo]>1.0;python_version<"2.7"
 
-    The project name is the only required portion of a requirement string, and
-    if it's the only thing supplied, the requirement will accept any version
-    of that project.
+    이 프로젝트 이름은 요구 문자열에서 유일하게 필수적인 부분이며, 이것만 입력되면, 요구조건은
+    모든 버전의 프로젝트를 받아들일 것이다.
 
-    The "extras" in a requirement are used to request optional features of a
-    project, that may require additional project distributions in order to
-    function.  For example, if the hypothetical "Report-O-Rama" project offered
-    optional PDF support, it might require an additional library in order to
-    provide that support.  Thus, a project needing Report-O-Rama's PDF features
-    could use a requirement of ``Report-O-Rama[PDF]`` to request installation
-    or activation of both Report-O-Rama and any libraries it needs in order to
-    provide PDF support.  For example, you could use::
+    요구조건에서 "extras" 프로젝트의 선택적인 기능을 요청하기 위해 사용되며 작동하기 위해
+    추가적인 프로젝트 디스트리뷰션을 필요로 할 것이다. 예를 들면, 가상의 "Report-O-Rama"
+    프로젝트가 추가적인 PDF 지원을 제공한다면 그 지원을 제공하기 위해서 추가적인 라이프러리를
+    필요로 할 것이다. 따라서 Report-O-Rama의 PDF 기능을 필요로 하는 프로젝트는 PDF 지원을
+    제공하기 위해서 필요한 Report-O-Rama와 다른 라이브러리의 설치나 활성화를 요청하기 위해서
+    ``Report-O-Rama[PDF]`` 의 요구조건을 사용할 수 있다. 예를 들어, 아래와 같이 사용할 수
+    있다::
 
         easy_install.py Report-O-Rama[PDF]
 
-    To install the necessary packages using the EasyInstall program, or call
-    ``pkg_resources.require('Report-O-Rama[PDF]')`` to add the necessary
-    distributions to sys.path at runtime.
+    EasyInstall 프로그램을 사용하는 필요 패키지를 설치하거나 실행중에 sys.path에 디스트리뷰션을
+    추가하는 ``pkg_resources.require('Report-O-Rama[PDF]')``\ 을 호출하기 위함이다.
 
-    The "markers" in a requirement are used to specify when a requirement
-    should be installed -- the requirement will be installed if the marker
-    evaluates as true in the current environment. For example, specifying
-    ``argparse;python_version<"2.7"`` will not install in an Python 2.7 or 3.3
-    environment, but will in a Python 2.6 environment.
+    요구 조건의 "markers"는 요구 패키지가 설치되어야 할 때 지정하기 위해서 사용한다. 요구 조건은
+    마커가 참이면 현재 환경에 설치될 것이다. 예를 들어, ``argparse;python_version<"2.7"``\
+    로 지정하면 파이썬 2.7이나 3.3 환경에서는 설치 되지 않고 2.6 환경에서는 설치될 것이다.
 
-``Requirement`` Methods and Attributes
+``Requirement`` 메서드와 특성
 --------------------------------------
 
 ``__contains__(dist_or_version)``
-    Return true if `dist_or_version` fits the criteria for this requirement.
-    If `dist_or_version` is a ``Distribution`` object, its project name must
-    match the requirement's project name, and its version must meet the
-    requirement's version criteria.  If `dist_or_version` is a string, it is
-    parsed using the ``parse_version()`` utility function.  Otherwise, it is
-    assumed to be an already-parsed version.
+    `dist_or_version`\ 이 요구조건의 기준에 맞으면 True를 리턴한다. `dist_or_version`\ 이
+    ``Distribution``\ 객체면, 프로젝트 이름은 요구조건의 프로젝트 이름과 일치하고, 버전은
+    요구조건의 버전 기준을 충족해야 한다. `dist_or_version`\ 이 문자열이면
+    ``parse_version()`` 유틸리티 함수를 이용해 파싱된다. 다른 경우 파싱이 된 버전으로
+    간주된다.
 
-    The ``Requirement`` object's version specifiers (``.specs``) are internally
-    sorted into ascending version order, and used to establish what ranges of
-    versions are acceptable.  Adjacent redundant conditions are effectively
-    consolidated (e.g. ``">1, >2"`` produces the same results as ``">2"``, and
-    ``"<2,<3"`` produces the same results as``"<2"``). ``"!="`` versions are
-    excised from the ranges they fall within.  The version being tested for
-    acceptability is then checked for membership in the resulting ranges.
+    ``Requirement``\ 의 버전 지정자 (``.specs``)는 내부적으로 오름차순 순서로 분류되고
+    받아들일 수 있는 버전의 범위를 정하기 위해 사용된다. 인접한 많은 조건은 효율적으로
+    통합되고 (예, ``">1, >2"``\ 는 ``">2"``\ 와 같은 결과를 ``"<2,<3"`` 는 ``"<2"``\ 와
+    같은 결과를 생산함), ``"!="``\ 버전은 범위 내에서 삭제된다. 적합성을 위해 테스트된 버전은
+    범위 내의 멤버심에 대해 확인된다.
 
 ``__eq__(other_requirement)``
-    A requirement compares equal to another requirement if they have
-    case-insensitively equal project names, version specifiers, and "extras".
-    (The order that extras and version specifiers are in is also ignored.)
-    Equal requirements also have equal hashes, so that requirements can be
-    used in sets or as dictionary keys.
+    대소문자를 구분하지 않는 동일한 프로젝트 이름, 버전 지정자, "extra"가 있으면
+    요구조건은 다른 요구조건과 비교한다. (extras와 버전 지정자의 순서는 무시된다.)
+    동일한 요구조건은 동일한 해쉬를 가지고 있어서, 요구조건은 집합이나 사전의 키로 사용될 수 있다.
 
 ``__str__()``
-    The string form of a ``Requirement`` is a string that, if passed to
-    ``Requirement.parse()``, would return an equal ``Requirement`` object.
+    ``Requirement``\ 의 문자열 형식은 ``Requirement.parse()``\ 에 전달되면
+    동일한 ``Requirement`` 객체를 반환하는 문자열이다.
 
 ``project_name``
-    The name of the required project
+    필요한 프로젝트의 이름
 
 ``key``
-    An all-lowercase version of the ``project_name``, useful for comparison
-    or indexing.
+    모든 소문자 버전의 ``project_name``, 비교나 색인에 유용함.
 
 ``extras``
-    A tuple of names of "extras" that this requirement calls for.  (These will
-    be all-lowercase and normalized using the ``safe_extra()`` parsing utility
-    function, so they may not exactly equal the extras the requirement was
-    created with.)
+    요구조건이 호출하는 "extras" 이름의 튜플. (모두 소문자가 되고 ``safe_extras()`` 파싱
+    유틸리티 함수를 사용해 표준화돼서 요구조건이 생성되었던 extras와 정확히 동일하지 않을 수 있다.
 
 ``specs``
-    A list of ``(op,version)`` tuples, sorted in ascending parsed-version
-    order.  The `op` in each tuple is a comparison operator, represented as
-    a string.  The `version` is the (unparsed) version number.
+    ``(op,version)`` 튜플의 리스트, 오름차순 파싱된 버전 순서로 분류됨. 각 튜플의 `op`\ 는
+    비교 연산자이며 문자열로 나타난다. `version`은 (파싱되지 않은) 버전 숫자다.
 
 ``marker``
-    An instance of ``packaging.markers.Marker`` that allows evaluation
-    against the current environment. May be None if no marker specified.
+    현재 환경에 대한 평가를 허용하는 ``packaging.markers.Marker`` 인스턴스. 마커 지정자가
+    없을 경우에는 None이 됨.
 
 ``url``
-    The location to download the requirement from if specified.
+    지정되면 요구조건을 다운로드 받을 위치.
 
-Entry Points
+엔트리 포인트
 ============
 
-Entry points are a simple way for distributions to "advertise" Python objects
-(such as functions or classes) for use by other distributions.  Extensible
-applications and frameworks can search for entry points with a particular name
-or group, either from a specific distribution or from all active distributions
-on sys.path, and then inspect or load the advertised objects at will.
+엔트리 포인트는 다른 디스트리뷰션에 의해 사용되는 함수나 클래스 같은 파이썬 객체를 디스트리뷰션이
+"선언하기" 위해 사용되는 간단한 바업이다 확장가능한 어플리케이션과 프레임워크는
+특정한 이름이나 그룸이 있는 엔트리 포인트를 특정한 디스트리뷰션이나 sys.path에 있는 모든 유효
+디스트리뷰션 찾을 수 있고, 마음대로 선언된 객체를 불러오거나 조사한다.
 
-Entry points belong to "groups" which are named with a dotted name similar to
-a Python package or module name.  For example, the ``setuptools`` package uses
-an entry point named ``distutils.commands`` in order to find commands defined
-by distutils extensions.  ``setuptools`` treats the names of entry points
-defined in that group as the acceptable commands for a setup script.
+엔트리 포인트는 파이썬 패키지나 모듈과 유사한 이름을 가진 "groups"에 속한다. 예를 들어
+``setuptools`` 패키지는 ``distutils.commands``\ 이름의 엔트리 포인트를 사용하고
+distutils 확장판으로 정의되는 커맨드를 찾기 위해서 사용된다. ``setuptools``\ 는 그룹에서
+지정된 엔트리 포인트의 이름을 셋업 스크립트를 위해 허용 가능한 커맨드로 처리한다.
 
-In a similar way, other packages can define their own entry point groups,
-either using dynamic names within the group (like ``distutils.commands``), or
-possibly using predefined names within the group.  For example, a blogging
-framework that offers various pre- or post-publishing hooks might define an
-entry point group and look for entry points named "pre_process" and
-"post_process" within that group.
+비슷한 방식으로, ``distutils.commands`` 같은 그룹에 있는 다이나믹 이름을 사용하건, 그룹에서
+사전에 정의된 이름을 사용해서 다른 패키지는 자신의 엔트피포인트 그룹을 정의할 수 있다. 예를 들어
+전, 후 퍼블리싱하는 다양한 훅을 제공하는 블로깅 프레임워크는 엔트리 포인트 그룹을 정의하고
+그룹에 있는 "pre_process", "post_process" 이름의 엔트리 포인트를 찾을 수 있다.
 
-To advertise an entry point, a project needs to use ``setuptools`` and provide
-an ``entry_points`` argument to ``setup()`` in its setup script, so that the
-entry points will be included in the distribution's metadata.  For more
-details, see the ``setuptools`` documentation.  (XXX link here to setuptools)
+엔트리 포인트를 선언하기 위해서 프로젝트는 ``setuptools``\ 를 사용하고
+``entry_points`` 인수를 setup 스크립트에 있는 ``setup()``\ 에 제공해야 될 필요성이 있고
+그래서 엔트리포인트는 디스트리뷰션의 메타데이터에 포함될 것이다. 더 자세한 정보는
+``setuptools`` 문서를 참고하라.
 
-Each project distribution can advertise at most one entry point of a given
-name within the same entry point group.  For example, a distutils extension
-could advertise two different ``distutils.commands`` entry points, as long as
-they had different names.  However, there is nothing that prevents *different*
-projects from advertising entry points of the same name in the same group.  In
-some cases, this is a desirable thing, since the application or framework that
-uses the entry points may be calling them as hooks, or in some other way
-combining them.  It is up to the application or framework to decide what to do
-if multiple distributions advertise an entry point; some possibilities include
-using both entry points, displaying an error message, using the first one found
-in sys.path order, etc.
+각 프로젝트으 디스트리뷰션은 같은 엔트리 포인트 그룹에 있는 주어진 이름의 엔트리 포인트 중에 최대
+하나를 선언할 수 있다. 예를 들어 다른 이름을 가지고 있는 한 distutils 확장은 두 개의 다른
+``distutils.commands`` 엔트리 포인트를 선언할 수 있다. 그러나 같은 그룹에 있는 같은 이름의
+엔트리 포인트를 광고하는 *다른* 프로젝트를 막을 수 있는 방법은 없다. 몇몇 경우에 이것은
+바람직한 일이다. 왜냐하면 같은 엔트리 포인트를 사용하는 어플리케이션이나 프레임워크가 그것들을 훅으로
+호출하거나 다른 경우에 그것들을 결합시킬 수 있기 때문이다. 여러 디스트리뷰션이 하나의 엔트리포인트를
+선언하는 한다면 무엇을 할 것인지 결정하는 일은 어플리케이션이나 프레임워크에 달려있다; 두 엔트리
+포인트를 사용하거나, 에러메세지를 표시하거나 sys 경로 순서에서 처음 발견된 것을 사용하는 것 등이
+가능한 방법에 포함될 수 있다.
 
 
-Convenience API
+편의 API
 ---------------
 
-In the following functions, the `dist` argument can be a ``Distribution``
-instance, a ``Requirement`` instance, or a string specifying a requirement
-(i.e. project name, version, etc.).  If the argument is a string or
-``Requirement``, the specified distribution is located (and added to sys.path
-if not already present).  An error will be raised if a matching distribution is
-not available.
+다음의 함수에서 `dist`\ 인수는 ``Distribution``, ``Requirement`` 인스턴스나 요구조건을
+지정하는 문자열이 될 수 있다 (프로젝트 이름, 버전 등). 인수가 문자열이거나 ``Requirement``\ 면
+지정된 디스트리뷰션인 검색된다 (없으면 sys.path에 추가된다). 사용가능한 일치하는 디스트리뷰션이 없으면
+에러가 발생한다.
 
-The `group` argument should be a string containing a dotted identifier,
-identifying an entry point group.  If you are defining an entry point group,
-you should include some portion of your package's name in the group name so as
-to avoid collision with other packages' entry point groups.
+`group` 인수는 엔트리 포인트 그룹을 식별하는 점으로 구분된 식별자를 포함하는 문자열이어야 한다.
+만약 엔트리포인트 그룹을 정의하는 중이라면 다른 패키지의 엔트리 포인트 그룹과 충돌을 피하기 위해서
+그룹 이름에 있는 당신의 패키지의 이름의 일부를 포함시켜야 한다.
 
 ``load_entry_point(dist, group, name)``
-    Load the named entry point from the specified distribution, or raise
-    ``ImportError``.
+    지정된 디스트리뷰션으로부터 명명된 엔트리포인트를 불러오거나 ``ImportError``\ 를 일으킨다.
 
 ``get_entry_info(dist, group, name)``
-    Return an ``EntryPoint`` object for the given `group` and `name` from
-    the specified distribution.  Returns ``None`` if the distribution has not
-    advertised a matching entry point.
+    지정된 디스트리뷰션으로부터 주어진 `group`\ 과 `name`\ 에 대한 ``EntryPoint`` 객체를
+    반환한다. 디스트리뷰션이 일치하는 엔트리포인트를 선언하지 않은 경우 ``None``\ 을 반환한다.
 
 ``get_entry_map(dist, group=None)``
-    Return the distribution's entry point map for `group`, or the full entry
-    map for the distribution.  This function always returns a dictionary,
-    even if the distribution advertises no entry points.  If `group` is given,
-    the dictionary maps entry point names to the corresponding ``EntryPoint``
-    object.  If `group` is None, the dictionary maps group names to
-    dictionaries that then map entry point names to the corresponding
-    ``EntryPoint`` instance in that group.
+    `group`\ 을 위한 디스트리뷰션의 엔트리 포인트 지도를 반환하거나 디스트리뷰션을 위한
+    전체 엔트리 지도를 반환한다. 이 함수는 디스트리뷰션이 엔트리 포인트를 선언하지 않아도 항상
+    사전을 반환한다. 만약 `group`\ 이 주어지면 사전은 엔트리 포인트 이름을 일치하는
+    ``EntryPoint`` 객체에 맵핑한다. `group`\ 이 None이면 사전을 그룹 이름을 엔트리 포인트를
+    그룹에 있는 일치하는 ``EntryPoint``인스턴스에 매핑하는 사전에 매핑한다.
 
 ``iter_entry_points(group, name=None)``
-    Yield entry point objects from `group` matching `name`.
+    `name`\ 에 매치되는 `group`\ 으로부터 엔트리 포인트 객체를 산출한다.
 
-    If `name` is None, yields all entry points in `group` from all
-    distributions in the working set on sys.path, otherwise only ones matching
-    both `group` and `name` are yielded.  Entry points are yielded from
-    the active distributions in the order that the distributions appear on
-    sys.path.  (Within entry points for a particular distribution, however,
-    there is no particular ordering.)
+    `name`\ 이 None이면 sys.path에 있는 working set에 있는 모든 디스트리뷰션으로부터
+    `group`\ 에 있는 모든 엔트리 포인트를 산출하고, 다른 경우 `group`\ 과 `name` 둘 다와
+    일치하는 하나의 엔트리 포인트만을 산출한다. 엔트리 포인트는 유효한 디스트리뷰션이 sys.path에 나타나는
+    순서대로 산출된다 (그러나, 틀정한 디스트리뷰션 내의 엔트리 포인트는 순서가 없다.)
 
-    (This API is actually a method of the global ``working_set`` object; see
-    the section above on `Basic WorkingSet Methods`_ for more information.)
+    (이 API는 사실 전역 ``working_set`` 객체의 메서드다; 자세한 정보는 위 쪽에 있는
+    `기본 workingset 메서드`_\ 를 참고하라.)
 
 
-Creating and Parsing
+생성ㄱ와 파싱
 --------------------
 
 ``EntryPoint(name, module_name, attrs=(), extras=(), dist=None)``
-    Create an ``EntryPoint`` instance.  `name` is the entry point name.  The
-    `module_name` is the (dotted) name of the module containing the advertised
-    object.  `attrs` is an optional tuple of names to look up from the
-    module to obtain the advertised object.  For example, an `attrs` of
-    ``("foo","bar")`` and a `module_name` of ``"baz"`` would mean that the
-    advertised object could be obtained by the following code::
+    ``EntryPoint`` 인스턴스를 생성한다. 엔트리포인트의 이름은 `name`\ 이다.
+    `module_name`\ 은 선언된 객체를 포함하는 모듈의 (점으로 구분된) 이름이다. `attrs`\ 는
+    선언된 오브젝트를 획득하기 위한 모듈로부터 검색하는 선택적인 이름 튜플이다.
+    예를 들어 ``("foo","bar")``\ 의 `attrs`\ 와 ``"baz"``\ 의 `module_name`\ 은 선언된
+    객체가 아래의 코드에 의해서 얻어질 수 있다는 의미다::
 
         import baz
         advertised_object = baz.foo.bar
 
-    The `extras` are an optional tuple of "extra feature" names that the
-    distribution needs in order to provide this entry point.  When the
-    entry point is loaded, these extra features are looked up in the `dist`
-    argument to find out what other distributions may need to be activated
-    on sys.path; see the ``load()`` method for more details.  The `extras`
-    argument is only meaningful if `dist` is specified.  `dist` must be
-    a ``Distribution`` instance.
+    `extras`\ 는 이 엔트리 포인트를 제공하기 위해 디스트리뷰션이 필요로하는 "extra feature"
+    이름의 선택적인 튜플이다. 엔트리 포인트가 로드되었을 때, 다른 디스트리뷰션이 sys.path에서
+    활성화되기 위해서 필요한 것을 찾기 위해 extra 기능이 `dist` 인수에서 검색된다;
+    자세한 정보는 ``load()`` 메서드를 참고하라. `extras` 인수는 `dist`\ 가 정의되었을 때만
+    의미가 있다. `dist`\ 는 ``Distribution`` 인스턴스여야 한다.
 
 ``EntryPoint.parse(src, dist=None)`` (classmethod)
-    Parse a single entry point from string `src`
+    문자열 `src`\ 로부터 단일 엔트리 포인트를 파싱한다
 
-    Entry point syntax follows the form::
+    엔트리 포인트 신택스는 아래의 형태를 따른다::
 
         name = some.module:some.attr [extra1,extra2]
 
-    The entry name and module name are required, but the ``:attrs`` and
-    ``[extras]`` parts are optional, as is the whitespace shown between
-    some of the items.  The `dist` argument is passed through to the
-    ``EntryPoint()`` constructor, along with the other values parsed from
-    `src`.
+    엔트리 이름과 모듈 이름이 요구된다, 그러나 ``:attrs``, ``[extras]`` 부분은
+    항목 일부의 사이에 있는 공백처럼 선택 사항이다. `dist` 인수는 `src`\ 로부터 파싱된
+    다른 값들과 함께 ``EntryPoint()`` 컨스트럭터로 전달된다.
 
 ``EntryPoint.parse_group(group, lines, dist=None)`` (classmethod)
-    Parse `lines` (a string or sequence of lines) to create a dictionary
-    mapping entry point names to ``EntryPoint`` objects.  ``ValueError`` is
-    raised if entry point names are duplicated, if `group` is not a valid
-    entry point group name, or if there are any syntax errors.  (Note: the
-    `group` parameter is used only for validation and to create more
-    informative error messages.)  If `dist` is provided, it will be used to
-    set the ``dist`` attribute of the created ``EntryPoint`` objects.
+    엔트리 포인트 이름을 ``EntryPoint`` 객체에 매핑하는 사전을 만들기 위헤 `lines`
+    (문자열 또는 여러 줄의 시퀀스)을 파싱한다. 엔트리 포인트 이름이 중복되었거나 `group`\ 이
+    유효하지 않은 엔트리 포인트 그룹 이름이거나 신택스 에러가 있을 경우 ``ValueError``\ 가
+    발생한다. (`group` 파라미터는 검정과 더 상세한 에러메세지를 생성하기 위해서만 사용된다.)
+    `dist`\ 가 제공되면, 생성된 ``EntryPoint`` 객체의 ``dist`` 특성을 설정하기 위해서
+    사용될 것이다.
 
 ``EntryPoint.parse_map(data, dist=None)`` (classmethod)
-    Parse `data` into a dictionary mapping group names to dictionaries mapping
-    entry point names to ``EntryPoint`` objects.  If `data` is a dictionary,
-    then the keys are used as group names and the values are passed to
-    ``parse_group()`` as the `lines` argument.  If `data` is a string or
-    sequence of lines, it is first split into .ini-style sections (using
-    the ``split_sections()`` utility function) and the section names are used
-    as group names.  In either case, the `dist` argument is passed through to
-    ``parse_group()`` so that the entry points will be linked to the specified
-    distribution.
+    `data`\ 를 파싱해서 룹 이름을 엔트리 포인트 이름을 ``EntryPoint`` 객체에 맵핑한 사전에
+    매핑하는 사전으로 만든다.`data`\ 가 사전이면, 키는 그룹 이름으로 사용되고 값은
+    ``parse_group()``\ 에 `lines` 인수로 전단된다. `data`\ 가 문자열이거나 줄로 된
+    시퀀스면 첫 번째는 .ini 스타일 섹션으로 분리되고 (``split_section``\ 을 사용) 섹션 이름은
+    그룹 이름으로 사용된다. 어느 경우든 `dist` 인수는 ``parse_group()``\ 에 전달되어서
+    엔트리 포인트는 지정된 디스트리뷰션에 링크될 것이다.
 
 
-``EntryPoint`` Objects
+``EntryPoint`` 객체
 ----------------------
 
-For simple introspection, ``EntryPoint`` objects have attributes that
-correspond exactly to the constructor argument names: ``name``,
-``module_name``, ``attrs``, ``extras``, and ``dist`` are all available.  In
-addition, the following methods are provided:
+간단한 검사의 경우 ``EntryPoint`` 객체는 컨스트럭터 인수 이름과 정확히 일치하는 특성을 가지고 있다:
+``name``, ``module_name``, ``attrs``, ``extras``, ``dist`` 모두 사용 가능하다.
+추가적으로 아래의 메서드들도 제공된다:
 
 ``load()``
-    Load the entry point, returning the advertised Python object.  Effectively
-    calls ``self.require()`` then returns ``self.resolve()``.
+    엔트리 포인트를 로드하고, 선언된 파이썬 객체를 리턴한다. 실제로 ``self.require()``\ 을
+    호출하고 ``self.resolve()``\ 를 반환한다.
 
 ``require(env=None, installer=None)``
-    Ensure that any "extras" needed by the entry point are available on
-    sys.path.  ``UnknownExtra`` is raised if the ``EntryPoint`` has ``extras``,
-    but no ``dist``, or if the named extras are not defined by the
-    distribution.  If `env` is supplied, it must be an ``Environment``, and it
-    will be used to search for needed distributions if they are not already
-    present on sys.path.  If `installer` is supplied, it must be a callable
-    taking a ``Requirement`` instance and returning a matching importable
-    ``Distribution`` instance or None.
+    엔트리 포인트에 필요한 모든 "extras"가 sys.path에서 사용 가능한지 확인한다.
+    ``EntryPoint``\ 가 ``extras``\ 를 가지고 있으면서 ``dist``\ 는 없거나  ,
+    명명된 엑스트라가 디스트리뷰션에 의해 정의되지 않은 경우 ``UnknownExtra``\ 를 일으킨다.
+    만약 `installer`\ 가 입력되면, ``Requirement`` 인스턴스를 취하고 일치하는 임포트 가능한
+    ``Distribution`` 인스턴스나 None을 반환하면서 호출 가능해야 한다.
 
 ``resolve()``
-    Resolve the entry point from its module and attrs, returning the advertised
-    Python object. Raises ``ImportError`` if it cannot be obtained.
+    엔트리 포인트를 모듈과 특성으로부터 분리하고, 선언된 파이썬 오브젝트를 반환한다.
+    얻어지지 않으면 ``ImportError``\ 를 발생시킨다.
 
 ``__str__()``
-    The string form of an ``EntryPoint`` is a string that could be passed to
-    ``EntryPoint.parse()`` to produce an equivalent ``EntryPoint``.
+    ``EntryPoint``\ 의 문자열 형태는 동일한 ``EntryPoint`` 를 생성하기 위해
+    ``EntryPoint.parse()``\ 에 전달될 수 있는 문자열이다.
 
 
-``Distribution`` Objects
+``Distribution`` 객체
 ========================
 
-``Distribution`` objects represent collections of Python code that may or may
-not be importable, and may or may not have metadata and resources associated
-with them.  Their metadata may include information such as what other projects
-the distribution depends on, what entry points the distribution advertises, and
-so on.
+``Distribution`` 객체는 파이썬 코드의 집합을 나타내며 코드는 임포트 되지 않을 수도 있고,
+관련된 메타데이터와 자원을 가지고 있지 않을 수도 있다. 메타데이터는 다른 디스트리뷰션에 어떤 다른
+프로젝트에 의존하고 있는지 디스트리뷰션이 선언하는 엔트리 포인트가 무엇인지 등의 정보를 포함하고 있다.
 
 
-Getting or Creating Distributions
+Distributions 생성 또는 획득하기
 ---------------------------------
 
-Most commonly, you'll obtain ``Distribution`` objects from a ``WorkingSet`` or
-an ``Environment``.  (See the sections above on `WorkingSet Objects`_ and
-`Environment Objects`_, which are containers for active distributions and
-available distributions, respectively.)  You can also obtain ``Distribution``
-objects from one of these high-level APIs:
+일반적으로 당신은 `WorkingSet``\ 이나 ``Environment``\ 에서 ``Distribution`` 객체를
+얻을 것이다. (위쪽의 `WorkingSet Objects`_ 섹션과 `Environment Objects`_ 섹션을 참고하라,
+각각은 유효한 디스트리뷰션과 사용 가능한 디스트리뷰션의 컨테이너다.) 당신은 또한 아래의 고레벨 API
+중에 하나에서 ``Distribution`` 객체를 얻을 수 있다:
 
 ``find_distributions(path_item, only=False)``
-    Yield distributions accessible via `path_item`.  If `only` is true, yield
-    only distributions whose ``location`` is equal to `path_item`.  In other
-    words, if `only` is true, this yields any distributions that would be
-    importable if `path_item` were on ``sys.path``.  If `only` is false, this
-    also yields distributions that are "in" or "under" `path_item`, but would
-    not be importable unless their locations were also added to ``sys.path``.
+    `path_item`\ 을 통해서 접근 가능한 디스트리뷰션을 산출한다. 만약 `only`\ 가 참이면,
+    ``location``\ 이 `path_item`\ 과 동일한 디스트리뷰션들만 산출한다. 즉, `only`\ 가
+    참이면 이것은 ``sys.path``\ 에 `path_item`\ 이 있으면 임포트 할수 있는 모든 디스트리뷰션을
+    다 산출한다. `only`\ 가 거짓이면 이것은 또한 `path_item` 안 또는 아래에 있는 디스트리뷰션을
+    산출한다. 그러나 위치가 ``sys.path``\ 에 추가되지 않으면 임포트 되지 않는다.
 
 ``get_distribution(dist_spec)``
-    Return a ``Distribution`` object for a given ``Requirement`` or string.
-    If `dist_spec` is already a ``Distribution`` instance, it is returned.
-    If it is a ``Requirement`` object or a string that can be parsed into one,
-    it is used to locate and activate a matching distribution, which is then
-    returned.
+    주어진 ``Requirement`` 또는 문자열에 대한 ``Distribution`` 객체를 반환한다.
+    만약 `dist_spec`\ 이 이미 ``Distribution`` 인스턴스면 그게 반환된다.
+    만약 하나로 파싱될 수 있는 문자열이나 ``Requirement`` 객체면 이것은 일치하는 디스트리뷰션을
+    찾고 활성화시키기 위해 사용되고 일치하는 디스트리뷰션이 리턴된다.
 
-However, if you're creating specialized tools for working with distributions,
-or creating a new distribution format, you may also need to create
-``Distribution`` objects directly, using one of the three constructors below.
+그러나 당신이 디스트리뷰션을 사용해서 작업하기 위한 특수한 툴을 제작하고 있거나
+새로운 배포 포맷을 제작하고 있으면 아래의 세 가지 컨스트럭터 중 하나를 사용해 직접
+``Distribution`` 객체를 생성할 필요가 있을 수 있다.
 
-These constructors all take an optional `metadata` argument, which is used to
-access any resources or metadata associated with the distribution.  `metadata`
-must be an object that implements the ``IResourceProvider`` interface, or None.
-If it is None, an ``EmptyProvider`` is used instead.  ``Distribution`` objects
-implement both the `IResourceProvider`_ and `IMetadataProvider Methods`_ by
-delegating them to the `metadata` object.
+이 컨스트럭터들은 모두 디스트리뷰션과 관련된 메타데이터나 자료에 접근하기 위해 사용되는
+선택적인 `metadata` 인수를 취한다. `metadata`\ 는 ``IResourceProvider`` 인터페이스를
+실행하는 객체이거나 None이어야 한다. 만약 None일 경우 ``Emptyprovider``\ 이 대신 사용된다.
+``Distributin`` 객체는 `metadata` 객체에 `IResourceProvider`_\ 와
+`IMetadataProvider Methods`_\ 을 위임함으로써 둘 모두를 실행한다.
 
 ``Distribution.from_location(location, basename, metadata=None, **kw)`` (classmethod)
     Create a distribution for `location`, which must be a string such as a

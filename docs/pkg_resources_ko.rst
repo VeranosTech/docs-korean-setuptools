@@ -760,173 +760,153 @@ Distributions 생성 또는 획득하기
 `IMetadataProvider Methods`_\ 을 위임함으로써 둘 모두를 실행한다.
 
 ``Distribution.from_location(location, basename, metadata=None, **kw)`` (classmethod)
-    Create a distribution for `location`, which must be a string such as a
-    URL, filename, or other string that might be used on ``sys.path``.
-    `basename` is a string naming the distribution, like ``Foo-1.2-py2.4.egg``.
-    If `basename` ends with ``.egg``, then the project's name, version, python
-    version and platform are extracted from the filename and used to set those
-    properties of the created distribution.  Any additional keyword arguments
-    are forwarded to the ``Distribution()`` constructor.
+    url, 파일 이름, ``sys.path``\ 에서 사용되는 다른 문자열 형식의 `location`\ 을
+    위한 디스트리뷰션을 만든다. `basename`\ 은 ``Foo-1.2-py2.4.egg``\ 같이
+    디스트리뷰션의 이름을 정하는 문자열이다. `basename`\ 이 ``.egg``\ 로 끝나면
+    프로젝트의 이름, 버전 파이썬 버전, 플랫폼은 파일이름에서 추출되고, 생성된
+    디스트리뷰션의 각 특성으로 고정된다. 추가적인 키워드 인수는 ``Distribution()``
+    컨스트럭터로 전달된다.
 
 ``Distribution.from_filename(filename, metadata=None**kw)`` (classmethod)
-    Create a distribution by parsing a local filename.  This is a shorter way
-    of saying  ``Distribution.from_location(normalize_path(filename),
-    os.path.basename(filename), metadata)``.  In other words, it creates a
-    distribution whose location is the normalize form of the filename, parsing
-    name and version information from the base portion of the filename.  Any
-    additional keyword arguments are forwarded to the ``Distribution()``
-    constructor.
+    로컬 파일 이름을 파싱해서 디스트리뷰션을 만든다.
+    ``Distribution.from_location(normalize_path(filename),
+    os.path.basename(filename), metadata)``\ 보다 짧은 방법이다. 즉, 위치가
+    이름과 버전 정보를 파일 이름의 기저 부분에서 파싱해서 표준화된 형태의 파일 이름을
+    가진 디스트리뷰션을 생성한다. 추가적인 키워드 인수는 ``Distribution()``
+    컨스트럭터로 전달된다.
 
 ``Distribution(location,metadata,project_name,version,py_version,platform,precedence)``
-    Create a distribution by setting its properties.  All arguments are
-    optional and default to None, except for `py_version` (which defaults to
-    the current Python version) and `precedence` (which defaults to
-    ``EGG_DIST``; for more details see ``precedence`` under `Distribution
-    Attributes`_ below).  Note that it's usually easier to use the
-    ``from_filename()`` or ``from_location()`` constructors than to specify
-    all these arguments individually.
+    속성을 세팅해서 디스트리뷰션을 만든다. `py_version` (현재 파이썬 버전이
+    디폴트 설정으로 되어있음)과 `precedence` (``EGG_DIST``\ 로 디폴트 설정; 자세한 정보는
+    아래 `Distribution 특성`_ 참고) 인수를 제외한 모든 인수는 선택적 이고 디폴트는
+    None으로 되어 있다. ``from_filename()``\ 이나, ``from_location()``
+    컨스트럭터를 사용하는 것이 모든 인수를 개별적으로 지정하는 것보다 쉽다.
 
 
-``Distribution`` Attributes
+``Distribution`` 특성
 ---------------------------
 
 location
-    A string indicating the distribution's location.  For an importable
-    distribution, this is the string that would be added to ``sys.path`` to
-    make it actively importable.  For non-importable distributions, this is
-    simply a filename, URL, or other way of locating the distribution.
+    디스트리뷰션의 위치를 나타내는 문자열. 임포트 가능한 디스트리뷰션의 경우
+    동적으로 임포트하기 위해서 ``sys.path``\ 추가된다. 임포트 되지 않는 디스트리뷰션의
+    경우 파일이름, url, 위치를 나타내는 다른 형식이다.
 
 project_name
-    A string, naming the project that this distribution is for.  Project names
-    are defined by a project's setup script, and they are used to identify
-    projects on PyPI.  When a ``Distribution`` is constructed, the
-    `project_name` argument is passed through the ``safe_name()`` utility
-    function to filter out any unacceptable characters.
+    디스트리뷰션의 프로젝트 이름인 문자열. 프로젝트 이름은 프로젝트의 setup 스크립트를
+    통해서 정의되고, PyPO 에서 프로젝트를 식별하기 위해서 사용된다. ``Distribution``\ 이
+    구성되었을 때, `project_name`\ 은 ``safe_name()`` 유틸리티 함수를 통해 전달돼서
+    허용되지 않는 문자를 걸러낸다
 
 key
-    ``dist.key`` is short for ``dist.project_name.lower()``.  It's used for
-    case-insensitive comparison and indexing of distributions by project name.
+    ``dist.key``\ 는``dist.project_name.lower()``\ 의 축약형이다. 프로젝트 이름으로
+    디스트리뷰션의 색인이나 대소문자를 구별하지않는 대조를 위해 사용된다.
 
 extras
-    A list of strings, giving the names of extra features defined by the
-    project's dependency list (the ``extras_require`` argument specified in
-    the project's setup script).
+    문자열로 된 리스트, 프로젝트의 의존성 리스트(프로젝트의 setup 스크립트에 지정된
+    ``extras_require`` 인수)에 정의된 추가 기능의 이름을 제공한다.
 
 version
-    A string denoting what release of the project this distribution contains.
-    When a ``Distribution`` is constructed, the `version` argument is passed
-    through the ``safe_version()`` utility function to filter out any
-    unacceptable characters.  If no `version` is specified at construction
-    time, then attempting to access this attribute later will cause the
-    ``Distribution`` to try to discover its version by reading its ``PKG-INFO``
-    metadata file.  If ``PKG-INFO`` is unavailable or can't be parsed,
-    ``ValueError`` is raised.
+    이 디스트리뷰션이 프로젝트의 어떤 릴리즈를 포함하고 있는지 표시하는 문자열.
+    ``Distribution`\ 이 구성되면 `version` 인수가 ``safe_version()`` 유틸리티
+    함수를 통해서 전달돼서 허용되지 않는 문자를 걸러낸다. `version`\ 이
+    구성될 때 지정되지 않으면 나중에 이 특성에 접근을 시도하면 ``Distribution``\ 이
+    자신의 ``PKG-INFO`` 메타이데이터 파일을 읽어서 자신의 버전을 찾으려고 시도한다.
+    ``PKG-INFO``\ 이 사용 불가능하거나 파싱될 수가 없으면 ``ValueError``\ 가
+    발생한다.
 
 parsed_version
-    The ``parsed_version`` is an object representing a "parsed" form of the
-    distribution's ``version``.  ``dist.parsed_version`` is a shortcut for
-    calling ``parse_version(dist.version)``.  It is used to compare or sort
-    distributions by version.  (See the `Parsing Utilities`_ section below for
-    more information on the ``parse_version()`` function.)  Note that accessing
-    ``parsed_version`` may result in a ``ValueError`` if the ``Distribution``
-    was constructed without a `version` and without `metadata` capable of
-    supplying the missing version info.
+    ``parsed_version``\ 는 디스트리뷰션의 ``version``\ 의 파싱된 형태를 나타내는
+    객체다. ``dist.parsed_version``\ 는 ``parse_version(dist.version)``\ 를
+    호출하는 쉬운 방법이다 디스트리뷰션을 버전에 따라 분류하거나 비교하기 위해 사용된다.
+    (``parse_version()`` 함수에 대한 자세한 정보는 아래의 `Utilities 파싱하기`_
+    섹션을 참고하라.) ``Distribution``\ 이 `version`\ 이나 손실된 버전 정보를
+    전달해주는 `metadata` 없이 구성되었으면 ``parsed_version``\ 에 접근할 경우
+    ``ValueError``\ 가 발생할 수 있다.
 
 py_version
-    The major/minor Python version the distribution supports, as a string.
-    For example, "2.7" or "3.4".  The default is the current version of Python.
+    문자열로서 디스트리뷰션이 지원하는 major/minor 파이썬 버전을 나타낸다.
+    예를 들어, "2.7" 또는 "3.4". 디폴트는 현재 파이썬 버전이다.
 
 platform
-    A string representing the platform the distribution is intended for, or
-    ``None`` if the distribution is "pure Python" and therefore cross-platform.
-    See `Platform Utilities`_ below for more information on platform strings.
+    디스트리뷰션이 목표로 했던 플랫폼을 나타내는 문자열, 디스트리뷰션이 "순수 파이썬"
+    교차 플랫폼인 경우 ``None``. 플랫폼 문자열에 대한 자세한 정보는 아래의
+    ``Platform Utilities`_\ 를 참고하라.
 
 precedence
-    A distribution's ``precedence`` is used to determine the relative order of
-    two distributions that have the same ``project_name`` and
-    ``parsed_version``.  The default precedence is ``pkg_resources.EGG_DIST``,
-    which is the highest (i.e. most preferred) precedence.  The full list
-    of predefined precedences, from most preferred to least preferred, is:
-    ``EGG_DIST``, ``BINARY_DIST``, ``SOURCE_DIST``, ``CHECKOUT_DIST``, and
-    ``DEVELOP_DIST``.  Normally, precedences other than ``EGG_DIST`` are used
-    only by the ``setuptools.package_index`` module, when sorting distributions
-    found in a package index to determine their suitability for installation.
-    "System" and "Development" eggs (i.e., ones that use the ``.egg-info``
-    format), however, are automatically given a precedence of ``DEVELOP_DIST``.
+    디스트리뷰션의 ``precedence``\ 는 같은 `project_name``\ 과 ``parsed_version``\ 을
+    가진 두 디스트리뷰션의 상대적 순서를 결정하기 위해 사용된다. 디폴트 우선은
+    ``pkg_resources.EGG_DIST``\ 이며 가장 높은(즉, 가장 선호되는) 우선이다.
+    사전 정의된 우선순위의 전체 리스트는, 가장 선호되는 것부터 최소로 선호되는 것
+    순으로: ``EGG_DIST``, ``BINARY_DIST``, ``SOURCE_DIST``, ``CHECKOUT_DIST``,
+    ``DEVELOP_DIST``\ 이다.  일반적으로, ``EGG_DIST`` 이외의 우선은 설치 적합성을
+    결정하는 패키지 인덱스에서 검색된 디스트리뷰션을 분류할 때
+    ``setuptools.package_index`` 모듈에 의해서만 사용된다. 그러나 "System"과
+    "Development" eggs는 (즉 ``.egg-info``\ 포맷을 사용하는) ``DEVELOP_DISt``의
+    우선권을 자동으로 부여받는다.
 
 
 
-``Distribution`` Methods
+``Distribution`` 메서드
 ------------------------
 
 ``activate(path=None)``
-    Ensure distribution is importable on `path`.  If `path` is None,
-    ``sys.path`` is used instead.  This ensures that the distribution's
-    ``location`` is in the `path` list, and it also performs any necessary
-    namespace package fixups or declarations.  (That is, if the distribution
-    contains namespace packages, this method ensures that they are declared,
-    and that the distribution's contents for those namespace packages are
-    merged with the contents provided by any other active distributions.  See
-    the section above on `Namespace Package Support`_ for more information.)
+    디스트리션이 `path`\ 에서 임포트 가능하게 한다. `path`\ 가 None이면 대신에
+    ``sys.path``\ 가 사용된다. 디스트리뷰션의 ``location``\ 이 `path` 안에 있고,
+    필요한 이름공간 패키지 수정과 선언을 수행한다. (즉, 디스트리뷰션이 이름 공간
+    패키지를 포함하고 있으면, 이 메서드는 패키지를 선언하고 이름 공간 패키지를 위한
+    디스트리뷰션의 내용을 다른 동적 디스트리뷰션에서 제공되는 컨텐즈와 병합한다.
+    자세한 정보는 `Namespace Package SUpport`_\ 섹션을 참고하라.)
 
-    ``pkg_resources`` adds a notification callback to the global ``working_set``
-    that ensures this method is called whenever a distribution is added to it.
-    Therefore, you should not normally need to explicitly call this method.
-    (Note that this means that namespace packages on ``sys.path`` are always
-    imported as soon as ``pkg_resources`` is, which is another reason why
-    namespace packages should not contain any code or import statements.)
+    ``pkg_resources``\ 는 전역 ``working_set``\ (디스트리뷰션이 추가될 때마다
+    이 메서드가 호출된다)에 알림 콜백을 추가한다.  그러므로, 일반적으로 명시적으로
+    이 메서드를 호출할 필요는 없다. (sys.path 에 있는 이름 공간 패키지는
+    ``pkg_resource``\ 가 있는 한 항상 임포트된다. 이것 때문에 이름공간 패키지는
+    스테이트먼트를 임포트하거나 코드를 포함해서는 안된다.)
 
 ``as_requirement()``
-    Return a ``Requirement`` instance that matches this distribution's project
-    name and version.
+    이 디스트리뷰션의 이름과 버전이 일치하는 ``Requirement`` 인스턴스를 반환한다.
 
 ``requires(extras=())``
-    List the ``Requirement`` objects that specify this distribution's
-    dependencies.  If `extras` is specified, it should be a sequence of names
-    of "extras" defined by the distribution, and the list returned will then
-    include any dependencies needed to support the named "extras".
+    디스트리뷰션의 의존성을 지정하는 ``Requirement`` 객체를 나열한다. `extras`\ 가
+    지정되어 있으면 디스트리뷰션에 의해 지정된 "extras"의 이름 시퀀스여야 하며 반환된
+    리스트는 "extras"를 지원하기 위해 필요한 의존성을 포함할 것이다.
 
 ``clone(**kw)``
-    Create a copy of the distribution.  Any supplied keyword arguments override
-    the corresponding argument to the ``Distribution()`` constructor, allowing
-    you to change some of the copied distribution's attributes.
+    디스트리뷰션의 복사본을 생성한다. 입력되는 키워드 인수는 ``Distribution()``
+    컨스트럭터에 대응하는 인수를 무시하고 복사된 디스트리뷰션의 특성 일부를 변경할 수
+    있게 해준다.
 
 ``egg_name()``
-    Return what this distribution's standard filename should be, not including
-    the ".egg" extension.  For example, a distribution for project "Foo"
-    version 1.2 that runs on Python 2.3 for Windows would have an ``egg_name()``
-    of ``Foo-1.2-py2.3-win32``.  Any dashes in the name or version are
-    converted to underscores.  (``Distribution.from_location()`` will convert
-    them back when parsing a ".egg" file name.)
+    디스트리뷰션의 표준 파일 이름이 무엇이어야 하는지를 ".egg" 확장자를 포함하지 않고
+    반환한다. 예를 들어 윈도우즈 파이썬 2.3에서 실행되는 버전 1.2 "Foo"  프로젝트
+    디스트리뷰션은 ``Foo-1-2-py2.3-win32``\ 라는 ``egg_name()``\ 을 가질 것이다.
+    이름이나 버전에 있는 대쉬는 언더스코어로 바퀸다. (``Distribution.from_location()``\ 는
+    ".egg" 파일 이름을 파싱할 때 그것들을 다시 되돌린다.)
 
 ``__cmp__(other)``, ``__hash__()``
-    Distribution objects are hashed and compared on the basis of their parsed
-    version and precedence, followed by their key (lowercase project name),
-    location, Python version, and platform.
+    디스트리뷰션 객체는 해쉬가 된 다음 파싱된 버전과 우선을 기초로 비교되고
+    뒤에 키(소문자 프로젝트 이름), 위치, 파이썬 버전, 플랫폼이 온다.
 
-The following methods are used to access ``EntryPoint`` objects advertised
-by the distribution.  See the section above on `Entry Points`_ for more
-detailed information about these operations:
+아래의 메서드는 배포판으로 선전된 ``EntryPoint`` 객체에 접근하기위해 사용된다.
+자세한 정보는 위쪽에 있는 `Entry Points`_ 를 참고하라:
 
 ``get_entry_info(group, name)``
-    Return the ``EntryPoint`` object for `group` and `name`, or None if no
-    such point is advertised by this distribution.
+    `group`\ 과 `name`\ 의 ``EntryPoint`` 객체를 반환하고, 디스트리뷰션에 의해
+    선전된 포인트가 없으면 None이 반환된다.
 
 ``get_entry_map(group=None)``
-    Return the entry point map for `group`.  If `group` is None, return
-    a dictionary mapping group names to entry point maps for all groups.
-    (An entry point map is a dictionary of entry point names to ``EntryPoint``
-    objects.)
+    `group`\ 의 엔트리 포인트 맵을 반환한다.  `group`\ 이 None이면 그룹 이름을
+    모든 그룹의 엔트피 포인트 맵에 대응시킨 사전을 반환한다. (엔트리 포인트 맵은
+    ``EntryPoint``\ 에 대한 엔트리 포인트 이름의 사전이다.)
 
 ``load_entry_point(group, name)``
-    Short for ``get_entry_info(group, name).load()``.  Returns the object
-    advertised by the named entry point, or raises ``ImportError`` if
-    the entry point isn't advertised by this distribution, or there is some
-    other import problem.
+    ``get_entry_info(group, name).load()``\ 의 축약형. 명명된 엔트리 포인트에 의해
+    선전된 객체를 반환한거나 엔트리 포인트가 디스트리뷰션에 의해 선전되지 않았거나
+    다른 임포트 문제가 있을 경우 ``ImportError``\ 를 발생시킨다.
 
-In addition to the above methods, ``Distribution`` objects also implement all
-of the `IResourceProvider`_ and `IMetadataProvider Methods`_ (which are
-documented in later sections):
+위의 메소드 외에 ``Distribution`` 객체는 `IResourceProvider`_,
+`IMetadataProvider Methods`_\ 의 모든 메소드를 실행할 수 있다. (다음 섹션들에
+설명되어 있다):
 
 * ``has_metadata(name)``
 * ``metadata_isdir(name)``
@@ -941,131 +921,109 @@ documented in later sections):
 * ``resource_isdir(resource_name)``
 * ``resource_listdir(resource_name)``
 
-If the distribution was created with a `metadata` argument, these resource and
-metadata access methods are all delegated to that `metadata` provider.
-Otherwise, they are delegated to an ``EmptyProvider``, so that the distribution
-will appear to have no resources or metadata.  This delegation approach is used
-so that supporting custom importers or new distribution formats can be done
-simply by creating an appropriate `IResourceProvider`_ implementation; see the
-section below on `Supporting Custom Importers`_ for more details.
+만약 디스트리뷰션이 `metadata` 인수를 가지고 생성됐으면, 이 리소스와 메다데이터
+접근 메서드는 `metadata` 제공자에게 위임된다. 그렇지 않은 경우 ``EmptyProvider``\ 에
+위임돼서 디스트리뷰션은 리소스나 메타데이터가 없이 나타날 것이다. 이 위임 방식은
+커스텀 임포터를 지원하거나 적절한 `IResourceProvider`_ 구현을 생성해서
+새로운 배포 포맷이 간단하게 작동되도록 하기 위해 사용된다; 아래의
+`커스텀 임포터 지원하기`_\ 를 참고하라.
 
 
 ``ResourceManager`` API
 =======================
 
-The ``ResourceManager`` class provides uniform access to package resources,
-whether those resources exist as files and directories or are compressed in
-an archive of some kind.
+``ResourceManager`` 클래스는 자원이 파일과 디렉토리로 존재하든 특정 종류로 압축 되었든
+패키지 리소스에 대한 일관된 접근을 제공한다.
 
-Normally, you do not need to create or explicitly manage ``ResourceManager``
-instances, as the ``pkg_resources`` module creates a global instance for you,
-and makes most of its methods available as top-level names in the
-``pkg_resources`` module namespace.  So, for example, this code actually
-calls the ``resource_string()`` method of the global ``ResourceManager``::
+일반적으로, ``pkg_resources`` 모듈이 전역 인스턴스를 생성해주고, ``pkg_resources``
+모듈 이름 공간에 있는 최상위 레벨의 이름으로 메서드의 대부분을 사용할수 있게 해주기
+때문에``ResourceManager`` 인스턴스를 명시적으로 관리하거나 생성할 필요는 없다,
+그래서 예를 들면, 이 코드는 실제로 전역 ``ResourceManager``\ 의 ``resource_string()``
+메서드를 실제로 호출 한다::
 
     import pkg_resources
     my_data = pkg_resources.resource_string(__name__, "foo.dat")
 
-Thus, you can use the APIs below without needing an explicit
-``ResourceManager`` instance; just import and use them as needed.
+따라서, 명시적인 ``ResourceManager`` 인스턴스 필요 없이 아래의 API를 사용할 수 있다;
+그냥 임포트해서 필요한대로 사용하면 된다.
 
 
 Basic Resource Access
 ---------------------
 
-In the following methods, the `package_or_requirement` argument may be either
-a Python package/module name (e.g. ``foo.bar``) or a ``Requirement`` instance.
-If it is a package or module name, the named module or package must be
-importable (i.e., be in a distribution or directory on ``sys.path``), and the
-`resource_name` argument is interpreted relative to the named package.  (Note
-that if a module name is used, then the resource name is relative to the
-package immediately containing the named module.  Also, you should not use use
-a namespace package name, because a namespace package can be spread across
-multiple distributions, and is therefore ambiguous as to which distribution
-should be searched for the resource.)
+아래의 메서드에서 `pakage_or_requirement` 인수는 파이썬 패키지/모듈 이름 (예,
+``foo.bar``) 또는 ``Requirement`` 인스턴스일 수 있다. 패키지 또는 모듈 이름인 경우
+명명된 모듈이나 패키지는 임포트 되고 (즉, 디스트리뷰션이나 ``sys.path`` 에 있는
+디렉토리 안에 있다), `resource_name` 인수는 명명된 패키지에 따라 해석된다.
+(모듈 이름이 사용되었으면, 리소스 이름은 즉시 명명된 모듈을 포함하는 패키지와 연관된다.
+또한 이ㅣ름공간 패키지 이름을 사용해서는 안 된다. 왜냐하면 이름 공간 패키지는 여러
+디스트리뷰션에 걸쳐서 퍼져있고 리소르를 위해서 어떤 디스트리뷰션을 찾아야 하는지
+모호해지기 때문이다.
 
-If it is a ``Requirement``, then the requirement is automatically resolved
-(searching the current ``Environment`` if necessary) and a matching
-distribution is added to the ``WorkingSet`` and ``sys.path`` if one was not
-already present.  (Unless the ``Requirement`` can't be satisfied, in which
-case an exception is raised.)  The `resource_name` argument is then interpreted
-relative to the root of the identified distribution; i.e. its first path
-segment will be treated as a peer of the top-level modules or packages in the
-distribution.
+``Requirement``\ 이면, 요구 조건이 자동적으로 분해되고(필요한 경우 현재 ``Environment``\ 를
+검색한다) 존재하지 않으면 일치하는 디스트리뷰션이 ``WorkingSet``과 ``sys.paht``\ 에
+추가된다. (``Requirement``\ 가 충족되지 않으면, 예외가 발생한다.) `resource_name`\ 는
+식별된 디스트리뷰션의 루트에 따라 해석된다; 즉 첫 번째 경로 부분은 디스트리뷰션에 있는
+최상위 레벨의 모듈이나 패키지의 피어로 처리될 것이다.
 
-Note that resource names must be ``/``-separated paths and cannot be absolute
-(i.e. no leading ``/``) or contain relative names like ``".."``.  Do *not* use
-``os.path`` routines to manipulate resource paths, as they are *not* filesystem
-paths.
+리소스 이름은 ``/``\ 로 분리된 경로여야 하고 절대경로 (즉, ``/``\ 로
+시작하면 안 됨) 이거나 ``".."`` 같은 상대 이름을 포함해서는 안된다. 파일 시스템 경로가
+아니기 때문에 ``os.path`` 루틴을 사용해서 리소스 경로를 조작하면 안 된다.
 
 ``resource_exists(package_or_requirement, resource_name)``
-    Does the named resource exist?  Return ``True`` or ``False`` accordingly.
+    명명된 리소스가 존재하는가? ``True`` 또는 ``False`` 반환한다.
 
 ``resource_stream(package_or_requirement, resource_name)``
-    Return a readable file-like object for the specified resource; it may be
-    an actual file, a ``StringIO``, or some similar object.  The stream is
-    in "binary mode", in the sense that whatever bytes are in the resource
-    will be read as-is.
+    지정된 리소스에 대한 읽을 수 있는 파일 형태의 객체를 반환한다; 실제 파일,
+    ``StringIO`` 이거나 유사한 객체일 수도 있다. 리소스에 있는 모든 바이트는
+    그대로 읽혀진다는 점에서 스트림은 바이너리 모드다.
 
 ``resource_string(package_or_requirement, resource_name)``
-    Return the specified resource as a string.  The resource is read in
-    binary fashion, such that the returned string contains exactly the bytes
-    that are stored in the resource.
+    문자열로 지정된 리소스를 반환한다. 리소스는 바이너리 방식으로 읽혀지며, 반환된
+    문자열은 정확히 리소스에 저장된 바이트를 포함하고 있다.
 
 ``resource_isdir(package_or_requirement, resource_name)``
-    Is the named resource a directory?  Return ``True`` or ``False``
-    accordingly.
+    명명된 리소스가 사전인가? ``True`` 또는 ``False``\ 를 반환한다.
 
 ``resource_listdir(package_or_requirement, resource_name)``
-    List the contents of the named resource directory, just like ``os.listdir``
-    except that it works even if the resource is in a zipfile.
+    리소스가 zip파일 안에 있어도 작동한다는 점을 제외하면 ``os.listdir``\ 처럼 명명된
+    리소스 사전의 컨텐츠를 나열한다.
 
-Note that only ``resource_exists()`` and ``resource_isdir()`` are insensitive
-as to the resource type.  You cannot use ``resource_listdir()`` on a file
-resource, and you can't use ``resource_string()`` or ``resource_stream()`` on
-directory resources.  Using an inappropriate method for the resource type may
-result in an exception or undefined behavior, depending on the platform and
-distribution format involved.
+리소스 타입에 관해서 ``resource_exists()``, ``resource_isdir()``\ 만 구분하지 않는다
+파일 리소스에서 ``resource_listdir()``\ 을 사용할 수 없고, 디렉토리 리소스에서
+``resource_string()``, ``resource_stream()``\ 를 사용할 수 없다. 리소스 타입에
+부적절한 메서드를 사용하는 것은 플랫폼이나 포함된 디스트리뷰션의 포맷에 따라서 정의되지
+않은 동작이나 예외를 일으킨다.
 
-
-Resource Extraction
+리소스 추출
 -------------------
 
 ``resource_filename(package_or_requirement, resource_name)``
-    Sometimes, it is not sufficient to access a resource in string or stream
-    form, and a true filesystem filename is needed.  In such cases, you can
-    use this method (or module-level function) to obtain a filename for a
-    resource.  If the resource is in an archive distribution (such as a zipped
-    egg), it will be extracted to a cache directory, and the filename within
-    the cache will be returned.  If the named resource is a directory, then
-    all resources within that directory (including subdirectories) are also
-    extracted.  If the named resource is a C extension or "eager resource"
-    (see the ``setuptools`` documentation for details), then all C extensions
-    and eager resources are extracted at the same time.
+    종종 문자열이나 스트림 형태로 리소스에 접근하는 것으로 충분하지 않으며, 실제
+    파일시스템 파일이름이 필요하다. 그러한 경우 리소스에 대한 파일 이름을 얻으려면
+    이 메서드를 (또는 모듈 레벨의 함수) 사용해야 한다. 리소스가 압축된 egg 같은
+    아카이브 디스트립뷰션이면, 캐쉬 디렉토리에 추가될 것이고 캐쉬에 있는 파일 이릉미
+    반환될 것이다. 명명된 리소스가 디렉토리면, 그 디렉토리에 (하위 디렉토리 포함)있는
+    모든 리소스 또한 추출된다. 명명된 리소스가 C 익스텐션이거나 "eager resource"면
+    (``setuptools`` 도큐먼테이션 참고), 모든 C 익스텐션과 eager 리소스가 동시에
+    추출된다.
 
-    Archived resources are extracted to a cache location that can be managed by
-    the following two methods:
+    아카이브된 자원은 아래의 두 메서드에 의해 관뢰될 수 있는 캐쉬 위치로 추출된다:
 
 ``set_extraction_path(path)``
-    Set the base path where resources will be extracted to, if needed.
+    필요한 경우, 리소스가 추출될 기본 경로를 설정한다.
 
-    If you do not call this routine before any extractions take place, the
-    path defaults to the return value of ``get_default_cache()``.  (Which is
-    based on the ``PYTHON_EGG_CACHE`` environment variable, with various
-    platform-specific fallbacks.  See that routine's documentation for more
-    details.)
+    추출이 시작되기 전에 이 루틴을 호출하지 않으면 경로는 ``get_default_chache()``\ 의
+    반환 값으로 디폴트 설정이 된다. (``PYTHON_EGG_CACHE`` 환경 변수를 기반으로 하고,
+    다양한 플랫폼 한정 대체 폴백이 있다. 더 사제한 정보는 루틴의 도큐먼테이션을
+    참고하라.
 
-    Resources are extracted to subdirectories of this path based upon
-    information given by the resource provider.  You may set this to a
-    temporary directory, but then you must call ``cleanup_resources()`` to
-    delete the extracted files when done.  There is no guarantee that
-    ``cleanup_resources()`` will be able to remove all extracted files.  (On
-    Windows, for example, you can't unlink .pyd or .dll files that are still
-    in use.)
+    리소스는 리소스 제공자에 의해 주어진 정보에 기반한 경로의 하위 디렉토리에
+    추출된다. 임시 디렉토로 설정해도 되지만 끝났을 때 추출된 파일을 지워야 하므로
+    반드시 ``cleanup_resorces()``\ 를 호출해야 한다.
 
-    Note that you may not change the extraction path for a given resource
-    manager once resources have been extracted, unless you first call
-    ``cleanup_resources()``.
+    당신이 ``cleanup_resources()``\ 를 첫 번째로 호출하지 않으면 일단 리소스가
+    추출되면 주어잔 자료 매니저를 위해 경로를 바꿀 수 없다.
 
 ``cleanup_resources(force=False)``
     Delete all extracted resource files and directories, returning a list

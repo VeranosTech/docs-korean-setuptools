@@ -1026,131 +1026,118 @@ Basic Resource Access
     추출되면 주어잔 자료 매니저를 위해 경로를 바꿀 수 없다.
 
 ``cleanup_resources(force=False)``
-    Delete all extracted resource files and directories, returning a list
-    of the file and directory names that could not be successfully removed.
-    This function does not have any concurrency protection, so it should
-    generally only be called when the extraction path is a temporary
-    directory exclusive to a single process.  This method is not
-    automatically called; you must call it explicitly or register it as an
-    ``atexit`` function if you wish to ensure cleanup of a temporary
-    directory used for extractions.
+    추출된 모든 리소스 파일과 디렉토리를 삭제하고, 성공적으로 제거되지 않은
+    디렉토리와 파일 이름 리스트를 반환한다. 이 함수는 일시처리 보호를 받지 않는다.
+    따라서 일반적으로 추출 경로가 다일 프로세스에서 독점적으로 이루어지는 임시
+    디렉토리일 때만 호출되어야 한다. 이 메서드는 자동적으로 호출되지 않는다;
+    추출에 쓰였던 임시 디렉토리를 정리하고 싶으면 반드시 명시적으로 호출하거나
+    ``atexit`` 함수로 등록해야 한다.
 
 
-"Provider" Interface
+"Provider" 인터페이스
 --------------------
 
-If you are implementing an ``IResourceProvider`` and/or ``IMetadataProvider``
-for a new distribution archive format, you may need to use the following
-``IResourceManager`` methods to co-ordinate extraction of resources to the
-filesystem.  If you're not implementing an archive format, however, you have
-no need to use these methods.  Unlike the other methods listed above, they are
-*not* available as top-level functions tied to the global ``ResourceManager``;
-you must therefore have an explicit ``ResourceManager`` instance to use them.
+새로운 배포 아카이브 포맷을 위해서 ``IResourceProvider``, ``IMetadataProvider``\ 을
+구현하고 있는 중이면 자료 추출 기느을 파일 시스템과 결합시키기 위해서
+``IResourceManager`` 메서드를 사용해야 한다. 그러나, 아카이브 포맷을 구현하지 않는다면
+이 메서드를 사용할 필요는 없다. 앞에서 설명된 여러 메서드들과는 달리 이 메서드들은
+전역 ``ResourceManager``\ 에 묶인 최상위 함수로서 사용할 수가 없다;
+따라서 그 메서드들을 사용하려면 명시적인 ``ResourceManager`` 인스턴스가 있어야
+한다.
 
 ``get_cache_path(archive_name, names=())``
-    Return absolute location in cache for `archive_name` and `names`
+    `archive_name`, `names`\ 에 관한 캐시에 있는 절대 위치를 반환한다
 
-    The parent directory of the resulting path will be created if it does
-    not already exist.  `archive_name` should be the base filename of the
-    enclosing egg (which may not be the name of the enclosing zipfile!),
-    including its ".egg" extension.  `names`, if provided, should be a
-    sequence of path name parts "under" the egg's extraction location.
+    존재하지 않는 경우 결과 경로의 부모 디렉토리가 생성될 것이다. `archive_name`\ 는
+    외함하는 egg(외함하는 zip 파일의 이름이 아닐 수 있음)의 가저 파일이며, ".egg"
+    확장자를 포함한다. `names`\ 가 제공되면 `names`\ 는 egg의 추출 위치 아래에 있는
+    경로 이름 부분의 시퀀스여야 한다.
 
-    This method should only be called by resource providers that need to
-    obtain an extraction location, and only for names they intend to
-    extract, as it tracks the generated names for possible cleanup later.
+    이 메서드는 나중에 정리하기 위해서 생성된 이름을 추적하기 때문에, 추출 위치를
+    얻어야 할 필요가 있는 리소스 제공자에 의해서, 추출될 예정인 이름에 대해서만
+    호출되어야 한다.
 
 ``extraction_error()``
-    Raise an ``ExtractionError`` describing the active exception as interfering
-    with the extraction process.  You should call this if you encounter any
-    OS errors extracting the file to the cache path; it will format the
-    operating system exception for you, and add other information to the
-    ``ExtractionError`` instance that may be needed by programs that want to
-    wrap or handle extraction errors themselves.
+    추출 프로세스를 간섭하는 동적 예외를 설명해주는 ``ExtractionError`` 발생시킨다.
+    캐시 경로에서 파일을 추출하는 중에 OS error가 발생하면 이 메서드를 호출해야 한다;
+    이것은 운영체제 예외를 포맷해주고 다른 정보를, 추출 예외를 자체적으로 처리하고 래핑하는
+    프로그램에서 필요로 하는 ``ExtractionError`` 인스턴스에 추가해준다.
 
 ``postprocess(tempname, filename)``
-    Perform any platform-specific postprocessing of `tempname`.
-    Resource providers should call this method ONLY after successfully
-    extracting a compressed resource.  They must NOT call it on resources
-    that are already in the filesystem.
+    `tempname`\ 의 지정 플랫폼 후처리를 수행한다. 리소스 제공자는 성공적으로 압축된
+    리소스를 추출했을 때만 이 메서드를 호출해야 한다. 이미 파일 시스템에 있는
+    리소스에 대해서는 호출하면 안 된다.
 
-    `tempname` is the current (temporary) name of the file, and `filename`
-    is the name it will be renamed to by the caller after this routine
-    returns.
+    `tempname`\ 파일의 임시 이름이고, 'filename'\ 은 이 루틴이 반환된 후에 호줄자에
+    의해 다시 명명될 것이다.
 
 
-Metadata API
-============
+메타데이터 API
+=============
 
-The metadata API is used to access metadata resources bundled in a pluggable
-distribution.  Metadata resources are virtual files or directories containing
-information about the distribution, such as might be used by an extensible
-application or framework to connect "plugins".  Like other kinds of resources,
-metadata resource names are ``/``-separated and should not contain ``..`` or
-begin with a ``/``.  You should not use ``os.path`` routines to manipulate
-resource paths.
+메타데이터 API는 접속가능한 디스트리뷰션에 묶여있는 메타데이터 리소스에 접근하기 위해
+사용된다. 메타데이터 리소스는 가상 파일 또는 디렉토리로, "plugins"에 연결하는 확장
+어플리케이션이나 프레임워크에 사용될 수 있는 디스트리뷰션에 관한 정보를 포함하고 있다.
+다른 종류의 리소스와 마찬가지로, 메타데이터 리소스 이름은 ``/``\ 로 구분되어 있고
+``..``\ 를 포함하거나 ``/``\ 로 시작하면 안 된다. 리소스 경로를 조작하기 위해서
+``os.path`` 루틴을 사용해서는 안 된다.
 
-The metadata API is provided by objects implementing the ``IMetadataProvider``
-or ``IResourceProvider`` interfaces.  ``Distribution`` objects implement this
-interface, as do objects returned by the ``get_provider()`` function:
+메타데이터 API는 ``IMetadataProvider`` 또는 ``IResourceProvider`` 인터페이스를
+시행하는 객체에 의해 제공된다. ``get_provider()`` 함수에 의해 반환되는 객체가
+하는 것처럼, ``Distribution`` 객체가 이 인터페이스를 시행한다;
 
 ``get_provider(package_or_requirement)``
-    If a package name is supplied, return an ``IResourceProvider`` for the
-    package.  If a ``Requirement`` is supplied, resolve it by returning a
-    ``Distribution`` from the current working set (searching the current
-    ``Environment`` if necessary and adding the newly found ``Distribution``
-    to the working set).  If the named package can't be imported, or the
-    ``Requirement`` can't be satisfied, an exception is raised.
+    패키지 이름이 입력되면, 패키지를 위한 ``IResourceProvider``\ 반환된다.
+    ``Requirement``\ 이 입력력되면, 현재 (필요한 경우 현재의 ``Environment``\ 를
+    찾고 새로 찾은 ``Distribution``\ 을 working set에 추가하는) working set으로부터
+    ``Distribution``\ 을 반환함으로써 요구조건을 분해한다. 만약 명명된 패키지가
+    임포트 되지 않거나 ``Requirement``\ 가 충족되지 않으면, 예외가 발생한다.
 
-    NOTE: if you use a package name rather than a ``Requirement``, the object
-    you get back may not be a pluggable distribution, depending on the method
-    by which the package was installed.  In particular, "development" packages
-    and "single-version externally-managed" packages do not have any way to
-    map from a package name to the corresponding project's metadata.  Do not
-    write code that passes a package name to ``get_provider()`` and then tries
-    to retrieve project metadata from the returned object.  It may appear to
-    work when the named package is in an ``.egg`` file or directory, but
-    it will fail in other installation scenarios.  If you want project
-    metadata, you need to ask for a *project*, not a package.
+    주석: ``Requirement`` 대신 패키지 이름을 사용하면, 돌려받는 객체가 플러그
+    가능한 디스트리뷰션이 아니게 될 수도 있으며 이는 설치하는 패키지의 방법에 따라
+    다르다. 특히 "개발" 패키지와 외부 관리되는 단일 버전 패키지는 패키지 이름을
+    대응하는 프로젝트의 메타데이터와 매핑할 수 있는 방법을 가지고 있지 않다. 패키지
+    이름을 ``get_provider()`` 에 전달하고 반환되는 객체로부터 프로젝트 메타데이터를
+    회수하는 코드를 쓰지 마라. 명명된 패키지가 ``.egg`` 파일이나 디렉토리에 있을 때
+    작동이 되는 것처럼 보이지만, 다른 설치 시나리오에서는 실패할 것이다. 프로젝트
+    메타데이터를 원하는 경우, 패키지가 아니라 *프로젝트*\ 에 요청할 필요가 있다.
 
 
-``IMetadataProvider`` Methods
+``IMetadataProvider`` 메서드
 -----------------------------
 
-The methods provided by objects (such as ``Distribution`` instances) that
-implement the ``IMetadataProvider`` or ``IResourceProvider`` interfaces are:
+``IMetadataProvider`` 또는 ``IResourceProvider`` 인스턴스를 시행하는 오브젝트에서
+(``Distribution`` 인스턴스 등) 제공되는 메서드는 아래와 같다:
 
 ``has_metadata(name)``
-    Does the named metadata resource exist?
+    지명된 메타데이터 리소스가 존재하는가?
 
 ``metadata_isdir(name)``
-    Is the named metadata resource a directory?
+    지명된 메타데이터가 디렉토리인가?
 
 ``metadata_listdir(name)``
-    List of metadata names in the directory (like ``os.listdir()``)
+    (``os.litdir()`` 같은) 디렉토리에 있는 메타디에터 이름의 리스트.
 
 ``get_metadata(name)``
-    Return the named metadata resource as a string.  The data is read in binary
-    mode; i.e., the exact bytes of the resource file are returned.
+    지명된 메타데이터 리소스를 문자열로 반환함. 데이터는 바이너리 모드로 읽는다; 즉,
+    리소스 파일의 정확한 바이트가 반환된다.
 
 ``get_metadata_lines(name)``
-    Yield named metadata resource as list of non-blank non-comment lines.  This
-    is short for calling ``yield_lines(provider.get_metadata(name))``.  See the
-    section on `yield_lines()`_ below for more information on the syntax it
-    recognizes.
+    빈 칸과 코멘트 라인이 없는 라인들의 리스트로 지명된 메타데이터 리소스를 산출한다.
+    이것은 ``yield_lines(provider.get_metadata(name))``\ 의 생략형이다. 인식하는
+    신택스에 대한 자세한 정보는 아래쪽의 `yield_lines()`_\ 에 있는 섹션을 참고하라.
 
 ``run_script(script_name, namespace)``
-    Execute the named script in the supplied namespace dictionary.  Raises
-    ``ResolutionError`` if there is no script by that name in the ``scripts``
-    metadata directory.  `namespace` should be a Python dictionary, usually
-    a module dictionary if the script is being run as a module.
+    입력된 이름 공간 사전에 있는 지명된 스크립트를 실행한다. ``script`` 메타데이터 디렉토리에
+    그 이름을 가진 스크립트가 없으면 ``ResolutionError``\ 를 발생시킨다. `namespace`\ 는
+    파이썬 사전이어야 하며 일반적으로 스크립트가 모듈로 실행되면 모듈 사전이어야 한다.
 
 
 Exceptions
 ==========
 
-``pkg_resources`` provides a simple exception hierarchy for problems that may
-occur when processing requests to locate and activate packages::
+``pkg_resources``\ 는 프로세스가 패키지를 찾고 가동시키는 요청을 할 때 일어날 수 있는 문제에 대한
+간단한 예외 계층을 제공한다::
 
     ResolutionError
         DistributionNotFound
@@ -1160,127 +1147,116 @@ occur when processing requests to locate and activate packages::
     ExtractionError
 
 ``ResolutionError``
-    This class is used as a base class for the other three exceptions, so that
-    you can catch all of them with a single "except" clause.  It is also raised
-    directly for miscellaneous requirement-resolution problems like trying to
-    run a script that doesn't exist in the distribution it was requested from.
+    이 클래스는 다른 세 가지 예외에 대해 기본 클래스로 사용되며, 단일 "예외" 구문으로
+    모두를 캐치할 수 있다. 요청한 디스트리뷰션 내에 존재하지 않는 스크립트를 실행하려는
+    시도를 하는 것 같은 여러 종류의 요구조건 해결 문제에 대해 발생할 수도 있다.
 
 ``DistributionNotFound``
-    A distribution needed to fulfill a requirement could not be found.
+    요구조건을 이행하기 위해 필요한 디스트리뷰션이 찾아지지 않는다.
 
 ``VersionConflict``
-    The requested version of a project conflicts with an already-activated
-    version of the same project.
+    요청된 버전의 프로젝트가 가동 중인 같은 프로젝트의 버전과 충돌한다.
 
 ``UnknownExtra``
-    One of the "extras" requested was not recognized by the distribution it
-    was requested from.
+    요청된 "extras" 중 하나가 요청한 디스트리뷰션에 의해 인식되지 않는다.
 
 ``ExtractionError``
-    A problem occurred extracting a resource to the Python Egg cache.  The
-    following attributes are available on instances of this exception:
+    리소스를 파이썬 egg 캐시로 추출할 때 문제가 발생핬다. 아래의 특성들은 이 예외의
+    인스턴스에서 사용 가능하다:
 
     manager
-        The resource manager that raised this exception
+        예외를 발생시킨 리소스 관리자
 
     cache_path
-        The base directory for resource extraction
+        리소스 추출을 위한 기본 디렉토리
 
     original_error
-        The exception instance that caused extraction to fail
+        추출을 실패하게 한 예외 인스턴스
 
 
-Supporting Custom Importers
+커스텀 importers 지원하기
 ===========================
 
-By default, ``pkg_resources`` supports normal filesystem imports, and
-``zipimport`` importers.  If you wish to use the ``pkg_resources`` features
-with other (PEP 302-compatible) importers or module loaders, you may need to
-register various handlers and support functions using these APIs:
+기본적으로, ``pkg_resources``\ 는 일반 파일시스템 임포트와 ``zipimport`` importers를
+지원한다. 다른 (PEP 302 호환) importers나 모듈 loaders로 ``pkg_resource`` 기능을
+사용하고 싶으면 아래의 API를 사용하는 함수를 지원하고 다양한 handler를 등록해야 될
+필요가 있다:
 
 ``register_finder(importer_type, distribution_finder)``
-    Register `distribution_finder` to find distributions in ``sys.path`` items.
-    `importer_type` is the type or class of a PEP 302 "Importer" (``sys.path``
-    item handler), and `distribution_finder` is a callable that, when passed a
-    path item, the importer instance, and an `only` flag, yields
-    ``Distribution`` instances found under that path item.  (The `only` flag,
-    if true, means the finder should yield only ``Distribution`` objects whose
-    ``location`` is equal to the path item provided.)
+    ``sys.path`` 항목에 있는 디스트리뷰션을 찾는 `distribution_finder`\ 를 등록한다.
+    `importer_type`\ 은 타입이거나 PEP 302 "Importer"(``sys.path`` 항목 handler)의
+    클래스이며 `distribution_finder`\ 는 경로 항목, importer 인스턴스 또는 `only`
+    플래그를 전달했을 때, 그 경로 항목 하에서 찾아지느 ``Distribution`` 인스턴스를
+    산출한다. (만약 참이면, 'only' 플래그는 파인더가 오로지 ``location``\ 이 제공된
+    경로 항목과 동일한 ``Distribution`` 객체만 산출한다는 의미다.
 
-    See the source of the ``pkg_resources.find_on_path`` function for an
-    example finder function.
+    finder 함수의 예시는 ``pkg_resources.find_on_path``\ 의 소스를 참고하라.
 
 ``register_loader_type(loader_type, provider_factory)``
-    Register `provider_factory` to make ``IResourceProvider`` objects for
-    `loader_type`.  `loader_type` is the type or class of a PEP 302
-    ``module.__loader__``, and `provider_factory` is a function that, when
-    passed a module object, returns an `IResourceProvider`_ for that module,
-    allowing it to be used with the `ResourceManager API`_.
+    `loader_type`\ 를 위한 ``IResourceProvider``\ 를 만드는 `provider_factory`\ 를
+    등록한다. `loader_type`\ 는 PEP 302 ``module.__loader__``\ 의 클래스나 타입이며
+    `provider_factory`\ 는 모듈 객체를 전달했을 때 그 모듈을 위한 `IResourceProvider`_\ 를
+    반환하며 `ResourceManager API`_\ 와 사용될 수 있게 해준다.
 
 ``register_namespace_handler(importer_type, namespace_handler)``
-    Register `namespace_handler` to declare namespace packages for the given
-    `importer_type`.  `importer_type` is the type or class of a PEP 302
-    "importer" (sys.path item handler), and `namespace_handler` is a callable
-    with a signature like this::
+    제공된 `importer_type`\ 을 위한 이름공간 패키지를 선언하는 `namespace_handler`\ 를
+    등록한다. `importer_type`\ 은 타입이거나 PEP 302 "Importer"(``sys.path`` 항목 handler)의
+    클래스이며 `namespace_handler`\ 아래 같은 시그니처로 호출 가능하다::
 
         def namespace_handler(importer, path_entry, moduleName, module):
-            # return a path_entry to use for child packages
+            # 자식 패키지에 사용하는 경로 엔트리를 반환한다.
 
-    Namespace handlers are only called if the relevant importer object has
-    already agreed that it can handle the relevant path item.  The handler
-    should only return a subpath if the module ``__path__`` does not already
-    contain an equivalent subpath.  Otherwise, it should return None.
+    이름공간 handler는 관련된 importer 객체가 관련있는 경로 항목을 다루어 된다고 이미
+    동의했으면 호출만 가능하다. handler는 모듈 ``__path__``\ 가 동일한 하위 경로를
+    포함하고 있지 않으면 하위 경로만 반환해야하 한다. 그렇지 않은 경우 None을 리턴해야
+    한다.
 
-    For an example namespace handler, see the source of the
-    ``pkg_resources.file_ns_handler`` function, which is used for both zipfile
-    importing and regular importing.
+    이름공간 handler의 예시는 zip파일 임포트와 정규 임포트에서 사용되는
+    ``pkg_resources.file_ns_handler`` 함수의 소스를 참고하라.
 
 
 IResourceProvider
 -----------------
 
-``IResourceProvider`` is an abstract class that documents what methods are
-required of objects returned by a `provider_factory` registered with
-``register_loader_type()``.  ``IResourceProvider`` is a subclass of
-``IMetadataProvider``, so objects that implement this interface must also
-implement all of the `IMetadataProvider Methods`_ as well as the methods
-shown here.  The `manager` argument to the methods below must be an object
-that supports the full `ResourceManager API`_ documented above.
+``IResourceProvider``\ 는 ``register_loader_type()``\ 에 등록된 `provider_factory`\ 로
+반환된 객체의 어떤 메소드가 필요한지 문서화한 추상적인 클래스다. ``IResourceProvider``\ 는
+``IMetadataProvider``\ 의 하위 클래스다. 그래서 이 인터페이스를 시행하는 객체는 반드시
+여기에 있는 메서드 뿐만 아니라 `IMetadataProvider Methods`_\ 의 모든 메서드를
+시행해야 한다. 아래에 있는 메서드에 대한 `manager` 인수는 위에 있는 문서화된 전체
+`ResourceManager API`_\ 를 지원하는 객체여야 한다.
 
 ``get_resource_filename(manager, resource_name)``
-    Return a true filesystem path for `resource_name`, coordinating the
-    extraction with `manager`, if the resource must be unpacked to the
-    filesystem.
+    리소스가 파일 시스템에 언팩되어야 한다면 `manager`\ 로 추출된 것을 조정하며,
+    `resource_name`\ 에 대한 참인 파일시스템 경로를 반환한다.
 
 ``get_resource_stream(manager, resource_name)``
-    Return a readable file-like object for `resource_name`.
+    `resource_name`\ 에 대한 읽을 수 있는 파일 같은 객체를 반환한다.
 
 ``get_resource_string(manager, resource_name)``
-    Return a string containing the contents of `resource_name`.
+    `resource_name`\ 의 컨텐츠를 포함하는 문자열을 반환한다.
 
 ``has_resource(resource_name)``
-    Does the package contain the named resource?
+    패키지가 지명된 리소스를 포함하고 있는가?
 
 ``resource_isdir(resource_name)``
-    Is the named resource a directory?  Return a false value if the resource
-    does not exist or is not a directory.
+    지명된 리소스가 디렉토리인가? 리소스가 존재하지 않거나 디렉토리가 아니면 false를
+    반혼한다.
 
 ``resource_listdir(resource_name)``
-    Return a list of the contents of the resource directory, ala
-    ``os.listdir()``.  Requesting the contents of a non-existent directory may
-    raise an exception.
+    리소스 디렉토리의 컨텐츠의 리스트를 반환한다. 존재하지 않는 디렉토리의 컨텐츠를
+    요청하는 것은 예외를 발생시킨다.
 
-Note, by the way, that your provider classes need not (and should not) subclass
-``IResourceProvider`` or ``IMetadataProvider``!  These classes exist solely
-for documentation purposes and do not provide any useful implementation code.
-You may instead wish to subclass one of the `built-in resource providers`_.
+그런데 제공자 클레스는 ``IResourceProvider`` 또는 ``IMetadataProvider`` 하위 클래스로
+분류할 필요가 없다 (하면 안된다). 이 클래스들은 오로지 문서화 목적으로 존재하며 유용한
+시행 코드를 제공하지 않는다.  대신에 `built-in resource providers`_\ 의 하나를
+하위 클래스로 분뷰하고 싶을 수도 있다.
 
 
-Built-in Resource Providers
+빌트인 리소스 제공자
 ---------------------------
 
-``pkg_resources`` includes several provider classes that are automatically used
-where appropriate.  Their inheritance tree looks like this::
+``pkg_resources``\ 는 적절한 곳에서 자동적으로 사용되는 몇 가지 제공자 클래스를
+포함하고 있다. 상속 트리는 아래와 같다::
 
     NullProvider
         EggProvider
@@ -1293,30 +1269,27 @@ where appropriate.  Their inheritance tree looks like this::
 
 
 ``NullProvider``
-    This provider class is just an abstract base that provides for common
-    provider behaviors (such as running scripts), given a definition for just
-    a few abstract methods.
+    이 제공자 클래스는 일반적인 제공자 작동(스크립트 실행 등)을 제공하는
+    추상적인 기초이며 몇 가지 추상적인 메서드의 정의를 제공한다.
 
 ``EggProvider``
-    This provider class adds in some egg-specific features that are common
-    to zipped and unzipped eggs.
+    제공자 클래스는 압축 되었거나 압축이 풀린 egg에 일반적인 egg 한정 기능에
+    추가된다.
 
 ``DefaultProvider``
-    This provider class is used for unpacked eggs and "plain old Python"
-    filesystem modules.
+    이 제공자 클래스는 언팩된 egg와 "오래된 일반 파이썬" 파일시스템 모듈에서
+    사용된다.
 
 ``ZipProvider``
-    This provider class is used for all zipped modules, whether they are eggs
-    or not.
+    이 제공자 클래스는 모듈이 egg든 아니든 zip된 뮤듈에서 사용된다.
 
 ``EmptyProvider``
-    This provider class always returns answers consistent with a provider that
-    has no metadata or resources.  ``Distribution`` objects created without
-    a ``metadata`` argument use an instance of this provider class instead.
-    Since all ``EmptyProvider`` instances are equivalent, there is no need
-    to have more than one instance.  ``pkg_resources`` therefore creates a
-    global instance of this class under the name ``empty_provider``, and you
-    may use it if you have need of an ``EmptyProvider`` instance.
+    이 제공자 클래스는 항상 메타데이터와 리소스가 없는 제공자와 일관된 답을
+    반환한다. 대신에 ``Distribution`` 객체는 ``metadata`` 인수 사용 없이 이 제공자
+    클래스의 인스턴스를 생성한다. 모든 ``EmptyProvider`` 인스턴스는 동일하기 때문에,
+    하나의 인스턴스만 있으면 된다. 그러므로 ``pkg_resources``\ 는 ``empty_provider``
+    이름 아래서 이 클래스의 전역 인스턴스를 생성하고 ``EmptyProvider`` 인스턴스가
+    필요하면 이것을 사용할 수 있다. 
 
 ``PathMetadata(path, egg_info)``
     Create an ``IResourceProvider`` for a filesystem-based distribution, where

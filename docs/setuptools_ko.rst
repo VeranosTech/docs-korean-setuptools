@@ -1,63 +1,54 @@
 ==================================================
-Building and Distributing Packages with Setuptools
+Setuptools로 패키지 빌드 및 배포하기
 ==================================================
 
-``Setuptools`` is a collection of enhancements to the Python ``distutils``
-(for Python 2.6 and up) that allow developers to more easily build and
-distribute Python packages, especially ones that have dependencies on other
-packages.
+``Setuptools`` 는 개발자가 Python 패키지, 특히 다른 패키지에 dependency가 있는 패키지를 보다
+쉽게 ​​빌드하고 배포 할 수 있게 해주는 Python 2.6 이상의 ``distutils`` 의 향상된 기능 모음이다.
 
-Packages built and distributed using ``setuptools`` look to the user like
-ordinary Python packages based on the ``distutils``.  Your users don't need to
-install or even know about setuptools in order to use them, and you don't
-have to include the entire setuptools package in your distributions.  By
-including just a single `bootstrap module`_ (a 12K .py file), your package will
-automatically download and install ``setuptools`` if the user is building your
-package from source and doesn't have a suitable version already installed.
+``setuptools`` 를 사용하여 빌드되고 배포되는 패키지는 사용자에게는 ``distutils`` 에 기반한 일반적인
+Python 패키지처럼 보이게 된다. 사용자는 setuptools를 설치하거나 사용할 필요가 없으므로 배포판에
+setuptools 패키지를 포함 할 필요가 없다. 하나의 `bootstrap module`_ (12K .py 파일)을 포함시키면
+사용자가 패키지를 소스에서 빌드할 시, 적절한 버전이 이미 설치되어 있지 않으면 패키지는 자동으로
+``setuptools`` 를 다운로드하여 설치하게 된다.
 
 .. _bootstrap module: https://bootstrap.pypa.io/ez_setup.py
 
-Feature Highlights:
+주요 기능:
 
-* Automatically find/download/install/upgrade dependencies at build time using
-  the `EasyInstall tool <easy_install.html>`_,
-  which supports downloading via HTTP, FTP, Subversion, and SourceForge, and
-  automatically scans web pages linked from PyPI to find download links.  (It's
-  the closest thing to CPAN currently available for Python.)
+* `EasyInstall tool <easy_install.html>`_ 를 사용하여 빌드 단계에서 자동으로 dependency를
+검색/다운로드/설치/업그레이드. HTTP, FTP, Subversion, SourceForge를 지원하며
+PyPI에서 링크된 웹페이지들을 자동으로 스캔하여 다운로드 링크를 찾는다. 이는 현재 Python에서
+CPAN에 가장 가까운 물건이다.
 
-* Create `Python Eggs <http://peak.telecommunity.com/DevCenter/PythonEggs>`_ -
-  a single-file importable distribution format
+* 단일 파일 import가능한 distribution format인 `Python Eggs
+<http://peak.telecommunity.com/DevCenter/PythonEggs>`_ 를 생성.
 
-* Enhanced support for accessing data files hosted in zipped packages.
+* zip 패키지로 호스트 된 데이터 파일에 대한 액세스 향상된 지원.
 
-* Automatically include all packages in your source tree, without listing them
-  individually in setup.py
+* 소스 트리에 있는 모든 패키지를 setup.py에 개별적으로 나열하지 않고 자동으로 포함.
 
-* Automatically include all relevant files in your source distributions,
-  without needing to create a ``MANIFEST.in`` file, and without having to force
-  regeneration of the ``MANIFEST`` file when your source tree changes.
+* ``MANIFEST.in`` 파일을 생성 할 필요 없이, 그리고 소스 트리가 변경 될 때 ``MANIFEST`` 파일을 강제로
+재생성하지 않고 소스 배포판에 모든 관련 파일을 자동으로 포함.
 
-* Automatically generate wrapper scripts or Windows (console and GUI) .exe
-  files for any number of "main" functions in your project.  (Note: this is not
-  a py2exe replacement; the .exe files rely on the local Python installation.)
+* 자동으로 프로젝트에서 "주요" 기능의 대한 wrapper 스크립트 또는 콘솔 및 GUI Windows
+.exe 파일을 생성. (주의: 이것은 py2exe 대체 파일이 아니며 .exe 파일은 로컬 Python 설치에 의존한다.)
 
-* Transparent Pyrex support, so that your setup.py can list ``.pyx`` files and
-  still work even when the end-user doesn't have Pyrex installed (as long as
-  you include the Pyrex-generated C in your source distribution)
+* setup.py가 ``.pyx`` 파일을 나열 할 수 있고 최종 사용자가 Pyrex를 설치하지 않은 경우에도 (Pyrex가
+생성 한 C를 소스 배포판에 포함시키는 한) 작동하도록 투명한 Pyrex 지원.
 
-* Command aliases - create project-specific, per-user, or site-wide shortcut
-  names for commonly used commands and options
+* Command alias 기능. 일반적으로 사용되는 command 및 옵션에 대한 프로젝트 별,
+사용자 별, 사이트 전체 바로 가기 이름을 만든다.
 
-* PyPI upload support - upload your source distributions and eggs to PyPI
+* PyPI 업로드 지원. 소스 배포판과 egg를 PyPI에 업로드
 
-* Deploy your project in "development mode", such that it's available on
-  ``sys.path``, yet can still be edited directly from its source checkout.
+* ``development mode`` 로 프로젝트 배포. ``sys.path`` 에서 사용할 수 있지만 소스 checkout에서도
+직접 편집 할 수 있다.
 
-* Easily extend the distutils with new commands or ``setup()`` arguments, and
-  distribute/reuse your extensions for multiple projects, without copying code.
+* 새로운 command나 ``setup ()`` argument로 distutils를 쉽게 확장 할 수 있으며, 코드를 복사하지 않고도
+여러 프로젝트에 extension을 배포/재사용.
 
-* Create extensible applications and frameworks that automatically discover
-  extensions, using simple "entry points" declared in a project's setup script.
+* 프로젝트의 설치 스크립트에 선언 된 간단한 "entry point"를 사용하여 extension을 자동으로 발견하는
+확장 가능한 응용 프로그램 및 프레임워크를 생성.
 
 .. contents:: **Table of Contents**
 

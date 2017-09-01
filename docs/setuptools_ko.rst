@@ -44,7 +44,7 @@ setuptools 패키지를 포함 할 필요가 없다. 하나의 `bootstrap module
 * ``development mode`` 로 프로젝트 배포. ``sys.path`` 에서 사용할 수 있지만 소스
   checkout에서도 직접 편집 할 수 있다.
 
-* 새로운 command나 ``setup ()`` argument로 distutils를 쉽게 확장 할 수 있으며, 코드를
+* 새로운 command나 ``setup()`` argument로 distutils를 쉽게 확장 할 수 있으며, 코드를
   복사하지 않고도 여러 프로젝트에 extension을 배포/재사용.
 
 * 프로젝트의 설치 스크립트에 선언 된 간단한 "entry point"를 사용하여 extension을 자동으로 발견하는
@@ -134,7 +134,7 @@ setuptools를 사용하는 간단한 설치 스크립트이다::
         # could also include long_description, download_url, classifiers, etc.
     )
 
-다음 섹션에서는 우리는 이러한 ``setup ()`` 의 argument 대부분(메타 데이터를 제외하고)이 무엇을
+다음 섹션에서는 우리는 이러한 ``setup()`` 의 argument 대부분(메타 데이터를 제외하고)이 무엇을
 하는지, 그리고 프로젝트에서 사용 할 수 있는 다양한 방법을 설명한다.
 
 
@@ -188,7 +188,7 @@ revision 41475를 나타낸다. ``dev`` 는 출시 전 태그이므로, 이 버�
   버전 ``1.9adev`` 은 ``1.9`` 버전의 ``adev`` pre-release를 의미하며, ``1.9a`` 의
   개발 pre-release를 의미하지 *않는다*. ``1.9a.dev`` 처럼 ``.dev`` 를 이용하거나
   ``1.9a0dev`` 처럼 숫자를 이용하여 분리해야 한다. 이 경우, ``1.9a.dev``, ``1.9a0dev``,
-  ``1.9.a.dev`` 는 setuptools에 의해 전부 동일하게 최급된다.
+  ``1.9.a.dev`` 는 setuptools에 의해 전부 동일하게 취급된다.
 
 * 선택한 버전 번호 체계가 생각대로 작동하는지 확인하려면, ``pkg_resources.parse_version()``
   함수를 ​​사용하여 서로 다른 버전 번호를 비교하면 된다::

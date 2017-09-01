@@ -1,5 +1,5 @@
 ==================================================
-Setuptools로 패키지 빌드 및 배포하기
+Building and Distributing Packages with Setuptools
 ==================================================
 
 ``Setuptools`` 는 개발자가 Python 패키지, 특히 다른 패키지에 dependency가 있는 패키지를 보다
@@ -63,29 +63,27 @@ Developer's Guide
 Installing ``setuptools``
 =========================
 
-Please follow the `EasyInstall Installation Instructions`_ to install the
-current stable version of setuptools.  In particular, be sure to read the
-section on `Custom Installation Locations`_ if you are installing anywhere
-other than Python's ``site-packages`` directory.
+`EasyInstall Installation Instructions`_ 를 따라 setuptools의 현재 stable 버전을 설치한다.
+특히, Python의 ``site-packages`` 디렉토리가 아닌 곳에 설치하는 경우,
+`Custom Installation Locations`_ 섹션을 반드시 읽어본다.
 
 .. _EasyInstall Installation Instructions: easy_install.html#installation-instructions
 
 .. _Custom Installation Locations: easy_install.html#custom-installation-locations
 
-If you want the current in-development version of setuptools, you should first
-install a stable version, and then run::
+현재 개발중인 버전의 setuptools를 사용하려면 먼저 stable 버전을 설치 한 다음 다음을 실행한다::
 
     ez_setup.py setuptools==dev
 
-This will download and install the latest development (i.e. unstable) version
-of setuptools from the Python Subversion sandbox.
+이렇게하면 Python Subversion sandbox에서 setuptools의 최신 개발 버전을 다운로드하여
+설치하게 된다.
 
 
 Basic Use
 =========
 
-For basic use of setuptools, just import things from setuptools instead of
-the distutils.  Here's a minimal setup script using setuptools::
+setuptools의 기본 사용을 위해서는 distutils 대신에 setuptools에서 import한다. 다음은
+setuptools를 사용하는 간단한 설치 스크립트이다::
 
     from setuptools import setup, find_packages
     setup(
@@ -94,22 +92,18 @@ the distutils.  Here's a minimal setup script using setuptools::
         packages=find_packages(),
     )
 
-As you can see, it doesn't take much to use setuptools in a project.
-Run that script in your project folder, alongside the Python packages
-you have developed.
+보다시피, 프로젝트에서 setuptools를 사용하는 것은 그리 어렵지 않다. 개발한 Python 패키지와
+함께 스크립트를 프로젝트 폴더에서 실행하면 된다.
 
-Invoke that script to produce eggs, upload to
-PyPI, and automatically include all packages in the directory where the
-setup.py lives.  See the `Command Reference`_ section below to see what
-commands you can give to this setup script. For example,
-to produce a source distribution, simply invoke::
+이 스크립트를 실행하면, egg를 생성하고, PyPI에 업로드하고, setup.py가 있는 디렉토리에 모든
+패키지를 자동으로 포함시킨다. 이 설정 스크립트에 어떤 명령을 줄 수 있는지 알아 보려면 아래의
+`Command Reference`_ 섹션을 참조한다. 예를 들어, 소스 배포판을 생성하려면 다음을 실행한다::
 
     python setup.py sdist
 
-Of course, before you release your project to PyPI, you'll want to add a bit
-more information to your setup script to help people find or learn about your
-project.  And maybe your project will have grown by then to include a few
-dependencies, and perhaps some data files and scripts::
+물론, 프로젝트를 PyPI에 공개하기 전에 설정 스크립트에 좀 더 많은 정보를 추가하여
+사람들이 프로젝트를 찾거나 배우는 데 도움이 되길 원할 것이다. 그리고 어쩌면 당신의 프로젝트는
+그때까지 몇가지 dependency, 데이터 파일과 스크립트를 추가로 포함하게 되었을지도 모른다::
 
     from setuptools import setup, find_packages
     setup(
@@ -140,80 +134,64 @@ dependencies, and perhaps some data files and scripts::
         # could also include long_description, download_url, classifiers, etc.
     )
 
-In the sections that follow, we'll explain what most of these ``setup()``
-arguments do (except for the metadata ones), and the various ways you might use
-them in your own project(s).
+다음 섹션에서는 우리는 이러한 ``setup ()`` 의 argument 대부분(메타 데이터를 제외하고)이 무엇을
+하는지, 그리고 프로젝트에서 사용 할 수 있는 다양한 방법을 설명한다.
 
 
 Specifying Your Project's Version
 ---------------------------------
 
-Setuptools can work well with most versioning schemes; there are, however, a
-few special things to watch out for, in order to ensure that setuptools and
-EasyInstall can always tell what version of your package is newer than another
-version.  Knowing these things will also help you correctly specify what
-versions of other projects your project depends on.
+Setuptools는 대부분의 버전 관리 체계에서 잘 작동 할 수 있다. 그러나 setuptools와 EasyInstall이
+패키지의 어떤 버전이 다른 버전보다 새로운 버전인지 항상 확인할 수 있도록 몇 가지 특별한 사항을
+주의해야 한다. 이러한 것들을 알면 프로젝트가 의존하는 다른 프로젝트들의 버전을 정확하게 지정하는데
+도움이 된다.
 
-A version consists of an alternating series of release numbers and pre-release
-or post-release tags.  A release number is a series of digits punctuated by
-dots, such as ``2.4`` or ``0.5``.  Each series of digits is treated
-numerically, so releases ``2.1`` and ``2.1.0`` are different ways to spell the
-same release number, denoting the first subrelease of release 2.  But  ``2.10``
-is the *tenth* subrelease of release 2, and so is a different and newer release
-from ``2.1`` or ``2.1.0``.  Leading zeros within a series of digits are also
-ignored, so ``2.01`` is the same as ``2.1``, and different from ``2.0.1``.
+버전은 release 번호와 pre-release 또는 post-release 태그 번갈아 가며 구성된다. release 번호는
+``2.4`` 또는 ``0.5`` 와 같이 점으로 구분 된 일련의 숫자이다. 점들 사이의 단위는 숫자로 처리되므로,
+``2.1`` 과 ``2.1.0`` 은 동일한 release 번호를 다르게 표기하는 방법일 뿐이다. 이는 release 2의 첫 번째
+subrelease를 나타낸다. 그러나 ``2.10`` 은 release 2의 *10번째* subrelease이므로 ``2.1`` 또는 ``2.1.0``
+과는 다른 더 새로운 버전의 release이다. 또한 선행 0은 무시되므로 ``2.01`` 은 ``2.1`` 과 같고 ``2.0.1``
+과는 다르다.
 
-Following a release number, you can have either a pre-release or post-release
-tag.  Pre-release tags make a version be considered *older* than the version
-they are appended to.  So, revision ``2.4`` is *newer* than revision ``2.4c1``,
-which in turn is newer than ``2.4b1`` or ``2.4a1``.  Postrelease tags make
-a version be considered *newer* than the version they are appended to.  So,
-revisions like ``2.4-1`` and ``2.4pl3`` are newer than ``2.4``, but are *older*
-than ``2.4.1`` (which has a higher release number).
+Release 번호 다음에는 pre-release 또는 post-release 태그가 있을 수 있다. Pre-release 태그는
+태그가 수식하는 버전보다 *오래된* 것으로 간주되도록 한다. 따라서, revision ``2.4`` 는 revision
+``2.4c1`` 보다 새로운 것이며, 이것은 ``2.4b1`` 또는 ``2.4a1`` 보다 새로운 것이다. Post-release 태그는
+태그가 수식하는 버전보다 *새로운* 것으로 간주되도록 한다. 따라서, revision ``2.4-1`` 과 ``2.4pl3``
+과 같은 revision은 ``2.4`` 보다는 새롭지만 ``2.4.1`` 보다는 더 오래된 버전이다.
 
-A pre-release tag is a series of letters that are alphabetically before
-"final".  Some examples of prerelease tags would include ``alpha``, ``beta``,
-``a``, ``c``, ``dev``, and so on.  You do not have to place a dot or dash
-before the prerelease tag if it's immediately after a number, but it's okay to
-do so if you prefer.  Thus, ``2.4c1`` and ``2.4.c1`` and ``2.4-c1`` all
-represent release candidate 1 of version ``2.4``, and are treated as identical
-by setuptools.
+Pre-release 태그는 사전적으로 "final" 앞에 오는 일련의 문자들이다. Pre-release 태그의 예로는
+``alpha``, ``beta``, ``a``, ``c``, ``dev`` 등이 있다. Pre-release 태그 앞에 숫자가 있다면, 점이나 대시를
+넣을 필요는 없다. 따라서 ``2.4c1`` 과 ``2.4.c1`` 과 ``2.4-c1`` 은 모두 ``2.4`` 버전의 release candidate
+1을 나타내며, setuptools에 의해 동일하게 취급된다.
 
-In addition, there are three special prerelease tags that are treated as if
-they were the letter ``c``: ``pre``, ``preview``, and ``rc``.  So, version
-``2.4rc1``, ``2.4pre1`` and ``2.4preview1`` are all the exact same version as
-``2.4c1``, and are treated as identical by setuptools.
+또한, ``pre``, ``preview``, ``rc`` 는 pre-release 태그로 특별하게 ``c`` 와 동일하게 로 취급된다.
+따라서 ``2.4rc1``, ``2.4pre1``, ``2.4preview1`` 은 ``2.4c1`` 과 완전히 똑같은 버전이며,
+setuptools에 의해 동일하게 취급된다.
 
-A post-release tag is either a series of letters that are alphabetically
-greater than or equal to "final", or a dash (``-``).  Post-release tags are
-generally used to separate patch numbers, port numbers, build numbers, revision
-numbers, or date stamps from the release number.  For example, the version
-``2.4-r1263`` might denote Subversion revision 1263 of a post-release patch of
-version ``2.4``.  Or you might use ``2.4-20051127`` to denote a date-stamped
-post-release.
+Post-release 태그는 사전적 정렬에서 "final" 보다 뒤에 오는 일련의 문자이거나, 대시(``-``)가 붙는다.
+Post-release 태그는 일반적으로 release 번호에서 패치 번호, 포트 번호, 빌드 번호, 개정 번호, 날짜
+스탬프를 분리하는 데 사용된다. 예를 들어서, ``2.4-r1263`` 버전은 ``2.4`` 의 release 후 패치의
+Subversion revision 1263을 나타낸다. 또는 ``2.4-20051127`` 을 사용하여 날짜가 찍힌
+post-release를 나타낼 수도 있다.
 
-Notice that after each pre or post-release tag, you are free to place another
-release number, followed again by more pre- or post-release tags.  For example,
-``0.6a9.dev-r41475`` could denote Subversion revision 41475 of the in-
-development version of the ninth alpha of release 0.6.  Notice that ``dev`` is
-a pre-release tag, so this version is a *lower* version number than ``0.6a9``,
-which would be the actual ninth alpha of release 0.6.  But the ``-r41475`` is
-a post-release tag, so this version is *newer* than ``0.6a9.dev``.
+각 pre-release 또는 post-release 태그 다음에 다른 release 번호를 자유롭게 넣을 수 있으며,
+여기에 다시 pre-release 또는 post-release 태그를 더 추가 할 수도 있다.
+예를 들어 ``0.6a9.dev-r41475`` 는 release 0.6의 9번째 알파 버전의 개발 버전인 Subversion
+revision 41475를 나타낸다. ``dev`` 는 출시 전 태그이므로, 이 버전은 release 0.6의 9번째
+알파 버전인 ``0.6a9`` 보다 *낮은* 버전이다. 그러나 ``-r41475`` 는 릴리스 이후 태그이므로,
+이 버전은 ``0.6a9.dev`` 보다 더 *새로운* 버전이다.
 
-For the most part, setuptools' interpretation of version numbers is intuitive,
-but here are a few tips that will keep you out of trouble in the corner cases:
+대부분의 경우, setuptools의 버전 번호 해석은 직관적이지만, 다음과 같은 몇 가지 팁을
+통해 헷갈리는 경우의 문제를 해결할 수 있다:
 
-* Don't stick adjoining pre-release tags together without a dot or number
-  between them.  Version ``1.9adev`` is the ``adev`` prerelease of ``1.9``,
-  *not* a development pre-release of ``1.9a``.  Use ``.dev`` instead, as in
-  ``1.9a.dev``, or separate the prerelease tags with a number, as in
-  ``1.9a0dev``.  ``1.9a.dev``, ``1.9a0dev``, and even ``1.9.a.dev`` are
-  identical versions from setuptools' point of view, so you can use whatever
-  scheme you prefer.
+* Pre-release 태그 여러개를 사이에 숫자나 점 없이 인접하게 붙이면 안된다.
+버전 ``1.9adev`` 은 ``1.9`` 버전의 ``adev`` pre-release를 의미하며, ``1.9a`` 의
+개발 pre-release를 의미하지 *않는다*. ``1.9a.dev`` 처럼 ``.dev`` 를 이용하거나
+``1.9a0dev`` 처럼 숫자를 이용하여 분리해야 한다. 이 경우, ``1.9a.dev``, ``1.9a0dev``,
+``1.9.a.dev`` 는 setuptools에 의해 전부 동일하게 최급된다.
 
-* If you want to be certain that your chosen numbering scheme works the way
-  you think it will, you can use the ``pkg_resources.parse_version()`` function
-  to compare different version numbers::
+* 선택한 버전 번호 체계가 생각대로 작동하는지 확인하려면, ``pkg_resources.parse_version()``
+함수를 ​​사용하여 서로 다른 버전 번호를 비교하면 된다::
 
     >>> from pkg_resources import parse_version
     >>> parse_version('1.9.a.dev') == parse_version('1.9a0dev')
@@ -223,9 +201,8 @@ but here are a few tips that will keep you out of trouble in the corner cases:
     >>> parse_version('0.6a9dev-r41475') < parse_version('0.6a9')
     True
 
-Once you've decided on a version numbering scheme for your project, you can
-have setuptools automatically tag your in-development releases with various
-pre- or post-release tags.  See the following sections for more details:
+프로젝트의 버전 번호 체계를 결정하면, setuptools가 개발중인 release들에 다양한 pre-release 태그
+또는 post-release 태그를 자동으로 태그하도록 할 수 있다. 자세한 내용은 다음 섹션들을 참조:
 
 * `Tagging and "Daily Build" or "Snapshot" Releases`_
 * `Managing "Continuous Releases" Using Subversion`_

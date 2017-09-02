@@ -216,123 +216,127 @@ New and Changed ``setup()`` Keywords
 모두 선택 사항이며, 관련된 ``setuptools`` 기능을 필요로 하지 않는다면 제공 할 필요는 없다.
 
 ``include_package_data``
-``True`` 로 설정된다면, ``setuptools`` 는 ``MANIFEST.in`` 파일에 지정된 패키지 디렉토리
-안에 있는 모든 데이터 파일을 자동으로 포함시킨다. 자세한 내용은 아래의 `Including Data Files`_
-섹션을 참조.
+    ``True`` 로 설정된다면, ``setuptools`` 는 ``MANIFEST.in`` 파일에 지정된 패키지 디렉토리
+    안에 있는 모든 데이터 파일을 자동으로 포함시킨다. 자세한 내용은 아래의 `Including Data Files`_
+    섹션을 참조.
 
 ``exclude_package_data``
-패키지 이름을 패키지 디렉토리에서 *제외* 되어야 할 glob 패턴 목록에 매핑하는 dictionary이다.
-이것을 사용하여 ``include_package_data`` 에 불필요하게 포함 된 파일들을 줄일 수 있다.
-설명과 예제는 아래의 `Including Data Files`_ 를 참조.
+    패키지 이름을 패키지 디렉토리에서 *제외* 되어야 할 glob 패턴 목록에 매핑하는 dictionary이다.
+    이것을 사용하여 ``include_package_data`` 에 불필요하게 포함 된 파일들을 줄일 수 있다.
+    설명과 예제는 아래의 `Including Data Files`_ 를 참조.
 
 ``package_data``
-패키지 이름을 glob 패턴 목록에 매핑하는 dictionary. 설명과 예제는 아래의 `Including Data Files`_
-를 참조. ``include_package_data`` 를 사용하고 있다면, 이 옵션은 사용할 필요가 없다.
-다만 설정 스크립트와 빌드 과정에서 생성 된 파일을 추가 할 필요있다면 사용한다.
+    패키지 이름을 glob 패턴 목록에 매핑하는 dictionary. 설명과 예제는 아래의 `Including Data
+    Files`_ 를 참조. ``include_package_data`` 를 사용하고 있다면, 이 옵션은 사용할 필요가
+    없다. 다만 설정 스크립트와 빌드 과정에서 생성 된 파일을 추가 할 필요있다면 사용한다.
 
 ``zip_safe``
-프로젝트를 zip 파일에서 안전하게 설치하고 실행할 수 있는지를 지정하는 bool 플래그. 이 argument가
-제공되지 않으면, ``bdist_egg`` 명령은 egg를 빌드 할 때마다 발생할 수있는 문제에 대해 프로젝트의
-모든 내용을 분석해야 한다.
+    프로젝트를 zip 파일에서 안전하게 설치하고 실행할 수 있는지를 지정하는 bool 플래그. 이 argument가
+    제공되지 않으면, ``bdist_egg`` 명령은 egg를 빌드 할 때마다 발생할 수있는 문제에 대해 프로젝트의
+    모든 내용을 분석해야 한다.
 
 ``install_requires``
-이 패키지를 설치하기 전에 설치해야 할 다른 distribution을 지정하는 string 또는 string 목록.
-이 argument의 형식과 예제에 대한 자세한 내용은 아래의 `Declaring Dependencies`_ 를 참조.
+    이 패키지를 설치하기 전에 설치해야 할 다른 distribution을 지정하는 string 또는 string 목록.
+    이 argument의 형식과 예제에 대한 자세한 내용은 아래의 `Declaring Dependencies`_ 를 참조.
 
 ``entry_points``
-Entry point 그룹 이름을 entry point를 정의하는 string 또는 string 목록에 매핑하는 dictionary.
-Entry point는 프로젝트에서 제공하는 서비스 또는 플러그인의 동적 발견을 지원하는 데 사용된다.
-이 argument의 형식에 대한 자세한 내용과 예는 `Dynamic Discovery of Services and Plugins`_
-를 참조. 이 키워드는 `Automatic Script Creation`_ 을 지원하기 위해 사용되기도 한다.
+    Entry point 그룹 이름을 entry point를 정의하는 string 또는 string 목록에 매핑하는 dictionary.
+    Entry point는 프로젝트에서 제공하는 서비스 또는 플러그인의 동적 발견을 지원하는 데 사용된다.
+    이 argument의 형식에 대한 자세한 내용과 예는 `Dynamic Discovery of Services and Plugins`_
+    를 참조. 이 키워드는 `Automatic Script Creation`_ 을 지원하기 위해 사용되기도 한다.
 
 ``extras_require``
-"extras"(프로젝트의 선택적 기능) 이름을 이러한 기능을 지원하기 위해 사전에 설치해야하는
-distribution을 지정하는 string이나 string 목록에 매핑하는 dictionary. 이 argument의 형식과
-예제에 대한 자세한 내용은 `Declaring Dependencies`_ 를 참조.
+    "extras"(프로젝트의 선택적 기능) 이름을 이러한 기능을 지원하기 위해 사전에 설치해야하는
+    distribution을 지정하는 string이나 string 목록에 매핑하는 dictionary. 이 argument의
+    형식과 예제에 대한 자세한 내용은 `Declaring Dependencies`_ 를 참조.
 
 ``python_requires``
-Python 버전의 PEP440에 정의된 버전 지정자에 해당하는 string. PEP 345에 정의 된
-Requires-Python을 지정하는 데 사용된다.
+    Python 버전의 PEP440에 정의된 버전 지정자에 해당하는 string. PEP 345에 정의 된
+    Requires-Python을 지정하는 데 사용된다.
 
 ``setup_requires``
-*setup 스크립트* 가 실행되기 위해서 필요한 다른 distribution을 지정하는 string 또는 string 목록.
-``setuptools`` 는 나머지 설치 스크립트나 명령을 처리하기 전에 이것들을 얻으려고 시도(``EasyInstall`` 을
-사용하여 다운로드하는 등)한다. 이 argument는 빌드 프로세스의 일부로 distutils extension을 사용하는
-경우 필요하다. 한 예로, setup() argument를 처리하고 이를 EGG-INFO 메타데이터 파일로 변환하는
-extension이 있다.
+    *setup 스크립트* 가 실행되기 위해서 필요한 다른 distribution을 지정하는 string 또는 string
+    목록. ``setuptools`` 는 나머지 설치 스크립트나 명령을 처리하기 전에 이것들을 얻으려고 시도
+    (``EasyInstall`` 을 사용하여 다운로드하는 등)한다. 이 argument는 빌드 프로세스의 일부로
+    distutils extension을 사용하는 경우 필요하다. 한 예로, setup() argument를 처리하고 이를
+    EGG-INFO 메타데이터 파일로 변환하는 extension이 있다.
 
-    (주의: ``setup_requires`` 에 나열된 프로젝트는 설치 스크립트가 실행되는 시스템에 자동으로 설치되지
-않는다. 이미 로컬에 있지 않은 경우 단순히 ./.eggs 디렉토리로 다운로드 될 뿐이다. 만약 이들이 설치되고
-설치 스크립트가 실행될 때 사용 가능하길 원한다면 ``install_requires``, ``setup_requires`` 에 **함께**
-추가해야 한다.)
+    (주의: ``setup_requires`` 에 나열된 프로젝트는 설치 스크립트가 실행되는 시스템에 자동으로
+    설치되지 않는다. 이미 로컬에 있지 않은 경우 단순히 ./.eggs 디렉토리로 다운로드 될 뿐이다. 만약
+    이들이 설치되고 설치 스크립트가 실행될 때 사용 가능하길 원한다면 ``install_requires`` 와
+    ``setup_requires`` 를 **함께** 추가해야 한다.)
 
 ``dependency_links``
-dependency를 검색 할 때 검색 될 URL들을 지정하는 string 목록. 이러한 링크는 ``setup_requires``
-또는 ``tests_require`` 로 지정된 패키지를 설치하는 데 필요할 경우 사용된다. 또한 EasyInstall과 같은
-도구로 ``.egg`` 파일을 설치할 때 사용하기 위해 egg의 메타데이터에 기록된다.
+    dependency를 검색 할 때 검색 될 URL들을 지정하는 string 목록. 이러한 링크는 ``setup_requires``
+    또는 ``tests_require`` 로 지정된 패키지를 설치하는 데 필요할 경우 사용된다. 또한 EasyInstall과
+    같은 도구로 ``.egg`` 파일을 설치할 때 사용하기 위해 egg의 메타데이터에 기록된다.
 
 ``namespace_packages``
-프로젝트의 "namespace package"를 지정하는 string 목록. Namespace package는 여러 프로젝트
-distribution에 걸쳐 분할 될 수 있는 패키지를 말한다. 예를 들어 Zope 3의 ``zope`` 패키지는
-``zope.interface`` 와 ``zope.publisher`` 와 같은 서브패키지가 따로 배포 될 수 있기 때문에,
-namespace package이다. Egg 런타임 시스템은 이러한 서브패키지들을 런타임에서 자동으로
-하나의 상위 패키지로 합칠 수 있다. 단, 이 경우 namespace package의 ``__init__. py`` 에는
-namespace 선언 외의 코드가 있어서는 안된다. 더 자세한 정보는 `Namespace Packages`_ 를 참조.
+    프로젝트의 "namespace package"를 지정하는 string 목록. Namespace package는 여러 프로젝트
+    distribution에 걸쳐 분할 될 수 있는 패키지를 말한다. 예를 들어 Zope 3의 ``zope`` 패키지는
+    ``zope.interface`` 와 ``zope.publisher`` 와 같은 서브패키지가 따로 배포 될 수 있기 때문에,
+    namespace package이다. Egg 런타임 시스템은 이러한 서브패키지들을 런타임에서 자동으로 하나의
+    상위 패키지로 합칠 수 있다. 단, 이 경우 namespace package의 ``__init__. py`` 에는
+    namespace 선언 외의 코드가 있어서는 안된다. 더 자세한 정보는 `Namespace Packages`_ 를 참조.
 
 ``test_suite``
-``unittest.TestCase`` subclass(또는 그런 subclass나 subclass의 method 하나 이상을 포함하는
-package나 module)를 지정하는 string 또는 argument 없이 호출 할 경우 ``unittest.TestSuite`` 를
-반환하는 function. 만약 지정된 suite가 module이고, module이 ``additional_tests()`` function을
-​​가지고 있다면, 그 function은 호출되고 결과는 실행할 테스트에 추가된다. 만약 지정된 suite가 package라면,
-모든 submodule과 subpackage가 전체 test suite에 재귀적으로 추가된다.
+    ``unittest.TestCase`` subclass(또는 그런 subclass나 subclass의 method 하나 이상을
+    포함하는 package나 module)를 지정하는 string 또는 argument 없이 호출 할 경우
+    ``unittest.TestSuite`` 를 반환하는 function. 만약 지정된 suite가 module이고,
+    module이 ``additional_tests()`` function을 ​​가지고 있다면, 그 function은 호출되고
+    결과는 실행할 테스트에 추가된다. 만약 지정된 suite가 package라면, 모든 submodule과
+    subpackage가 전체 test suite에 재귀적으로 추가된다.
 
-    이 argument를 지정하면 `test`_ command를 사용하여 지정된 test suite를 실행 할 수 있다. (예 :``setup.py test``)
-자세한 내용은 아래의 `test`_ command를 참조.
+    이 argument를 지정하면 `test`_ command를 사용하여 지정된 test suite를 실행 할 수 있다.
+    (예 :``setup.py test``) 자세한 내용은 아래의 `test`_ command를 참조.
 
 ``tests_require``
-프로젝트의 테스트가 그것을 설치하는 데 필요한 것 외에 하나 이상의 추가 패키지를 필요로 한다면,
-이 옵션을 사용하여 지정할 수 있다. 패키지 테스트를 실행하기 위해 다른 distribution이 있어야 하는지를
-지정하는 string 또는 string 목록이어야 한다. ``test`` command를 실행하면, ``setuptools`` 는
-이것들을 얻으려고 시도(``EasyInstall`` 을 사용하여 다운로드하는 것 포함)한다. 이 필수 프로젝트들은
-테스트가 실행되는 시스템에 설치되지 않고, 로컬에 아직 설치되지 않은 경우에 프로젝트의 설치 디렉토리로
-다운로드만 된다.
+    프로젝트의 테스트가 그것을 설치하는 데 필요한 것 외에 하나 이상의 추가 패키지를 필요로 한다면,
+    이 옵션을 사용하여 지정할 수 있다. 패키지 테스트를 실행하기 위해 다른 distribution이 있어야 하는지를
+    지정하는 string 또는 string 목록이어야 한다. ``test`` command를 실행하면, ``setuptools``
+    는 이것들을 얻으려고 시도(``EasyInstall`` 을 사용하여 다운로드하는 것 포함)한다. 이 필수 프로젝트들은
+    테스트가 실행되는 시스템에 설치되지 않고, 로컬에 아직 설치되지 않은 경우에 프로젝트의 설치 디렉토리로
+    다운로드만 된다.
 
 .. _test_loader:
 
 ``test_loader``
-setuptools가 일반적으로 사용하는 것보다 실행할 테스트를 찾는 다른 방법을 사용하려면,
-이 argument에 module 이름과 class 이름을 지정할 수 있다. 지정된 class는 argument 없이
-인스턴스화 가능해야 하며, 인스턴스는 Python의 `unittest` module의 ``TestLoader`` class에 정의된
-``loadTestsFromNames()`` moethod를 지원해야 한다. Setuptools는 `names` argument에
-``test_suite`` argument에 제공된 값인 하나의 테스트 "name"만 전달한다. ``test_suite``
-string에 포함가능 한 것에 제한이 없으므로, 지정한 로더는 원하는 대로 이 string을 해석 할 수 있다.
+    setuptools가 일반적으로 사용하는 것보다 실행할 테스트를 찾는 다른 방법을 사용하려면, 이
+    argument에 module 이름과 class 이름을 지정할 수 있다. 지정된 class는 argument 없이
+    인스턴스화 가능해야 하며, 인스턴스는 Python의 `unittest` module의 ``TestLoader`` class에
+    정의된 ``loadTestsFromNames()`` moethod를 지원해야 한다. Setuptools는 `names`
+    argument에 ``test_suite`` argument에 제공된 값인 하나의 테스트 "name"만 전달한다.
+    ``test_suite`` string에 포함가능 한 것에 제한이 없으므로, 지정한 로더는 원하는 대로 이
+    string을 해석 할 수 있다.
 
     Module 이름과 class 이름은 ``:`` 로 구분되어야 한다. 이 argument의 default값은
-``"setuptools.command.test:ScanningLoader"`` 이다. Default인 ``unittest`` 동작을 사용하고자 한다면,
-대신 ``"unittest:TestLoader"`` 를 ``test_loader`` argument로 지정할 수도 있다. 다만, 이렇게 하면
-submodule 및 subpackage를 자동으로 검색 할 수 없다.
+    ``"setuptools.command.test:ScanningLoader"`` 이다. Default인 ``unittest``
+    동작을 사용하고자 한다면, 대신 ``"unittest:TestLoader"`` 를 ``test_loader``
+    argument로 지정할 수도 있다. 다만, 이렇게 하면 submodule 및 subpackage를 자동으로 검색 할
+    수 없다.
 
-    여기에 지정한 module과 class는 다른 package에 포함 될 수도 있다. 다만 이 경우, ``tests`` command를
-실행 할 때 loader class를 포함하는 package를 사용할 수 있도록 ``tests_require`` 옵션을 사용해야 한다.
+    여기에 지정한 module과 class는 다른 package에 포함 될 수도 있다. 다만 이 경우, ``tests``
+    command를 실행 할 때 loader class를 포함하는 package를 사용할 수 있도록 ``tests_require``
+    옵션을 사용해야 한다.
 
 ``eager_resources``
-함께 추출되어야 하는 리소스를 지정하는 string 목록. 이 argument는 프로젝트가 zip 파일로 설치되며,
-목록의 모든 리소스가 *단위* 로 파일 시스템에 추출되어야 하는 경우에만 유용하다. 여기에 나열된 리소스는
-소스 root에 상대적으로 경로가 '/'로 분리되어 있어야 한다. 따라서 패키지 ``bar.baz`` 에 리소스 ``foo.png`` 를
-나열하려면 ``bar/baz/foo.png`` 를 사용한다.
+    함께 추출되어야 하는 리소스를 지정하는 string 목록. 이 argument는 프로젝트가 zip 파일로 설치되며,
+    목록의 모든 리소스가 *단위* 로 파일 시스템에 추출되어야 하는 경우에만 유용하다. 여기에 나열된 리소스는
+    소스 root에 상대적으로 경로가 '/'로 분리되어 있어야 한다. 따라서 패키지 ``bar.baz`` 에 리소스
+    ``foo.png`` 를 나열하려면 ``bar/baz/foo.png`` 를 사용한다.
 
     리소스를 한 번에 하나씩만 가져 오거나, 프로젝트의 다른 파일(데이터 파일 또는 공유 라이브러리)에 접근하는
-C extension이 없으면, 이 인수가 필요하지 않은 겨우일 가능성이 높으므로 이 설정을 건드리지 않는게 좋다.
-이 argument의 작동 방식에 대한 자세한 내용은 아래의 `Automatic Resource Extraction`_ 을 참조.
+    C extension이 없으면, 이 인수가 필요하지 않은 겨우일 가능성이 높으므로 이 설정을 건드리지 않는게 좋다.
+    이 argument의 작동 방식에 대한 자세한 내용은 아래의 `Automatic Resource Extraction`_ 을 참조.
 
 ``use_2to3``
-빌드 과정에서 Python 2에서 Python 3으로 소스 코드를 변환. 자세한 것은 :doc:`python3` 를 참조.
+    빌드 과정에서 Python 2에서 Python 3으로 소스 코드를 변환. 자세한 것은 :doc:`python3` 를 참조.
 
 ``convert_2to3_doctests``
-2to3로 변환 될 필요가 있는 doctest 소스 파일 목록. 자세한 것은 :doc:`python3` 를 참조.
+    2to3로 변환 될 필요가 있는 doctest 소스 파일 목록. 자세한 것은 :doc:`python3` 를 참조.
 
 ``use_2to3_fixers``
-2to3 변환 중에 사용할 추가 fixer를 검색해야 할 module 목록. 자세한 것은 :doc:`python3` 를 참조.
+    2to3 변환 중에 사용할 추가 fixer를 검색해야 할 module 목록. 자세한 것은 :doc:`python3` 를 참조.
 
 
 Using ``find_packages()``

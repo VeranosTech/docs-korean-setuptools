@@ -221,18 +221,18 @@ New and Changed ``setup()`` Keywords
     섹션을 참조.
 
 ``exclude_package_data``
-    패키지 이름을 패키지 디렉토리에서 *제외* 되어야 할 glob 패턴 목록에 매핑하는 dictionary이다.
+    패키지 이름을 패키지 디렉토리에서 *제외* 되어야 할 glob 패턴 목록에 매핑하는 dictionary.
     이것을 사용하여 ``include_package_data`` 에 불필요하게 포함 된 파일들을 줄일 수 있다.
     설명과 예제는 아래의 `Including Data Files`_ 를 참조.
 
 ``package_data``
     패키지 이름을 glob 패턴 목록에 매핑하는 dictionary. 설명과 예제는 아래의 `Including Data
     Files`_ 를 참조. ``include_package_data`` 를 사용하고 있다면, 이 옵션은 사용할 필요가
-    없다. 다만 설정 스크립트와 빌드 과정에서 생성 된 파일을 추가 할 필요있다면 사용한다.
+    없다. 다만 설정 스크립트와 빌드 과정에서 생성 된 파일을 추가 할 필요가 있다면 사용한다.
 
 ``zip_safe``
     프로젝트를 zip 파일에서 안전하게 설치하고 실행할 수 있는지를 지정하는 bool 플래그. 이 argument가
-    제공되지 않으면, ``bdist_egg`` 명령은 egg를 빌드 할 때마다 발생할 수있는 문제에 대해 프로젝트의
+    제공되지 않으면, ``bdist_egg`` 명령은 egg를 빌드 할 때마다 발생 할 수 있는 문제에 대해 프로젝트의
     모든 내용을 분석해야 한다.
 
 ``install_requires``
@@ -246,7 +246,7 @@ New and Changed ``setup()`` Keywords
     를 참조. 이 키워드는 `Automatic Script Creation`_ 을 지원하기 위해 사용되기도 한다.
 
 ``extras_require``
-    "extras"(프로젝트의 선택적 기능) 이름을 이러한 기능을 지원하기 위해 사전에 설치해야하는
+    "extras"(프로젝트의 선택적 기능) 이름을 이러한 기능을 지원하기 위해 사전에 설치해야 하는
     distribution을 지정하는 string이나 string 목록에 매핑하는 dictionary. 이 argument의
     형식과 예제에 대한 자세한 내용은 `Declaring Dependencies`_ 를 참조.
 
@@ -264,7 +264,7 @@ New and Changed ``setup()`` Keywords
     (주의: ``setup_requires`` 에 나열된 프로젝트는 설치 스크립트가 실행되는 시스템에 자동으로
     설치되지 않는다. 이미 로컬에 있지 않은 경우 단순히 ./.eggs 디렉토리로 다운로드 될 뿐이다. 만약
     이들이 설치되고 설치 스크립트가 실행될 때 사용 가능하길 원한다면 ``install_requires`` 와
-    ``setup_requires`` 를 **함께** 추가해야 한다.)
+    ``setup_requires`` 에 **함께** 추가해야 한다.)
 
 ``dependency_links``
     dependency를 검색 할 때 검색 될 URL들을 지정하는 string 목록. 이러한 링크는 ``setup_requires``
@@ -281,7 +281,7 @@ New and Changed ``setup()`` Keywords
 
 ``test_suite``
     ``unittest.TestCase`` subclass(또는 그런 subclass나 subclass의 method 하나 이상을
-    포함하는 package나 module)를 지정하는 string 또는 argument 없이 호출 할 경우
+    포함하는 package나 module)를 지정하는 string, 또는 argument 없이 호출 할 경우
     ``unittest.TestSuite`` 를 반환하는 function. 만약 지정된 suite가 module이고,
     module이 ``additional_tests()`` function을 ​​가지고 있다면, 그 function은 호출되고
     결과는 실행할 테스트에 추가된다. 만약 지정된 suite가 package라면, 모든 submodule과
@@ -301,17 +301,17 @@ New and Changed ``setup()`` Keywords
 .. _test_loader:
 
 ``test_loader``
-    setuptools가 일반적으로 사용하는 것보다 실행할 테스트를 찾는 다른 방법을 사용하려면, 이
+    setuptools가 일반적으로 사용하는 것 말고 실행할 테스트를 찾는 다른 방법을 사용하려면, 이
     argument에 module 이름과 class 이름을 지정할 수 있다. 지정된 class는 argument 없이
     인스턴스화 가능해야 하며, 인스턴스는 Python의 `unittest` module의 ``TestLoader`` class에
-    정의된 ``loadTestsFromNames()`` moethod를 지원해야 한다. Setuptools는 `names`
+    정의된 ``loadTestsFromNames()`` method를 지원해야 한다. Setuptools는 `names`
     argument에 ``test_suite`` argument에 제공된 값인 하나의 테스트 "name"만 전달한다.
-    ``test_suite`` string에 포함가능 한 것에 제한이 없으므로, 지정한 로더는 원하는 대로 이
+    ``test_suite`` string에 포함 가능 한 것에 제한이 없으므로, 지정한 로더는 원하는 대로 이
     string을 해석 할 수 있다.
 
-    Module 이름과 class 이름은 ``:`` 로 구분되어야 한다. 이 argument의 default값은
-    ``"setuptools.command.test:ScanningLoader"`` 이다. Default인 ``unittest``
-    동작을 사용하고자 한다면, 대신 ``"unittest:TestLoader"`` 를 ``test_loader``
+    Module 이름과 class 이름은 ``:`` 로 구분한다. 이 argument의 default값은
+    ``"setuptools.command.test:ScanningLoader"`` 이다. Default 동작인 ``unittest``
+    를 사용하고자 한다면, 대신 ``"unittest:TestLoader"`` 를 ``test_loader``
     argument로 지정할 수도 있다. 다만, 이렇게 하면 submodule 및 subpackage를 자동으로 검색 할
     수 없다.
 

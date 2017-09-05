@@ -2,181 +2,135 @@
 Easy Install
 ============
 
-Easy Install is a python module (``easy_install``) bundled with ``setuptools``
-that lets you automatically download, build, install, and manage Python
-packages.
+Easy Install는 자동으로 파이썬 패키지를 다운로드, 빌드, 설치 그리고 관리해주는 ``setuptools`` 와 함께 묶인 파이썬 모듈이다(``easy_install``).
 
-Please share your experiences with us! If you encounter difficulty installing
-a package, please contact us via the `distutils mailing list
-<http://mail.python.org/pipermail/distutils-sig/>`_.  (Note: please DO NOT send
-private email directly to the author of setuptools; it will be discarded.  The
-mailing list is a searchable archive of previously-asked and answered
-questions; you should begin your research there before reporting something as a
-bug -- and then do so via list discussion first.)
+패키지를 설치하는 과정에서 어려움을 겪었다면 `distutils mailing list
+<http://mail.python.org/pipermail/distutils-sig/>`_ 을 통해 연락을 해라. 
+(setuptools의 저자들에게 직접적으로 이메일을 보내지는 말라. 그렇게 하면 이메일이 처리되지 않을 것이다. 
+메일 리스트는 이전에 묻고 답한 질문에 대해서 검색이 가능한 아카이브이다. 
+버그에 대해서 리포트 하기 전에 조사를 해보아야 한다. )
 
-(Also, if you'd like to learn about how you can use ``setuptools`` to make your
-own packages work better with EasyInstall, or provide EasyInstall-like features
-without requiring your users to use EasyInstall directly, you'll probably want
-to check out the full `setuptools`_ documentation as well.)
-
-.. contents:: **Table of Contents**
+(또한, EasyInstall을 통해 당신의 패키지가 더 잘 작동하게 만들거나 사용자들에게 EasyInstall을 직접 사용하라는 요구 없이 EasyInstall 같은 기능을 제공하기 위해 ``setuptools`` 를 어떻게 사용할 수 있는지 배우고 싶다면, `setuptools`_ 문서를 확인하고 싶을 것이다.)
 
 
-Using "Easy Install"
-====================
+.. contents:: ** 목차 **
+
+
+"Easy Install" 사용하기 
+=========================
 
 
 .. _installation instructions:
 
-Installing "Easy Install"
+"Easy Install" 설치하기
 -------------------------
 
-Please see the `setuptools PyPI page <https://pypi.python.org/pypi/setuptools>`_
-for download links and basic installation instructions for each of the
-supported platforms.
+지원되는 플랫폼에 대한 다운로드 링크와 기본 설치 지시 사항을 위해 `setuptools PyPI page <https://pypi.python.org/pypi/setuptools>`_ 를 봐라.
 
-You will need at least Python 2.6.  An ``easy_install`` script will be
-installed in the normal location for Python scripts on your platform.
+적어도 파이썬 2.6 버전이 필요하다. ``easy_intall`` 스크립트는 플랫폼 위의 파이썬 스크립트의 일반적인 위치에 설치될 것이다. 
 
-Note that the instructions on the setuptools PyPI page assume that you are
-are installing to Python's primary ``site-packages`` directory.  If this is
-not the case, you should consult the section below on `Custom Installation
-Locations`_ before installing.  (And, on Windows, you should not use the
-``.exe`` installer when installing to an alternate location.)
+setuptools PyPI 페이지에서 지시사항은 당신이 파이썬의 주요한 ``site-packages`` 디렉토리를 설치하고 있다는 것을 가정한다. 그렇지 않으면, 설치 전에, 아래에 있는 섹션인 `커스텀 설치 위치`_ 을 살펴봐야한다.
+(윈도우에서 다른 위치에서 설치를 진행할 때 ``.exe`` 인스톨러를 사용하지 않아도 된다.)
 
-Note that ``easy_install`` normally works by downloading files from the
-internet.  If you are behind an NTLM-based firewall that prevents Python
-programs from accessing the net directly, you may wish to first install and use
-the `APS proxy server <http://ntlmaps.sf.net/>`_, which lets you get past such
-firewalls in the same way that your web browser(s) do.
+``easy_install`` 은 일반적으로 인터넷에서 파일을 다운로드함으로써 작동한다.
+파이썬 프로그램이 넷에 직접 접근하는 것을 막는 NTLM 기반의 방화벽이 있다면 `APS proxy server <http://ntlmaps.sf.net/>`_ 를 먼저 설치하고 사용해야할 수도 있다. 이를 사용해서 웹 브라우저와 동일한 방식으로 방화벽을 통과할 수 있게 해준다.
 
-(Alternately, if you do not wish easy_install to actually download anything, you
-can restrict it from doing so with the ``--allow-hosts`` option; see the
-sections on `restricting downloads with --allow-hosts`_ and `command-line
-options`_ for more details.)
+(대안으로, 실제로 다운로드를 할 때 easy_install 사용을 원치 않는다면, ``--allow-hosts`` 옵션으로 이를 제한할 수 있다. 더 자세한 사항을 위해서 `--allow-hosts 를 이용한 다운로드 제한`_ 과 `커맨드 라인 옵션`_ 섹션을 봐라.)
 
 
-Troubleshooting
+트러블 슈팅
 ~~~~~~~~~~~~~~~
 
-If EasyInstall/setuptools appears to install correctly, and you can run the
-``easy_install`` command but it fails with an ``ImportError``, the most likely
-cause is that you installed to a location other than ``site-packages``,
-without taking any of the steps described in the `Custom Installation
-Locations`_ section below.  Please see that section and follow the steps to
-make sure that your custom location will work correctly.  Then re-install.
 
-Similarly, if you can run ``easy_install``, and it appears to be installing
-packages, but then you can't import them, the most likely issue is that you
-installed EasyInstall correctly but are using it to install packages to a
-non-standard location that hasn't been properly prepared.  Again, see the
-section on `Custom Installation Locations`_ for more details.
+EasyInstall/setuptools 정확하게 설치된다면, ``easy_install`` 명령을 수행할 수 있다. 그렇지 않다면 ``ImportError`` 에러가 발생할 것이다. 이 에러는 아래의 `커스텀 설치 위치`_ 에서 설명된 단계를 따르지 않고 ``site-packages`` 가 아닌 다른 곳에 설치할 경우 주로 발생한다. 
+커스텀 위치가 제대로 작동하게 하기 위해서는 해당 섹션과 각 단계를 따라가라. 그리고 나서 재설치를 한다.  
+
+유사하게, ``easy_install`` 을 실행하고 패키지 설치를 하는 것처럼 나타지만 임포트할 수 없다면, 이 경우는 EasyInstall은 정확하게 설치되었지만 준비가 되지 않은 표준 위치가 아닌 곳에 패키지를 설치한 경우가 많다. 
+더 자세한 사항에 대해서는 아래의 `커스텀 설치 위치`_ 을 봐라.
 
 
-Windows Notes
+윈도우 노트 
 ~~~~~~~~~~~~~
 
-Installing setuptools will provide an ``easy_install`` command according to
-the techniques described in `Executables and Launchers`_. If the
-``easy_install`` command is not available after installation, that section
-provides details on how to configure Windows to make the commands available.
+setuptools를 설치하는 것은  `실행 파일 및 실행 프로그램`_ 에 설명된 기술에 따라 ``easy_install`` 명령을 제공할 것이다.
+``easy_install`` 명령은 설치 후에는 이용 불가능하다면, 해당 섹션은 윈도우에서 명령을 이용 가능하게 하기 위한 조작 방법에 대한 상세사항을 제공한다.
 
 
-Downloading and Installing a Package
+패키지 다운로드와 설
 ------------------------------------
 
-For basic use of ``easy_install``, you need only supply the filename or URL of
-a source distribution or .egg file (`Python Egg`__).
+
+``easy_install`` 의 기본 사용법을 위해, 소스 배포 또는 .egg file (`Python Egg`__) 의 파일 이름 또는 URL을 제공할 필요가 있다.
 
 __ http://peak.telecommunity.com/DevCenter/PythonEggs
 
-**Example 1**. Install a package by name, searching PyPI for the latest
-version, and automatically downloading, building, and installing it::
+
+**Example 1**. 이름으로 패키지를 설치하고, PyPI에서 최신 버전을 검색하고 자동으로 다운로드, 빌드 및 설치를 한다.::
 
     easy_install SQLObject
 
-**Example 2**. Install or upgrade a package by name and version by finding
-links on a given "download page"::
+**Example 2**. "download page" 에서 링크를 찾아 이름과 버전을 통해서 설치 또는 업그레이드를 한다.::
 
     easy_install -f http://pythonpaste.org/package_index.html SQLObject
 
-**Example 3**. Download a source distribution from a specified URL,
-automatically building and installing it::
+**Example 3**. 지정된 URL에서 소스 배포판을 다운로드하여 자동으로 빌드하고 설치한다.::
 
     easy_install http://example.com/path/to/MyPackage-1.2.3.tgz
 
-**Example 4**. Install an already-downloaded .egg file::
+**Example 4**. 이미 다운로드된 .egg file을 설치한다.::
 
     easy_install /my_downloads/OtherPackage-3.2.1-py2.3.egg
 
-**Example 5**.  Upgrade an already-installed package to the latest version
-listed on PyPI::
+**Example 5**. 이미 설치된 패키지를 PyPI에 나열된 최신 버전으로 업그레이드한다.::
 
     easy_install --upgrade PyProtocols
 
-**Example 6**.  Install a source distribution that's already downloaded and
-extracted in the current directory (New in 0.5a9)::
+**Example 6**.  현재 디렉토리에서 이미 다운로드 되고 추출된 소스 배포를 설치한다.(New in 0.5a9)::
 
     easy_install .
 
-**Example 7**.  (New in 0.6a1) Find a source distribution or Subversion
-checkout URL for a package, and extract it or check it out to
-``~/projects/sqlobject`` (the name will always be in all-lowercase), where it
-can be examined or edited.  (The package will not be installed, but it can
-easily be installed with ``easy_install ~/projects/sqlobject``.  See `Editing
-and Viewing Source Packages`_ below for more info.)::
+**Example 7**.  (New in 0.6a1) 패키지에 대한 소스 배포와 하위버전 체크아웃 URL를 찾는다. 그리고 
+그것을 추출하거나 ``~ / projects / sqlobject`` (이름은 항상 모두 소문자이다.)에 체크 아웃한다.
+이를 통해 검사하거나 수정할 수 있다. (패키지는 설치되지 않을 것이지만 ``easy_install ~/projects/sqlobject``  를 통해 쉽게 설치된다. 더 자세한 사항을 위해서는 `소스 패키지 수정 및 보기`_ 를 봐라.)::
 
     easy_install --editable --build-directory ~/projects SQLObject
 
-**Example 7**. (New in 0.6.11) Install a distribution within your home dir::
+**Example 7**. (New in 0.6.11) 홈 디렉토리 내에서 배포를 설치한다.::
 
     easy_install --user SQLAlchemy
 
-Easy Install accepts URLs, filenames, PyPI package names (i.e., ``distutils``
-"distribution" names), and package+version specifiers.  In each case, it will
-attempt to locate the latest available version that meets your criteria.
 
-When downloading or processing downloaded files, Easy Install recognizes
-distutils source distribution files with extensions of .tgz, .tar, .tar.gz,
-.tar.bz2, or .zip.  And of course it handles already-built .egg
-distributions as well as ``.win32.exe`` installers built using distutils.
+Easy Install은 URL, 파일이름, PyPI 패키지 이름( ``distutils`` "distribution" 이름)과 패키지+버전의 형태도 받아 들인다. 다른 경우에는 기준을 만족시키는 이용 가능한 최신 버전의 위치를 알아내려고 시도할 것이다.
 
-By default, packages are installed to the running Python installation's
-``site-packages`` directory, unless you provide the ``-d`` or ``--install-dir``
-option to specify an alternative directory, or specify an alternate location
-using distutils configuration files.  (See `Configuration Files`_, below.)
+다운로드하거나 다운로드된 파일을 처리할 때, Easy Install은 .tgz, .tar, .tar.gz,
+.tar.bz2, 또는 .zip.의 확장자를 가지고 있는 distutils 소스 배포 파일을 인식한다. 그리고 이미 빌드된 .egg 배포와 distutils을 사용해서 빌드된 ``.win32.exe`` 을 처리한다. 
 
-By default, any scripts included with the package are installed to the running
-Python installation's standard script installation location.  However, if you
-specify an installation directory via the command line or a config file, then
-the default directory for installing scripts will be the same as the package
-installation directory, to ensure that the script will have access to the
-installed package.  You can override this using the ``-s`` or ``--script-dir``
-option.
+다른 디렉토리를 지정하기 위해 ``-d`` 또는 ``--install-dir`` 옵션을 제공하지 않거나 distutil configuration 파일(아래의 `Configuration Files`_, 참조)을 사용한 다른 위치를 지정하지 않으면 기본적으로 패키지는 실행되고 있는 파이썬 설치 ``site-packages`` 디렉토리에 설치된다. 
 
-Installed packages are added to an ``easy-install.pth`` file in the install
-directory, so that Python will always use the most-recently-installed version
-of the package.  If you would like to be able to select which version to use at
-runtime, you should use the ``-m`` or ``--multi-version`` option.
+기본적으로 패키지에 포함된 스크립트는 실행중인 파이썬 설치 표준 스크립트 설치 위치에 설치된다. 그러나, 커맨드 라인이나 config 파일을 통해 위치를 지정한다면, 설치 스크립트의 기본 디렉토리는 스크립트가 설치된 패키지에 접근할 것을 보장하기 위해 패키지 설치 디렉토리와 같아질 것이다. ``-s`` 또는 ``--script-dir`` 옵션을 통해 오버라이드 할 수 있다. 
+
+파이썬이 설치된 패키지는 설치 디렉토리 내의 ``easy_isntall.pth`` 파일에 추가된다. 
+그래서 파이썬은 항상 가장 최근에 설치된 패키지 버전을 사용할 수 있다. 실행시 어떤 버전을 사용할지 선택하고 싶다면, 
+``-m`` 또는  ``--multi-version`` 옵션을 사용해라.
 
 
-Upgrading a Package
+패키지 업그레이드
 -------------------
 
-You don't need to do anything special to upgrade a package: just install the
-new version, either by requesting a specific version, e.g.::
+패키지 업그레이드를 위해 특별한 것을 할 필요는 없다. 단지 새로운 버전을 설치하거나 특정 버전을 요청하면 된다.
+예를 들면 아래와 같다. ::
 
     easy_install "SomePackage==2.0"
 
-a version greater than the one you have now::
+지금 가지고 있는 버전보다 최신의 버전의 경우::
 
     easy_install "SomePackage>2.0"
 
-using the upgrade flag, to find the latest available version on PyPI::
+PyPI에서 가장 최신 버전을 찾기 위해 업그레이드 flag를 사용한다 ::
 
     easy_install --upgrade SomePackage
 
-or by using a download page, direct download URL, or package filename::
+또는 다운로드 페이지, 직접 다운로드 URL, 또는 패키지 파일 이름을 사용한다. ::
 
     easy_install -f http://example.com/downloads ExamplePackage
 
@@ -184,280 +138,190 @@ or by using a download page, direct download URL, or package filename::
 
     easy_install my_downloads/ExamplePackage-2.0.tgz
 
-If you're using ``-m`` or ``--multi-version`` , using the ``require()``
-function at runtime automatically selects the newest installed version of a
-package that meets your version criteria.  So, installing a newer version is
-the only step needed to upgrade such packages.
+``-m`` 또는 ``--multi-version`` 을 사용한다면, 실행시 자동으로 ``require()`` 함수를 사용하는 것은 기준을 만족시키는 가장 최근에 설치된 패키지의 버전을 선택한다. 그래서, 새로운 버전을 설치하는 것은 단지 업그레이드를 하는 데 필요한 단계이다.
 
-If you're installing to a directory on PYTHONPATH, or a configured "site"
-directory (and not using ``-m``), installing a package automatically replaces
-any previous version in the ``easy-install.pth`` file, so that Python will
-import the most-recently installed version by default.  So, again, installing
-the newer version is the only upgrade step needed.
-
-If you haven't suppressed script installation (using ``--exclude-scripts`` or
-``-x``), then the upgraded version's scripts will be installed, and they will
-be automatically patched to ``require()`` the corresponding version of the
-package, so that you can use them even if they are installed in multi-version
-mode.
-
-``easy_install`` never actually deletes packages (unless you're installing a
-package with the same name and version number as an existing package), so if
-you want to get rid of older versions of a package, please see `Uninstalling
-Packages`_, below.
+PYTHONPATH에 있는 디렉토리 또는 configured "site" 디렉토리에 설치를 하고 있다면, 패키지를 설치하는 것은 자동으로 ``easy-install.pth`` 내에 있는 이전 버전으로 대체될 것이다. 그래서 파이썬은 기본적으로 가장 최근에 설치된 버전을 임포트할 것이다. 다시 말하자면, 새로운 버전을 설치하는것은 단지 요구 되어지는 업그레이드 단계이다. 
 
 
-Changing the Active Version
+스크립트 설치를 억제하지 않는 경우( ``--exclude-scripts`` 또는 ``-x`` 를 사용해서 ), 업그레이드된 버전의 스크립트는 설치될 것이다. 그리고 스크립트는 자동으로 상응하는 패키지 버전의 ``require()`` 에 패치될 것이다.  그래서 멀티버전모드로 설치되었더라도 사용에는 문제가 없다. 
+
+``easy_install`` 는 패키지를 삭제하지 않는다. ( 존재하는 패키지와 같은 이름이나 같은 버전 넘버로 설치하지 않는 이상)
+그래서 이전 버전의 패키지를 삭제하고 싶다면, 아래의  `패키지 삭제`_, 를 참고해라.
+ 
+
+
+활성 버전을 변경하기 
 ---------------------------
 
-If you've upgraded a package, but need to revert to a previously-installed
-version, you can do so like this::
+패키즈를 업그레이드 하고 싶지만, 이전에 설치된 버전으로 돌아갈 필요가 있다면, 다음과 같이 할 수 있다.:: 
 
     easy_install PackageName==1.2.3
 
-Where ``1.2.3`` is replaced by the exact version number you wish to switch to.
-If a package matching the requested name and version is not already installed
-in a directory on ``sys.path``, it will be located via PyPI and installed.
+``1.2.3`` 은 변경하기를 원하는 정확한 버전 넘버로 대체된다. 요청된 이름과 버전과 매칭된 패키지가 ``sys.path`` 의 디렉토리에 설치되지 않았다면, PyPI를 통해 위치를 알아내고 설치될 것이다. 
 
-If you'd like to switch to the latest installed version of ``PackageName``, you
-can do so like this::
+가장 최근에 설치된 ``PackageName`` 버전으로 변경하려면 다음과 같이 하면 된다.:;
 
     easy_install PackageName
 
-This will activate the latest installed version.  (Note: if you have set any
-``find_links`` via distutils configuration files, those download pages will be
-checked for the latest available version of the package, and it will be
-downloaded and installed if it is newer than your current version.)
+이는 최근에 설치된 버전을 활성화 할 것이다. ( distutils configuration 파일을 통해 ``find_links`` 를 설정한다면, 다운로드 페이지는 패키지의 가장 최근 버전을 체크할 것이고 현재 버전보다 최신의 버전이 있다면 그 버전을 다운로드, 설치를 할 것이다.)
 
-Note that changing the active version of a package will install the newly
-active version's scripts, unless the ``--exclude-scripts`` or ``-x`` option is
-specified.
+``--exclude-scripts`` 또는 ``-x`` option 으로 지정되지 않았다면 활성화 패키지 버전을 번경하는 것은 새롭게 활성화된 버전의 스크립트를 설치할 것이다. 
 
 
-Uninstalling Packages
+패키지 삭제 
 ---------------------
 
-If you have replaced a package with another version, then you can just delete
-the package(s) you don't need by deleting the PackageName-versioninfo.egg file
-or directory (found in the installation directory).
+패키지를 다른 버전으로 대체한다면, 당신은 단지 PackageName-versioninfo.egg 파일 또는 디렉토리 (설치 디렉토리에서 찾을 수 있음)를 삭제함으로써 필요하지 않는 패키지 버전을 삭제할 수 있다. 
 
-If you want to delete the currently installed version of a package (or all
-versions of a package), you should first run::
+현재 설치된 패키지 버전 또는 패키지의 모든 버전을 삭제하고 싶다면, 우선 이렇게 실행해야한다.::
 
     easy_install -m PackageName
 
-This will ensure that Python doesn't continue to search for a package you're
-planning to remove. After you've done this, you can safely delete the .egg
-files or directories, along with any scripts you wish to remove.
+이는 파이썬이 제거하기로 계획중인 패키지를 계속해서 검색하지 않는 것을 보장한다. 그 후에, 제거하기를 희망하는 스크립트를 따라 .egg 파일 또는 디렉토리를 안전하게 제거할 수 있다. 
 
 
-Managing Scripts
+스크립트 관리
 ----------------
 
-Whenever you install, upgrade, or change versions of a package, EasyInstall
-automatically installs the scripts for the selected package version, unless
-you tell it not to with ``-x`` or ``--exclude-scripts``.  If any scripts in
-the script directory have the same name, they are overwritten.
+``-x`` 또는 ``--exclude-scripts`` 옵션을 설정하지 않으면, 설치, 업그레이드, 패키지 버전 변경을 할 때마다, EasyInstall은 자동으로 선택된 패키지 버전의 스크립트를 설치한다. 스크립트 디렉토리에 있는 스크립트들이 같은 이름은 가진다면, 덮어 쓰여진다.
 
-Thus, you do not normally need to manually delete scripts for older versions of
-a package, unless the newer version of the package does not include a script
-of the same name.  However, if you are completely uninstalling a package, you
-may wish to manually delete its scripts.
+그러므로, 새로운 버전의 패키지가 같은 이름으로 된 스크립트를 포함하지 않지 않는 한, 수동으로 이전 패키지 버전의 스크립트를 수동으로 삭제할 필요가 없다. 그러나 완전히 패키지를 삭제하려면, 수동으로 스크립트를 삭제해야한다.
 
-EasyInstall's default behavior means that you can normally only run scripts
-from one version of a package at a time.  If you want to keep multiple versions
-of a script available, however, you can simply use the ``--multi-version`` or
-``-m`` option, and rename the scripts that EasyInstall creates.  This works
-because EasyInstall installs scripts as short code stubs that ``require()`` the
-matching version of the package the script came from, so renaming the script
-has no effect on what it executes.
+EasyInstall의 기본 동작은 한 번에 한 버전의 패키지에서만 스크립트를 정상적으로 실행할 수 있음을 의미한다.
+그러나 여러 버전의 스크립트를 사용할 수 있게 하려면 ``--multi-version`` 또는 ``-m`` 옵션을 사용하고 EasyInstall이 생성하는 스크립트의 이름을 변경하면 됩니다.
 
-For example, suppose you want to use two versions of the ``rst2html`` tool
-provided by the `docutils <http://docutils.sf.net/>`_ package.  You might
-first install one version::
+EasyInstall 스크립트는가 나온 패키지의 일치하는 버전을 ``require()`` 해야하는 짧은 코드 stub으로 스크립트를 설치하기 때문에 이는 작동한다. 따라서 스크립트의 이름을 재명명하는 것은 아무런 영향이 없다.
+
+예를 들면, `docutils <http://docutils.sf.net/>`_ 패키지에서 제공되는 ``rst2html`` 툴의 두 가지 버전을 사용하고 싶다고 가정하자. 먼저 한 가지 버전에 대해서 설치를 할 수 있다.::
 
     easy_install -m docutils==0.3.9
 
-then rename the ``rst2html.py`` to ``r2h_039``, and install another version::
+``rst2html.py`` 를 ``r2h_039`` 로 재명명한다. 그리고 다른 버전을 설치한다.::
 
     easy_install -m docutils==0.3.10
 
-This will create another ``rst2html.py`` script, this one using docutils
-version 0.3.10 instead of 0.3.9.  You now have two scripts, each using a
-different version of the package.  (Notice that we used ``-m`` for both
-installations, so that Python won't lock us out of using anything but the most
-recently-installed version of the package.)
+이는 다른 ``rst2html.py`` 스크립트를 생성할 것이다. 이 버전은 0.3.9 대신 0.3.10 버전의 docutils를 사용한다.
+이제 두 가지 스크립트를 가지고 있고 각각은 다른 버전의 패키지를 사용한다. ( 두 가지 설치에 대해 ``-m`` 옵션을 사용하면, 파이썬은 가장 최근에 설치한 패키지 버전 이외의 것을 사용하지 못하게 한다.)
 
 
-Executables and Launchers
--------------------------
 
-On Unix systems, scripts are installed with as natural files with a "#!"
-header and no extension and they launch under the Python version indicated in
-the header.
+실행 파일 및 실행 프로그램
+------------------------------
 
-On Windows, there is no mechanism to "execute" files without extensions, so
-EasyInstall provides two techniques to mirror the Unix behavior. The behavior
-is indicated by the SETUPTOOLS_LAUNCHER environment variable, which may be
-"executable" (default) or "natural".
+유닉스 시스템에서, 스크립트는 "#!" 헤더가 있고 확장자가 없고 헤더에 표시된 Python 버전으로 시작된다.
 
-Regardless of the technique used, the script(s) will be installed to a Scripts
-directory (by default in the Python installation directory). It is recommended
-for EasyInstall that you ensure this directory is in the PATH environment
-variable. The easiest way to ensure the Scripts directory is in the PATH is
-to run ``Tools\Scripts\win_add2path.py`` from the Python directory (requires
-Python 2.6 or later).
+윈도우에서는 확장명이 없는 파일을 실행하는 매커니즘이 있다. 그래서 EasyInstall은 유닉스의 동작은 미러링 하는 두 가지 기술을 제공한다. 이 동작은 SETUPTOOLS_LAUNCHER 환경 변수에 의해 표시되고 이는 "executable" 또는 "natural" 일 수 있다.
 
-Note that instead of changing your ``PATH`` to include the Python scripts
-directory, you can also retarget the installation location for scripts so they
-go on a directory that's already on the ``PATH``.  For more information see
-`Command-Line Options`_ and `Configuration Files`_.  During installation,
-pass command line options (such as ``--script-dir``) to
-``ez_setup.py`` to control where ``easy_install.exe`` will be installed.
+사용된 기술에 관계 없이 스크립트는 스크립트 디렉토리(기본적으로 파이썬 설치 디렉토리)에 설치될 것이다. 
+이 디렉토리가 PATH 환경 변수에 있는지 확인하는 것이 EasyInstall에 추천된다.
+스크립트 디렉토리가 PATH에 있는지 확인하기 가장 쉬운 방법은 파이썬 디렉토리에서 ``Tools\Scripts\win_add2path.py`` 를 실행하는 것이다.
+ 
+파이썬 스크립트 디렉토리를 포함하는 ``PATH`` 를 변경하는 것 대신에, 스크립트를 위한 설치 위치를 재설정할 수도 있다. 
+그래서 이미 ``PATH`` 에 있는 디렉토리를 이동할 수 있다.
+더 많은 정보를 알고 싶다면, `커맨드 라인 옵션`_ 와 `Configuration Files`_ 를 봐라.  
+설치를 하는 동안, ``--script-dir`` 와 같은 커맨드 라인 옵션은 ``ez_setup.py`` 에 전달된다. 그리고 ``easy_install.exe`` 가 설치될 곳을 관리한다.
 
 
-Windows Executable Launcher
+윈도우 실행 파일 프로그램 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-If the "executable" launcher is used, EasyInstall will create a '.exe'
-launcher of the same name beside each installed script (including
-``easy_install`` itself). These small .exe files launch the script of the
-same name using the Python version indicated in the '#!' header.
+실행 파일 프로그램이 사용된다면, EasyInstall은 설치된 각 스크립트 옆에 있는 같은 이름의 스크립트'.exe' 런처를 만들 것이다.( ``easy_install`` 도 포함). 이러한 작은 .exe 파일은 '#!' 헤더에서 표시되는 파이썬 버전을 사용하여 같은 이름의 스크립트를 시작할 것이다.
+이 동작은 현재 기본 설정값이다. 실행 파일 프로그램을을 강제로 사용하려면 ``SETUPTOOLS_LAUNCHER`` 을 "executable"로 설정해라.
 
-This behavior is currently default. To force
-the use of executable launchers, set ``SETUPTOOLS_LAUNCHER`` to "executable".
 
 Natural Script Launcher
 ~~~~~~~~~~~~~~~~~~~~~~~
 
-EasyInstall also supports deferring to an external launcher such as
-`pylauncher <https://bitbucket.org/pypa/pylauncher>`_ for launching scripts.
-Enable this experimental functionality by setting the
-``SETUPTOOLS_LAUNCHER`` environment variable to "natural". EasyInstall will
-then install scripts as simple
-scripts with a .pya (or .pyw) extension appended. If these extensions are
-associated with the pylauncher and listed in the PATHEXT environment variable,
-these scripts can then be invoked simply and directly just like any other
-executable. This behavior may become default in a future version.
+EasyInstall은 또한 스크립트를 시작하기 위한 `pylauncher <https://bitbucket.org/pypa/pylauncher>`_ 와 같은 외부 런처로 실행 지연을 지원한다. 
+``SETUPTOOLS_LAUNCHER`` 환경 변수를 "natural"로 설정하여 실험적인 기능을 가능하게 해라. 그리고 나서 EasyInstall은 .pya(또는 .pyw) 확장자가 추가된 간단한 스크립트로 스크립트를 설치한다.
+이러한 확장이 pylauncher와 연관이 있고 PATHEXT 환경 변수에 나열되어 있으면, 이러한 스크립트는 다른 실행 파일들 처럼 간단하고 직접적으로 호출될 수 있다. 이 동작은 향후 버전에서 기본값이 될 수도 있다.
 
-EasyInstall uses the .pya extension instead of simply
-the typical '.py' extension. This distinct extension is necessary to prevent
-Python
-from treating the scripts as importable modules (where name conflicts exist).
-Current releases of pylauncher do not yet associate with .pya files by
-default, but future versions should do so.
+EasyInstall은 전형적인 '.py' 확장자 대신에 .pya 확장을 사용한다. 이렇게 구별되는 확장자는 파이썬이 스크립트를 임포트 가능한 모듈(이름 충돌이 존재하는 곳)로 취급하지 못하도록 하는데에 필요하다.
+현재 pylauncher의 릴리즈는 아직 .pya 파일을 기본값으로 설정하지 않는다. 그러나 향후에는 그렇게 될 것이다.
 
 
-Tips & Techniques
+팁과 기술
 -----------------
 
-Multiple Python Versions
+다중 파이썬 버전
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
-EasyInstall installs itself under two names:
-``easy_install`` and ``easy_install-N.N``, where ``N.N`` is the Python version
-used to install it.  Thus, if you install EasyInstall for both Python 3.2 and
-2.7, you can use the ``easy_install-3.2`` or ``easy_install-2.7`` scripts to
-install packages for the respective Python version.
+EasyInstall은 EasyInstall 자체를 두 가지 이름으로 설치한다.:
 
-Setuptools also supplies easy_install as a runnable module which may be
-invoked using ``python -m easy_install`` for any Python with Setuptools
-installed.
+``easy_install`` 과 ``easy_install-N.N`` . ``N.N`` 은 이를 설치하기 위해 사용되는 파이썬 버전이다. 
+그러므로 파이썬3.2와 2.7에 모두에 대해 EasyInstall을 설치한다면, 개별 파이썬 버전에 대해 패키지를 설치하기 위해  `` easy_install-3.2`` 또는 ``easy_install-2.7`` 스크립트를 사용할 수 있다.
 
-Restricting Downloads with ``--allow-hosts``
+Setuptools는 또한 설치된 Setuptools를 가지고 있는 파이썬에 대해 ``python -m easy_install`` 을 사용해서 발생하는 실행가능한 모듈로서 easy_install을 제공한다. 
+
+
+``--allow-hosts`` 를 이용한 다운로드 제한
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-You can use the ``--allow-hosts`` (``-H``) option to restrict what domains
-EasyInstall will look for links and downloads on.  ``--allow-hosts=None``
-prevents downloading altogether.  You can also use wildcards, for example
-to restrict downloading to hosts in your own intranet.  See the section below
-on `Command-Line Options`_ for more details on the ``--allow-hosts`` option.
+``--allow-hosts`` (``-H``) 옵션을 사용하면 EasyInstall이 링크와 다운로드는 찾을 도메일을 제한할 수 있다.
+``--allow-hosts=None`` 은 다운로드를 완전히 막는다. 
+또한 와일드 카드를 사용하여 자신의 인트라넷에 있는 호스트에 다운하는 것을 제한할 수 있다.
+``--allow-hosts``  옵션에 대한 자세한 정보를 위해서는 `커맨드 라인 옵션`_ 를 봐라.
 
-By default, there are no host restrictions in effect, but you can change this
-default by editing the appropriate `configuration files`_ and adding:
+기본적으로 호스트 제한이 없지만, 적절한 `configuration files`_ 을 수정하는 것과 추가하는 것을 통해 이 기본값을 변경할 수 있다.:
 
 .. code-block:: ini
 
     [easy_install]
     allow_hosts = *.myintranet.example.com,*.python.org
 
-The above example would then allow downloads only from hosts in the
-``python.org`` and ``myintranet.example.com`` domains, unless overridden on the
-command line.
+위의 예는 커맨드 라인에서 덮어 쓰지 않는 한, ``python.org`` 와 ``myintranet.example.com`` 도메인에 있는 호스트들로부터 다운로드만을 허락한다.
 
 
-Installing on Un-networked Machines
+Un-networked Machines에서의 설치 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Just copy the eggs or source packages you need to a directory on the target
-machine, then use the ``-f`` or ``--find-links`` option to specify that
-directory's location.  For example::
-
+필요한 에그나 소스 패키지를 해당 머신의 디렉토리에 복사하기만 하면 된다. 
+그리고 나서 디렉토리의 위치를 지정하기 위해 ``-f`` 또는 ``--find-links`` 옵션을 사용한다. 예를 들면 ::
+ 
     easy_install -H None -f somedir SomePackage
 
-will attempt to install SomePackage using only eggs and source packages found
-in ``somedir`` and disallowing all remote access.  You should of course make
-sure you have all of SomePackage's dependencies available in somedir.
+위는 단지 ``somedir`` 에서 찾은 에그와 소스 패키지를 사용하게 SomePackage르 설치를 시도하고 모든 원격 접근을 허락하지 않는다. somdir에서 SomePackage의 종속성을 모두 사용할 수 있어야 한다.
 
-If you have another machine of the same operating system and library versions
-(or if the packages aren't platform-specific), you can create the directory of
-eggs using a command like this::
+같은 운영체제와 라이브러리 버전의 다른 머신이 있다면(또는 패키지의 플랫폼이 지정되지 않았다면) 다음과 같은 명령을 통해 egg의 디렉토리를 만들 수 있다.::
 
     easy_install -zmaxd somedir SomePackage
 
-This will tell EasyInstall to put zipped eggs or source packages for
-SomePackage and all its dependencies into ``somedir``, without creating any
-scripts or .pth files.  You can then copy the contents of ``somedir`` to the
-target machine.  (``-z`` means zipped eggs, ``-m`` means multi-version, which
-prevents .pth files from being used, ``-a`` means to copy all the eggs needed,
-even if they're installed elsewhere on the machine, and ``-d`` indicates the
-directory to place the eggs in.)
+이는 EasyInstall이 스크립트나 .pth 파일을 만들지 않고 SomePakage에 대한 압축된 에그 또는 소스 패키지와 모든 종속성을 ``somedir`` 에 넣도록 한다. ``somedir`` 의 내용을 대상 머신에 복사할 수 있다.
+( ``-z`` 는 압축된 에그를 뜻하고 ``-m`` 은 .pth 파일을 사용하지 못하게 하는 다중 버전을 의미한다. ``-a`` 는 설치되어 있음에 불구하고, 필요한 모든 에그의 복사를 의미한다. ``-d`` 는 에그를 놓을 디렉토리의 위치를 표시한다.)
 
-You can also build the eggs from local development packages that were installed
-with the ``setup.py develop`` command, by including the ``-l`` option, e.g.::
+또한 ``-l`` 옵션을 포함해서 `setup.py develop` 명령으로 설치된 로컬 개발 패키지로부터 에그를 빌드할 수 있다. 
+예를 들면 ::
 
     easy_install -zmaxld somedir SomePackage
 
-This will use locally-available source distributions to build the eggs.
+이것은 로컬로 이용 가능한 소스 배포판을 사용하여 에그를 빌드한다.  
 
 
-Packaging Others' Projects As Eggs
+에그로 다른 프로젝트를 패키징하기 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Need to distribute a package that isn't published in egg form?  You can use
-EasyInstall to build eggs for a project.  You'll want to use the ``--zip-ok``,
-``--exclude-scripts``, and possibly ``--no-deps`` options (``-z``, ``-x`` and
-``-N``, respectively).  Use ``-d`` or ``--install-dir`` to specify the location
-where you'd like the eggs placed.  By placing them in a directory that is
-published to the web, you can then make the eggs available for download, either
-in an intranet or to the internet at large.
+에그의 형태로 게시되지 않은 패키지를 배포할 필요가 있는가? 프로젝트에 대한 에그를 빌드하기 위해 EasyInstall을 사용할 수 있다.
+``--zip-ok``, ``--exclude-scripts``, ``--no-deps`` 옵션을 (``-z``, ``-x`` and ``-N``, respectively) 를 사용하기를 원할 것이다. 에그를 넣을 위치를 지정하기 위해 ``-d`` 또는 ``-install-dir`` 을 사용해라. 웹에 게시된 디렉토리에 에그를 넣음으로써, 인트라넷 또는 인터넷에서 에그를 다운로드 할 수 있다.
 
-If someone distributes a package in the form of a single ``.py`` file, you can
-wrap it in an egg by tacking an ``#egg=name-version`` suffix on the file's URL.
-So, something like this::
+누군가 단일 ``.py`` 파일의 형태로 패키지를 배포한다면, 파일의 URL에  ``#egg=name-version`` 접미사를 붙임으로써 에그 안에서 래핑할 수 있다.
+다음 예시와 같다. ::
 
     easy_install -f "http://some.example.com/downloads/foo.py#egg=foo-1.0" foo
 
-will install the package as an egg, and this::
+에그로 패키지를 인스톨 할 것이다. ::
 
     easy_install -zmaxd. \
         -f "http://some.example.com/downloads/foo.py#egg=foo-1.0" foo
 
-will create a ``.egg`` file in the current directory.
+이는 ``.egg`` 파일을 현재 디렉토리에 만들 것이다.
 
 
-Creating your own Package Index
+패키지 인덱스 만들기 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-In addition to local directories and the Python Package Index, EasyInstall can
-find download links on most any web page whose URL is given to the ``-f``
-(``--find-links``) option.  In the simplest case, you can simply have a web
-page with links to eggs or Python source packages, even an automatically
-generated directory listing (such as the Apache web server provides).
+로컬 디렉토리와 파이썬 패키지 인덱스 외에도, EasyInstall은 ``-f`` ( ``-find-link`` )옵션을 사용해서 웹페이지에서 다운로드 링크를 발견할 수 있다. 아주 간단한 예시로, 에그나 파이썬 소스 패키지에 대한 링크가 있는 웹 페이지, 심지어 자동으로 생선된 디렉토리 목록(Apache 웹 서버가 제공하는)을 가질 수 있다. 
 
-If you are setting up an intranet site for package downloads, you may want to
-configure the target machines to use your download site by default, adding
-something like this to their `configuration files`_:
+패키지 다운로드를 위한 인트라넷 사이트를 설정하고 있다면, 기본적으로 다운로드 사이트를 사용하도록 대상 머신을 구성하고 이 파일을 `Configuration files`_ 에 추가할 수 있다. :
 
 .. code-block:: ini
 
@@ -466,147 +330,94 @@ something like this to their `configuration files`_:
                  http://turbogears.org/download/
                  http://peak.telecommunity.com/dist/
 
-As you can see, you can list multiple URLs separated by whitespace, continuing
-on multiple lines if necessary (as long as the subsequent lines are indented.
 
-If you are more ambitious, you can also create an entirely custom package index
-or PyPI mirror.  See the ``--index-url`` option under `Command-Line Options`_,
-below, and also the section on `Package Index "API"`_.
+보다시피, 공백으로 구분된 여러 개의 URL을 나열할 수 있다. 필요한 경우 여러 줄로 계속 나열 할 수 있다. ( 후속 줄을 들여쓰기 하는 한)
+
+더 야망이 있다면 전체 커스텀 패키지 인덱스 또는 PyPI 미러를 만들 수도 있다. 
+아래의 `커맨드 라인 옵션`_ 내의 ``--index-url`` 옵션과 `패키지 인덱스 "API"`_ 섹션을 봐라.
 
 
-Password-Protected Sites
+패스워드로 보호된 사이트
 ------------------------
 
-If a site you want to download from is password-protected using HTTP "Basic"
-authentication, you can specify your credentials in the URL, like so::
+니가 다운로드 하기를 원하는 사이트가 HTTP "Basic" 권한을 통해 패스워드로 보호되어 있다면, 아래와 같은 방법으로 URL에서 인증서를 지정할 수 있다. ::
 
     http://some_userid:some_password@some.example.com/some_path/
 
-You can do this with both index page URLs and direct download URLs.  As long
-as any HTML pages read by easy_install use *relative* links to point to the
-downloads, the same user ID and password will be used to do the downloading.
+인덱스 페이지 URL과 직접 다운로드 URL로 이를 할 수 있다. easy_install로 읽은 HTML 페이지가 다운로드 지점에 상대 링크를 사용하는 한, 같은 사용자 ID 또는 패스워드는 다운로드를 하는데 사용될 것이다.
 
-Using .pypirc Credentials
+.pypirc 인증서 사용하기
 -------------------------
 
-In additional to supplying credentials in the URL, ``easy_install`` will also
-honor credentials if present in the .pypirc file. Teams maintaining a private
-repository of packages may already have defined access credentials for
-uploading packages according to the distutils documentation. ``easy_install``
-will attempt to honor those if present. Refer to the distutils documentation
-for Python 2.5 or later for details on the syntax.
+URL에 보증서를 제공하는 것 외에도 ``easy_install`` 또한 .pypirc 파일에 인증서가 있는 경우 인증서를 사용한다.
+패키지의 개인 저장소를 관리하는 팀은 이미 distutils 문서에 따라 패키지를 업로드 하기 위한 액세스 인증서를 정의했을 수도 있다. 
+``easy_install`` 은 존재하는 경우, 이를 존중한다. sysntax에 대한 자세한 내용은 Python 2.5 이상의 distutils 문서를 참고해라. 
 
-Controlling Build Options
+
+빌드 옵션 제어
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
-EasyInstall respects standard distutils `Configuration Files`_, so you can use
-them to configure build options for packages that it installs from source.  For
-example, if you are on Windows using the MinGW compiler, you can configure the
-default compiler by putting something like this:
+EasyInstall은 표준 distutils `Configuration Files`_ 을 존중한다. 그래서 소스로부터 설치된 패키지를 위한 빌드 옵션을 구성하게 위해 이러한 파일을 사용할 수 있다. 예를 들면, 윈도우에서 MinGW 컴파일러를 사용한다면, 이렇게 함으로써 기본 컴파일러를 구성할 수 있다.:
 
 .. code-block:: ini
 
     [build]
     compiler = mingw32
 
-into the appropriate distutils configuration file.  In fact, since this is just
-normal distutils configuration, it will affect any builds using that config
-file, not just ones done by EasyInstall.  For example, if you add those lines
-to ``distutils.cfg`` in the ``distutils`` package directory, it will be the
-default compiler for *all* packages you build.  See `Configuration Files`_
-below for a list of the standard configuration file locations, and links to
-more documentation on using distutils configuration files.
+적절한 distutils 설정 파일에 넣는다. 사실, 이것은 정상적인 distutils 구성일 뿐이기 때문에, EasyInstall 에 의해 수행되는 것 뿐만 아니라 해당 config 파일을 사용하는 모든 빌드에 영향을 미친다. 예를 들면, ``distutils`` 패키지 디렉토리에 있는 ``distutils.cfg`` 에 이러한 줄을 더한다면, 빌드하는 모든 패키지에 대한 컴파일러가 될 것이다. 
+
+표준 설정 파일 위치 목록과 distutils 설정 파일 사용에 대한 더 많은 문서 링크가 알고 싶다면 `Configuration Files`_ 을 봐라.
 
 
-Editing and Viewing Source Packages
+소스 패키지 수정 및 보기
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Sometimes a package's source distribution  contains additional documentation,
-examples, configuration files, etc., that are not part of its actual code.  If
-you want to be able to examine these files, you can use the ``--editable``
-option to EasyInstall, and EasyInstall will look for a source distribution
-or Subversion URL for the package, then download and extract it or check it out
-as a subdirectory of the ``--build-directory`` you specify.  If you then wish
-to install the package after editing or configuring it, you can do so by
-rerunning EasyInstall with that directory as the target.
+때때로 패키지의 소스 배포판에는 실제 코드의 일부가 아닌 추가 문서, 예제, 구성 파일 등이 포함되어 있다.
+이 파일들은 검사할 수 있도록 하기 위해, ``--editable`` 옵션을 EasyInstall에 사용할 수 있다. 
+그리고 EasyInstall은 소스 배포판 또는 패키지의 하위버전 URL을 찾을 것이다. 그런 다음, 다운로드를 하고 추출을 하거나 지정한 ``--build-directory`` 의 하위 디렉토리로 체크를 할 것이다.  
+그리고 다음 패키지를 수정 또는 구성한 후, 설치하려면 해당 디렉토리에 EasyInstall을 재실행하여서 패키지를 설치할 수 있다.
 
-Note that using ``--editable`` stops EasyInstall from actually building or
-installing the package; it just finds, obtains, and possibly unpacks it for
-you.  This allows you to make changes to the package if necessary, and to
-either install it in development mode using ``setup.py develop`` (if the
-package uses setuptools, that is), or by running ``easy_install projectdir``
-(where ``projectdir`` is the subdirectory EasyInstall created for the
-downloaded package.
+``--editable`` 을 사용하려면 EasyInstall이 실제로 패키지를 빌드하거나 설치하는 것을 멈춘다. 이는 단지 찾고, 얻고, 언팩을 가능하게 해준다. 
 
-In order to use ``--editable`` (``-e`` for short), you *must* also supply a
-``--build-directory`` (``-b`` for short).  The project will be placed in a
-subdirectory of the build directory.  The subdirectory will have the same
-name as the project itself, but in all-lowercase.  If a file or directory of
-that name already exists, EasyInstall will print an error message and exit.
+필요한 경우 패키지를 변경하거나 ``setup.py develop`` (패키지가 setuptools를 사용한다면)을 사용해서 개발 환경을 설치하는 것을 허락한다. 또는 ``easy_install projectdir`` (``projectdir`` 은 다운로드 패키지를 위해 만들어진 EasyInstall 하위 디렉토리)을 실행시키는 것도 허락한다.
 
-Also, when using ``--editable``, you cannot use URLs or filenames as arguments.
-You *must* specify project names (and optional version requirements) so that
-EasyInstall knows what directory name(s) to create.  If you need to force
-EasyInstall to use a particular URL or filename, you should specify it as a
-``--find-links`` item (``-f`` for short), and then also specify
-the project name, e.g.::
+``--editable`` (줄여서 ``-e``) 를 사용하기 위해, ``--build-directory`` (줄여서 ``-b``) 를 사용해야한다. 
+프로젝트는 빌드 디렉토리의 서브디렉토리 내에 위치할 것이다. 서브디렉토리는 프로젝트와 같은 이름을 가지지만 모두 소문자로 표시될 것이다. 파일 또는 디렉토리의 이름이 이미 조냊한다면, EasyInstall은 에러 메시지를 발생시키고 종료 시킬 것이다.
 
+또한 ``--editable`` 을 사용할 때, URL 또는 파일이름을 argument로 사용할 수 없다. 
+EasyInstall이 어떤 디렉토리가 만들어졌는지 확인하기 위해 프로젝트의 이름(그리고 선택적인 버전 요구사항)을 지정해야한다.
+EasyInstall이 특정 URL이나 파일이름은 강제로 사용해야한다면, ``--find-links`` (줄여서 ``-f``)아이템으로 지정해야한다. 그리고 또한 프로젝트의 이름도 지정해야한다. 예를 들면 ::
+ 
     easy_install -eb ~/projects \
      -fhttp://prdownloads.sourceforge.net/ctypes/ctypes-0.9.6.tar.gz?download \
      ctypes==0.9.6
 
 
-Dealing with Installation Conflicts
+설치 충돌 문제 해결
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-(NOTE: As of 0.6a11, this section is obsolete; it is retained here only so that
-people using older versions of EasyInstall can consult it.  As of version
-0.6a11, installation conflicts are handled automatically without deleting the
-old or system-installed packages, and without ignoring the issue.  Instead,
-eggs are automatically shifted to the front of ``sys.path`` using special
-code added to the ``easy-install.pth`` file.  So, if you are using version
-0.6a11 or better of setuptools, you do not need to worry about conflicts,
-and the following issues do not apply to you.)
+(0.6a11 버전부터 이 섹션이 더 이상 사용되지 않는다. 이전 버전의 EasyInstall을 사용하는 사람들이 이를 참조 할 수 있도록 여기에 보관된다. 버전 0.6a11부터 설치 충돌은 이전 또는 시스템에 설치된 패키지를 삭제하지 않고 또한 문제도 무시하지 않고 자동으로 처리된다. 대신 egg는 ``easy-install.pth`` 파일에 추가 된 특별한 코드를 사용하여 자동으로 ``sys.path`` 의 앞 쪽으로 이동한다. 따라서 setuptools 버전 0.6a11 이상을 사용하는 경우 충돌에 대해 걱정할 필요가 없으며 다음 문제가 적용되지 않는다.)
 
-EasyInstall installs distributions in a "managed" way, such that each
-distribution can be independently activated or deactivated on ``sys.path``.
-However, packages that were not installed by EasyInstall are "unmanaged",
-in that they usually live all in one directory and cannot be independently
-activated or deactivated.
+EasyInstall은 "managed" 방법으로 배포판을 설치한다. 개별 배포판은 ``sys.path`` 에서 독립적으로 활성화 또는 비활성화 될 수 있다. 그러나 EasyInstall에 의해 설치되지 않은 패키지는 일반적으로 하나의 디렉토리에 모두 있으면 독립적으로 활성화되거나 비활성화 될 수 없다는 점에서 "unmanaged" 입니다.
+ 
+따라서, EasyInstall을 사용하여 기존 패키지를 업그레이드하거나 기존 패키지와 동일한 이름의 패키지를 설치하는 경우, EasyInstall은 충돌을 경고를 할 것이다. 
+(이는 ``setup.py install`` 보다 향상된 것이다. 왜냐하면 ``distutils`` 는 오래된 패키지 위에 새로운 패키지를 설치하기 때문이다. 관련이 없는 두 개의 패키지를 결합하거나 최신 버전의 패키지에서 삭제된 모듈을 남길 수 있다.)
 
-As a result, if you are using EasyInstall to upgrade an existing package, or
-to install a package with the same name as an existing package, EasyInstall
-will warn you of the conflict.  (This is an improvement over ``setup.py
-install``, because the ``distutils`` just install new packages on top of old
-ones, possibly combining two unrelated packages or leaving behind modules that
-have been deleted in the newer version of the package.)
+EasyInstall은 기존의 "unmanaged" 패키지와 설치 중인 모든 배포판의 모듈 또는 패키지 간에 충돌을 발견하면 설치를 중지한다. 새로운 패키지가 제대로 작동하려면 삭제해야할 기존 파일과 디렉토리의 목록이 표시된다. 계속하려면 충돌하는 파일과 디렉토리를 수동으로 삭제하고 EasyInstall을 재실행해야한다. 
 
-EasyInstall will stop the installation if it detects a conflict
-between an existing, "unmanaged" package, and a module or package in any of
-the distributions you're installing.  It will display a list of all of the
-existing files and directories that would need to be deleted for the new
-package to be able to function correctly.  To proceed, you must manually
-delete these conflicting files and directories and re-run EasyInstall.
-
-Of course, once you've replaced all of your existing "unmanaged" packages with
-versions managed by EasyInstall, you won't have any more conflicts to worry
-about!
+물론, 기존의 존재하는 "unmanaged" 패키지를 EasyInstall에서 "managed" 되는 버전으로 바꾸면 충돌에 대해서 더 이상 걱정할 필요가 없다.
 
 
-Compressed Installation
+압축 설치
 ~~~~~~~~~~~~~~~~~~~~~~~
 
-EasyInstall tries to install packages in zipped form, if it can.  Zipping
-packages can improve Python's overall import performance if you're not using
-the ``--multi-version`` option, because Python processes zipfile entries on
-``sys.path`` much faster than it does directories.
+EasyInstall은 가능한 경우, 압축 형식으로 패키지를 설치하려고 한다. 
+zip 패키지는 ``--multi-version`` 옵션을 사용하지 않으면 파이썬의 전반적인 임포트 성능을 향상시킬 수 있다.
+파이썬은 디렉토리보다 ``sys.path`` 에 있는 zip 파일 항목을 훨씬 빠르게 처리하기 때문이다.
 
-As of version 0.5a9, EasyInstall analyzes packages to determine whether they
-can be safely installed as a zipfile, and then acts on its analysis.  (Previous
-versions would not install a package as a zipfile unless you used the
-``--zip-ok`` option.)
+0.5a9 버전부터 EasyInstall은 패키지를 분석하여 zip 파일로 안전하게 설치할 수 있는지 여부를 결정한 다음 분석을 수행한다. (이전 버전에서는 ``--zip-ok`` 옵션을 사용하지 않는 한, 패키지를 zip 파일로 설치하지 않는다.)
 
-The current analysis approach is fairly conservative; it currently looks for:
+현재의 분석 접근 방법은 꽤 보수적이다. :
 
  * Any use of the ``__file__`` or ``__path__`` variables (which should be
    replaced with ``pkg_resources`` API calls)
@@ -616,28 +427,16 @@ The current analysis approach is fairly conservative; it currently looks for:
 
  * Top-level modules that might be scripts used with ``python -m`` (Python 2.4)
 
-If any of the above are found in the package being installed, EasyInstall will
-assume that the package cannot be safely run from a zipfile, and unzip it to
-a directory instead.  You can override this analysis with the ``-zip-ok`` flag,
-which will tell EasyInstall to install the package as a zipfile anyway.  Or,
-you can use the ``--always-unzip`` flag, in which case EasyInstall will always
-unzip, even if its analysis says the package is safe to run as a zipfile.
-
-Normally, however, it is simplest to let EasyInstall handle the determination
-of whether to zip or unzip, and only specify overrides when needed to work
-around a problem.  If you find you need to override EasyInstall's guesses, you
-may want to contact the package author and the EasyInstall maintainers, so that
-they can make appropriate changes in future versions.
-
-(Note: If a package uses ``setuptools`` in its setup script, the package author
-has the option to declare the package safe or unsafe for zipped usage via the
-``zip_safe`` argument to ``setup()``.  If the package author makes such a
-declaration, EasyInstall believes the package's author and does not perform its
-own analysis.  However, your command-line option, if any, will still override
-the package author's choice.)
+설치 중인 패키지에서 위의 항목 중 하나라도 발견되면 EasyInstall은 패키지를 zip 파일에서 안전하게 실행할 수 없다고 가정하고 디렉토리에 압축을 푼다.
+이 분석을 ``-zip-ok`` 플래그로 오버라이드 할 수 있다. 그러면 EasyInstall이 패키지를 zip 파일로 설치하도록 알려준다. 또는 ``--always-unzip`` 플래그를 사용할 수도 있다. 이는 EasyInstall이 분석 결과 패키지가 zip 파일로 실행하는 것이 안전하다고 하더라도 항상 압축을 푼다.
 
 
-Reference Manual
+그러나 일반적으로 EasyInstall이 zip 또는 unzip 여부를 결정하고 문제를 해결하는 데 필요할 때만 재정의를 지정하는 것이 가장 간단하다. EasyInstall의 추측을 무시해야하는 경우, 패키지 저자와 EasyInstall 관리자에게 문의하여 향후 버전에서 적절하게 변경할 수 있다.
+
+(패키지가 설정 스크립트에서 ``setuptools`` 를 사용한다면, 패키지 저자는 ``setup ()`` 에 대한 ``zip_safe``  argument를 통해 패키지를 안전하거나 안전하지 않은 것으로 선언할 수 있는 옵션을 갖게 된다. 패키지 저자가 이러한 선언을 하면 EasyInstall은 패키지 저자를 믿고 스스로 분석을 수행하지 않는다. 그러나 명령 줄 옵션이있는 경우 패키지 작성자의 선택보다 우선시 한다.)
+
+
+참조 메뉴얼
 ================
 
 Configuration Files
@@ -645,12 +444,8 @@ Configuration Files
 
 (New in 0.4a2)
 
-You may specify default options for EasyInstall using the standard
-distutils configuration files, under the command heading ``easy_install``.
-EasyInstall will look first for a ``setup.cfg`` file in the current directory,
-then a ``~/.pydistutils.cfg`` or ``$HOME\\pydistutils.cfg`` (on Unix-like OSes
-and Windows, respectively), and finally a ``distutils.cfg`` file in the
-``distutils`` package directory.  Here's a simple example:
+EasyInstall의 기본 옵션은 ``easy_install`` 이라는 제목 아래에 있는 표준 distutils 구성 파일을 사용하여 지정할 수 있다. EasyInstall은 먼저 현재 디렉토리에서 ``setup.cfg`` 파일을 찾은 다음  ``~/.pydistutils.cfg`` 또는 ``$HOME\\pydistutils.cfg`` (on Unix-like OSes and Windows, respectively) 그리고 마지막으로 ``distutils`` 패키지 디렉토리 내의 ``distutils.cfg`` 파일을 찾을 것이다. 여기에 간단한 예가 있다.:
+
 
 .. code-block:: ini
 
@@ -667,365 +462,220 @@ and Windows, respectively), and finally a ``distutils.cfg`` file in the
     find_links = http://sqlobject.org/
                  http://peak.telecommunity.com/dist/
 
-In addition to accepting configuration for its own options under
-``[easy_install]``, EasyInstall also respects defaults specified for other
-distutils commands.  For example, if you don't set an ``install_dir`` for
-``[easy_install]``, but *have* set an ``install_lib`` for the ``[install]``
-command, this will become EasyInstall's default installation directory.  Thus,
-if you are already using distutils configuration files to set default install
-locations, build options, etc., EasyInstall will respect your existing settings
-until and unless you override them explicitly in an ``[easy_install]`` section.
+EasyInstall은 ``[easy_install]`` 에서 자체 옵션에 대한 설정을 허용하는 것 외에도 다른 distutils 명령에 지정된 기본값을 존중한다.
 
-For more information, see also the current Python documentation on the `use and
-location of distutils configuration files <https://docs.python.org/install/index.html#inst-config-files>`_.
+예를 들어, ``[easy_install]`` 에 ``install_dir`` 을 설정하지 않고, ``[install]`` 명령에 대해 ``install_lib`` 를 설정했다면, 이는 EasyInstall의 기본 설치 디렉토리가 될 것이다.
 
-Notice that ``easy_install`` will use the ``setup.cfg`` from the current
-working directory only if it was triggered from ``setup.py`` through the
-``install_requires`` option. The standalone command will not use that file.
+그러므로, 이미 distutils 구성 파일을 사용해서 기본 설치 위치, 빌드 옵션 등을 설정했다면, EasyInstall은 ``[easy_install]`` 섹션에서 명시적으로 오버라이드 하지 않을 때까지 기본 설정을 존중한다.
 
-Command-Line Options
+더 많은 정보를 얻고 싶다면 `use and location of distutils configuration files <https://docs.python.org/install/index.html#inst-config-files>`_ 에서 현재 파이썬 문서를 봐라.
+
+``easy_install`` 은 ``setup.py`` 에서 ``install_requires`` 옵션을 통해 촉진된 경우에만 현재 작업 디렉토리의 ``setup.cfg`` 를 사용할 것이다. 독립 실행 명령은 해당 파일을 사용하지 않는다.
+
+
+커맨드 라인 옵션
 --------------------
 
 ``--zip-ok, -z``
-    Install all packages as zip files, even if they are marked as unsafe for
-    running as a zipfile.  This can be useful when EasyInstall's analysis
-    of a non-setuptools package is too conservative, but keep in mind that
-    the package may not work correctly.  (Changed in 0.5a9; previously this
-    option was required in order for zipped installation to happen at all.)
+    zip 파일로 실행하기에 안전하지 않다고 표시되더라도 zip 파일로 모든 패키지를 설치해라. 이는 EasyInstall non-setuptools 패키지 분석이 너무 보수적이 일 때 유용할 수 있다. 하지만 패키지가 제대로 동작하지 않음을 명심해라. (0.5a9에서 변경, 이전에는 이 옵션이 압축 설치가 전혀 발생하지 않게 하기 위해 필요했음)
 
 ``--always-unzip, -Z``
-    Don't install any packages as zip files, even if the packages are marked
-    as safe for running as a zipfile.  This can be useful if a package does
-    something unsafe, but not in a way that EasyInstall can easily detect.
-    EasyInstall's default analysis is currently very conservative, however, so
-    you should only use this option if you've had problems with a particular
-    package, and *after* reporting the problem to the package's maintainer and
-    to the EasyInstall maintainers.
+    패키지가 zip 파일로 실행하기에 안전한 것으로 표시되더라도 zip 파일로 설치하지 마라. 이는 패키지가 안전하지 않은 일을 하지만 EasyInstall이 쉽게 감지할 수 없을 경우 유용하다. EasyInstall의 기본 분석은 매우 보수적이다. 그러나 특정 패키지에 문제가 있는 경우에만 이 옵션을 사용하고 패키지 관리자와 EasyInstall 관리자에게 문제를 보고 한 후에 이 옵션을 사용해야한다. 
+    
+    (노트 :``-z / -Z`` 옵션은 대상 디렉토리에 아직 설치되지 않은 체 새로 빌드되거나 다운로드 된 패키지의 설치에만 영향을 준다. 기존에 설치된 버전을 ZIP에서 UNZIP 파일로 변환하려는 경우 또는 그 반대의 경우, 먼저 기존 버전을 삭제하고 EasyInstall을 재실행 해야한다.)
 
-    (Note: the ``-z/-Z`` options only affect the installation of newly-built
-    or downloaded packages that are not already installed in the target
-    directory; if you want to convert an existing installed version from
-    zipped to unzipped or vice versa, you'll need to delete the existing
-    version first, and re-run EasyInstall.)
 
 ``--multi-version, -m``
-    "Multi-version" mode. Specifying this option prevents ``easy_install`` from
-    adding an ``easy-install.pth`` entry for the package being installed, and
-    if an entry for any version the package already exists, it will be removed
-    upon successful installation. In multi-version mode, no specific version of
-    the package is available for importing, unless you use
-    ``pkg_resources.require()`` to put it on ``sys.path``. This can be as
-    simple as::
+    다중 버전 모드. 이 옵션을 지정하면 ``easy_install`` 이 설치 중인 패키지에 대한 ``easy_intall.pth`` 항목을 추가하지 못한다. 그리고 패키지가 이미 존재하는 버전의 항목이 있으면, 이는 설치가 완료되면 제거된다.
+    다중 버전 모드에서 ``pkg_resources.require()`` 를 사용하여 ``sys.path`` 에 넣지 않는 한, 특정 버전의 패키지를 임포트할 수 없다. 이것은 다음과 같이 간단하게 할 수 있다.::
 
         from pkg_resources import require
         require("SomePackage", "OtherPackage", "MyPackage")
 
-    which will put the latest installed version of the specified packages on
-    ``sys.path`` for you. (For more advanced uses, like selecting specific
-    versions and enabling optional dependencies, see the ``pkg_resources`` API
-    doc.)
-
-    Changed in 0.6a10: this option is no longer silently enabled when
-    installing to a non-PYTHONPATH, non-"site" directory.  You must always
-    explicitly use this option if you want it to be active.
+    이는 ``sys.path`` 에 가장 최근에 설치된 특정 패키지의 버전을 놓을 것이다.
+    (특정 버전을 선택하고 선택적인 종속성을 가능하게 하는 것과 같은 고급 사용에 대한 정보는 ``pkg_resources`` API 문서를 봐라.)
+    
+    0.6a10에서 변경됨 : non-PYTHONPATH 와 non-"site" 디렉토리에 설치될 때, 이 옵션은 더 이상 자동으로 가능하지 않다. 활성화를 원한다면 명시적으로 이 옵션을 사용해야한다.
 
 ``--upgrade, -U``   (New in 0.5a4)
-    By default, EasyInstall only searches online if a project/version
-    requirement can't be met by distributions already installed
-    on sys.path or the installation directory.  However, if you supply the
-    ``--upgrade`` or ``-U`` flag, EasyInstall will always check the package
-    index and ``--find-links`` URLs before selecting a version to install.  In
-    this way, you can force EasyInstall to use the latest available version of
-    any package it installs (subject to any version requirements that might
-    exclude such later versions).
+    기본적으로 프로젝트/버전 요구사항이 sys.path 또는 설치 디렉토리에 이미 설치된 배포판에 의해 충족 시키지 못한다면, EasyInstall은 온라인을 검색한다. 그러나 ``--upgrade`` 또는 ``-U`` 플래그를 제공한다면, 설치를 위한 버전을 선택하기 전에 EasyInstall은 항상 패키지 인덱스와 ``--find-links`` URL 를 검사할 것이다. 
+    이런 방법으로, EasyInstall이 가장 최근의 사용가능한 버전의 패키지를 사용할 수 있게 한다. 
+    (이후 버전을 제외시킬 수있는 버전 요구 사항이있을 수 있음.)
 
 ``--install-dir=DIR, -d DIR``
-    Set the installation directory. It is up to you to ensure that this
-    directory is on ``sys.path`` at runtime, and to use
-    ``pkg_resources.require()`` to enable the installed package(s) that you
-    need.
-
-    (New in 0.4a2) If this option is not directly specified on the command line
-    or in a distutils configuration file, the distutils default installation
-    location is used.  Normally, this would be the ``site-packages`` directory,
-    but if you are using distutils configuration files, setting things like
-    ``prefix`` or ``install_lib``, then those settings are taken into
-    account when computing the default installation directory, as is the
-    ``--prefix`` option.
+    
+    설치 디렉토리를 설정한다. 실행 시에 ``sys.apth`` 에 이 디렉토리가 있어야 한다. 그리고 필요한 설치된 패키지를 위해 ``pkg_resources.require()`` 를 사용해야한다.
+    
+    (0.4a2의 새로운 기능) 
+    이 옵션을 커맨드라인이나 distutils 구성 파일에 직접 지정하지 않으면 distutils 기본 설치 위치가 사용된다. 일반적으로 이는 ``site-packages`` 디렉토리이겠지만, ``prefix`` 또는 ``install_lib`` 와 같은 것을 설정하는 distutils 설정 파일을 사용한다면, 기본 설치 디렉토리를 계산할 때 그 설정을 고려한다. 설치 디렉토리와 ``--prefix`` 라는 옵션이 있다. 
 
 ``--script-dir=DIR, -s DIR``
-    Set the script installation directory.  If you don't supply this option
-    (via the command line or a configuration file), but you *have* supplied
-    an ``--install-dir`` (via command line or config file), then this option
-    defaults to the same directory, so that the scripts will be able to find
-    their associated package installation.  Otherwise, this setting defaults
-    to the location where the distutils would normally install scripts, taking
-    any distutils configuration file settings into account.
 
+    스크립트 설치 디렉토리를 설정하십시오. 커맨드 라인이나 구성 파일을 통해 이 옵션을 사용하지 않지만, ``--install-dir`` 을 사용했다면, 이 옵션은 기본적으로 동일한 디렉토리에 있다. 그래서 스크립트가 관련 패키지  설치를 찾을 수 있을 것이다. 그렇지 않으면 distutils이 일반적으로 스크립트를 설치하는 위치에 대한 기본 설정은 distutils 구성 파일 설정을 고려할 것이다.
+    
 ``--exclude-scripts, -x``
-    Don't install scripts.  This is useful if you need to install multiple
-    versions of a package, but do not want to reset the version that will be
-    run by scripts that are already installed.
+    스크립트를 설치하지 마라. 패키지의 여러 버전을 설치해야 하지만 이미 설치된 스크립트에 의해 실행될 버전을 재설정하고 싶지 않다면 이는 유용하다. 
 
 ``--user`` (New in 0.6.11)
-    Use the user-site-packages as specified in :pep:`370`
-    instead of the global site-packages.
+    전역 site-packages 대신 : pep :`370` 에 지정된대로 user-site-packages를 사용해라.
 
-``--always-copy, -a``   (New in 0.5a4)
-    Copy all needed distributions to the installation directory, even if they
-    are already present in a directory on sys.path.  In older versions of
-    EasyInstall, this was the default behavior, but now you must explicitly
-    request it.  By default, EasyInstall will no longer copy such distributions
-    from other sys.path directories to the installation directory, unless you
-    explicitly gave the distribution's filename on the command line.
+``--always-copy, -a``   
+    (0.5a4의 새로운 기능)
+    필요한 모든 배포판을 sys.path의 디렉토리에 이미 있는 경우라도 설치 디렉토리에 복사해라.
+    이전 버전의 EasyInstall에서는 이는 기본 동작이었지만 이제 명시적으로 요청해야 합니다.
+    기본적으로 EasyInstall은 커맨드라인에서 배포판의 파일 이름을 명시적으로 지정하지 않으면 다른 배포를 sys.path 디렉토리의 배포 디렉토리에서 설치 디렉토리에 복사하지 않는다. 
 
-    Note that as of 0.6a10, using this option excludes "system" and
-    "development" eggs from consideration because they can't be reliably
-    copied.  This may cause EasyInstall to choose an older version of a package
-    than what you expected, or it may cause downloading and installation of a
-    fresh copy of something that's already installed.  You will see warning
-    messages for any eggs that EasyInstall skips, before it falls back to an
-    older version or attempts to download a fresh copy.
+    0.6a10에서 이 옵션을 사용하면 시스템과 개발 에그를 신뢰를 가지고 복사할 수 없으므로 고려 대상에서 제외된다. 
+    이는 EasyInstall이 기대한 것보다 이전 버전을 선택하는 원인이 되거나 이미 설치된 것의 복사본을 다운로드하거나 설치하는 원인이 될 수도 있다. EasyInstall이 이전 버전으로 되돌아가거나 새로운 복사본을 다운로드 하기 전에, 건너 뛸 에그에 대한 경고 메세지가 표시된다.
 
+    
 ``--find-links=URLS_OR_FILENAMES, -f URLS_OR_FILENAMES``
-    Scan the specified "download pages" or directories for direct links to eggs
-    or other distributions.  Any existing file or directory names or direct
-    download URLs are immediately added to EasyInstall's search cache, and any
-    indirect URLs (ones that don't point to eggs or other recognized archive
-    formats) are added to a list of additional places to search for download
-    links.  As soon as EasyInstall has to go online to find a package (either
-    because it doesn't exist locally, or because ``--upgrade`` or ``-U`` was
-    used), the specified URLs will be downloaded and scanned for additional
-    direct links.
+    특정 "다운로드 페이지"또는 디렉토리를 스캔하여 에그 또는 기타 배포본에 대한 직접 링크를 찾는다.
+    기존 파일이나 디렉토리 이름 또는 직접 다운로드 URL은 EasyInstall의 검색 캐시에 즉시 추가되고 간접 URL(에그 또는 다른 인식된 보관 형식을 가리키지 않은 URL)은 추가 링크 목록에 추가되어 다운로드 링크를 검색한다. 
+    EasyInstall이 패키지를 찾기 위해 온라인 상태가 되자마자(로컬에 존재하지 않거나 ``--upgrade`` 또는 ``U`` 가 옵션이 사용되었기 때문에), 지정된 URL은 추가적인 직접 링크에 대해 다운로드되고 스캔된다.
 
-    Eggs and archives found by way of ``--find-links`` are only downloaded if
-    they are needed to meet a requirement specified on the command line; links
-    to unneeded packages are ignored.
+    ``-find-links`` 의 방법으로 발견된 에그와 아카이브는 커맨드 라인에서 지정된 요구사항을 만족시키기 위해 필요하다면 다운로드 되어진다. 불필요한 패키지에 대한 링크는 무시된다.
+    
+    모든 요청된 패키지가 다운로드 페이지에서 지정된 링크를 사용해서 발견된다면, ``--upgrade`` 또는 ``-U`` 옵션을 지정하지 않는 한, 파이썬 패키지 인덱스는 참조될 수 없다.
 
-    If all requested packages can be found using links on the specified
-    download pages, the Python Package Index will not be consulted unless you
-    also specified the ``--upgrade`` or ``-U`` option.
+    (노트 : 링크를 포함하는 로컬 HTML을 참조하고 싶다면, 디렉토리, 에그를 참조하지 않거나 아카이브가 무시되는 파일 이름으로 ``file:`` URL 을 사용해야한다.)
 
-    (Note: if you want to refer to a local HTML file containing links, you must
-    use a ``file:`` URL, as filenames that do not refer to a directory, egg, or
-    archive are ignored.)
-
-    You may specify multiple URLs or file/directory names with this option,
-    separated by whitespace.  Note that on the command line, you will probably
-    have to surround the URL list with quotes, so that it is recognized as a
-    single option value.  You can also specify URLs in a configuration file;
-    see `Configuration Files`_, above.
-
-    Changed in 0.6a10: previously all URLs and directories passed to this
-    option were scanned as early as possible, but from 0.6a10 on, only
-    directories and direct archive links are scanned immediately; URLs are not
-    retrieved unless a package search was already going to go online due to a
-    package not being available locally, or due to the use of the ``--update``
-    or ``-U`` option.
-
-``--no-find-links`` Blocks the addition of any link.
-    This parameter is useful if you want to avoid adding links defined in a
-    project easy_install is installing (whether it's a requested project or a
-    dependency). When used, ``--find-links`` is ignored.
-
-    Added in Distribute 0.6.11 and Setuptools 0.7.
-
+    공백으로 구분된 이 옵션을 사용하여 여러 URL 또는 파일 또는 디렉토리의 이름을 지정할 수 있다.
+    커맨드 라인에서, URL 목록을 따옴표로 묶어야 하므로 단일 옵션 값으로 인식된다. 또한 구성 파일내의 URL도 지정할 수 있다. 위의 `Configuration Files`_ 파일을 보자.
+    
+    0.6a10에서 변경사항 : 이전에 이 옵션을 사용한 모든 URL과 디렉토리는 가능한 빨리 스캔되었지만, 0.6a10 버전부터는 디렉토리와 직접 아카이브 링크만 즉시 스캔된다. 패키지 검색이 로컬에서 사용될 수 없거나 ``--update`` 또는 ``-U`` 옵션을 사용했기 때문에 이미 패키지 검색이 온라인 상태로 되지 않는 한 URL은 검색되지 않는다. 
+    
+``--no-find-links`` 
+    링크 추가를 차단한다.
+    easy_install이 설치되고 있는 프로젝트에서 정의된 링크가 추가되는 것을 막고 싶다면(요청된 프로젝트 또는 종속성인지 간에) 이 파라미터는 유용하다. 사용될 때, ``--find-links`` 는 무시된다.
+    Distribute 0.6.11 과 Setuptools 0.7에서 추가되었다.
+    
 ``--index-url=URL, -i URL`` (New in 0.4a1; default changed in 0.6c7)
-    Specifies the base URL of the Python Package Index.  The default is
-    https://pypi.python.org/simple if not specified.  When a package is requested
-    that is not locally available or linked from a ``--find-links`` download
-    page, the package index will be searched for download pages for the needed
-    package, and those download pages will be searched for links to download
-    an egg or source distribution.
+    파이썬 패키지 인덱스의 기본 URL을 지정한다. 지정되지 않으면 기본값은 https://pypi.python.org/simple 이다.
+    패키지가 ``--find-links`` 다운로드 페이지로부터 링크되거나 로컬에서 사용할 수 없는 패키지가 요청되었을 때,
+    패키지 인덱스는 필요한 패키지에 대한 다운로드 페이지를 위해 검색될 것이다. 그리고 이러한 다운로드 페이지는 링크가 에그 또는 소스 배포판을 다운로드하기 위해 검색될 것이다.
 
 ``--editable, -e`` (New in 0.6a1)
-    Only find and download source distributions for the specified projects,
-    unpacking them to subdirectories of the specified ``--build-directory``.
-    EasyInstall will not actually build or install the requested projects or
-    their dependencies; it will just find and extract them for you.  See
-    `Editing and Viewing Source Packages`_ above for more details.
+    단지 지정된 프로젝트를 위해 소스 배포판을 찾고 다운로드한다. 그리고 지정된``--build-directory`` 의 서브 디렉토리에 압축을 해제한다.
+    EasyInstall은 요청한 프로젝트나 그 의존성을 실제로 빌드하거나 설치하지는 않을 것이다. 단지 찾아내고 추출할 것이다. 자세한 사항이 궁금하다면, 위의 `소스 패키지 수정 및 보기`_ 를 봐라.
 
 ``--build-directory=DIR, -b DIR`` (UPDATED in 0.6a1)
-    Set the directory used to build source packages.  If a package is built
-    from a source distribution or checkout, it will be extracted to a
-    subdirectory of the specified directory.  The subdirectory will have the
-    same name as the extracted distribution's project, but in all-lowercase.
-    If a file or directory of that name already exists in the given directory,
-    a warning will be printed to the console, and the build will take place in
-    a temporary directory instead.
-
-    This option is most useful in combination with the ``--editable`` option,
-    which forces EasyInstall to *only* find and extract (but not build and
-    install) source distributions.  See `Editing and Viewing Source Packages`_,
-    above, for more information.
+    소스 패키지를 빌드하기 위해 사용된 디렉토리를 설정하기. 소스 배포나 체크아웃으로부터 패키지가 빌드 된다면, 지정된 디렉토리의 서브 디렉토리에 추출된다. 서브 디렉토리는 추출된 배포판의 프로젝트와 이름이 같지만 모두 소문자로 표시된다.
+    해당 이름의 파일이나 디렉토리가 주어진 디렉토리에 이미 존재한다면, 콘솔에 경고가 표시될 것이다. 대신에 빌드는 임시 디렉토리에서 수행될 것이다.
+    
+    이 옵션은 EasyInstall이 단지 소스 배포판을 발견하고 추출하는 것(빌드나 설치는 아님)을 강요하는 ``--editable`` 옵션과 함께 가장 유용하게 사용된다.
+    더 자세한 정보를 위해서는 위의 `소스 패키지 수정 및 보기`_ 를 봐라. 
 
 ``--verbose, -v, --quiet, -q`` (New in 0.4a4)
-    Control the level of detail of EasyInstall's progress messages.  The
-    default detail level is "info", which prints information only about
-    relatively time-consuming operations like running a setup script, unpacking
-    an archive, or retrieving a URL.  Using ``-q`` or ``--quiet`` drops the
-    detail level to "warn", which will only display installation reports,
-    warnings, and errors.  Using ``-v`` or ``--verbose`` increases the detail
-    level to include individual file-level operations, link analysis messages,
-    and distutils messages from any setup scripts that get run.  If you include
-    the ``-v`` option more than once, the second and subsequent uses are passed
-    down to any setup scripts, increasing the verbosity of their reporting as
-    well.
+    EasyInstall의 진행 메시지 세부 정보 수준을 제어한다. 기본 상세 수준은 "info"이며, 이는 설정 스크립트 실행, 아카이브 압축 해체 또는 URL 검색과 같이 상대적으로 시간이 많이 소요되는 작업에 대해서만 정보를 출력한다.     
+    ``-q`` 또는 ``--quiet`` 를 사용하는 것은 상세 수준이 "warn"으로 떨어지고 설치 보고서, 경고, 에러에 대해서만 표시할 것이다. ``-v`` 또는 ``--verbose`` 를 사용하면 상세 레벨이 올라가서 실행되는 모든 설정 스크립트의 개별 파일 수준 작업, 링크 분석 메시지 및 distutils 메시지가 포함된다. ``-v`` 옵션을 두 번 이상 포함 시키면 두 번째 및 뒤따라오는 사용은 모든 스크립트로 전달되어 보고의 상세도가 올라간다.
 
 ``--dry-run, -n`` (New in 0.4a4)
-    Don't actually install the package or scripts.  This option is passed down
-    to any setup scripts run, so packages should not actually build either.
-    This does *not* skip downloading, nor does it skip extracting source
-    distributions to a temporary/build directory.
+    실제로 패키지 또는 스크립트를 설치하지마라. 이 옵션은 실행되는 모든 설치 스크립트로 전달되므로 패키지가 실제로 빌드되지 않아야 한다. 이는 다운로드는 건너뛰지 않으며, 임시/빌드 디렉토리로 소스 배포판을 추출하는 것도 건너 뛰지 않는다. 
 
 ``--optimize=LEVEL``, ``-O LEVEL`` (New in 0.4a4)
-    If you are installing from a source distribution, and are *not* using the
-    ``--zip-ok`` option, this option controls the optimization level for
-    compiling installed ``.py`` files to ``.pyo`` files.  It does not affect
-    the compilation of modules contained in ``.egg`` files, only those in
-    ``.egg`` directories.  The optimization level can be set to 0, 1, or 2;
-    the default is 0 (unless it's set under ``install`` or ``install_lib`` in
-    one of your distutils configuration files).
+    소스 배포판을 설치하고 있고, ``--zip-ok`` 옵션을 사용하고 있지 않다면, 이 옵션은 ``.py`` 파일에서 ``.pyo`` 파일로 컴파일링에 대한 최적의 수준을 제어한다.
+    ``.egg`` 파일에 포함되어 있는 모듈의 컴파일에는 영향을 미치지 않고, ``.egg`` 디렉토리에 있는 모듈의 컴파일에만 영향을 미친다. 최적화 수준은 0,1 또는 2로 설정될 수 있다. 기본값은 0이다. 
+    (distutils 구성 파일 중 하나에 ``install`` 또는 ``install_lib`` 로 설정되어 있지 않으면)
+    
 
 ``--record=FILENAME``  (New in 0.5a4)
-    Write a record of all installed files to FILENAME.  This is basically the
-    same as the same option for the standard distutils "install" command, and
-    is included for compatibility with tools that expect to pass this option
-    to "setup.py install".
+    
+    설치된 모든 파일의 기록을 FILENAME에 기록해라. 이는 기본적으로 표준 distutils "install" 명령과 동일한 옵션이고 "setup.py install"에 이 옵션을 전달할 도구와의 호환성을 위해 포함된다. 
 
 ``--site-dirs=DIRLIST, -S DIRLIST``   (New in 0.6a1)
-    Specify one or more custom "site" directories (separated by commas).
-    "Site" directories are directories where ``.pth`` files are processed, such
-    as the main Python ``site-packages`` directory.  As of 0.6a10, EasyInstall
-    automatically detects whether a given directory processes ``.pth`` files
-    (or can be made to do so), so you should not normally need to use this
-    option.  It is is now only necessary if you want to override EasyInstall's
-    judgment and force an installation directory to be treated as if it
-    supported ``.pth`` files.
-
+    하나 이상의 커스텀 "site" 디렉토리를 지정한다. "site" 디렉토리는 메인 파이썬 ``site-packages`` 디렉토리와 같이 ``.pth`` 파일이 처리되는 디렉토리이다. 
+    0.6a10부터 EasyInstall은 주어진 디렉토리가 ``.pth`` 파일을 처리하는지의 여부에 대해 자동으로 감지한다.
+    그래서 일반적으로 이 옵션을 사용할 필요는 없다. EasyInstall의 판단을 오버라이드하고 설치 디렉토리가 ``.pth`` 파일을 지원하는 것처럼 처리하기를 원한다면 필요하다. 
+    
 ``--no-deps, -N``  (New in 0.6a6)
-    Don't install any dependencies.  This is intended as a convenience for
-    tools that wrap eggs in a platform-specific packaging system.  (We don't
-    recommend that you use it for anything else.)
-
+    종속성을 설치하지 마라. 이는 플랫폼 지정 패키지 시스템에서 에그를 래핑하는 도구의 편리성을 위한 것이다. 
+    (다른 용도로 사용하지 않는 것이 좋다.)
+    
 ``--allow-hosts=PATTERNS, -H PATTERNS``   (New in 0.6a6)
-    Restrict downloading and spidering to hosts matching the specified glob
-    patterns.  E.g. ``-H *.python.org`` restricts web access so that only
-    packages listed and downloadable from machines in the ``python.org``
-    domain.  The glob patterns must match the *entire* user/host/port section of
-    the target URL(s).  For example, ``*.python.org`` will NOT accept a URL
-    like ``http://python.org/foo`` or ``http://www.python.org:8080/``.
-    Multiple patterns can be specified by separating them with commas.  The
-    default pattern is ``*``, which matches anything.
+    지정된 glob 패턴과 일치하는 호스트에 대한 다운로드와 스파이더링을 제한한다. 예를 들면, ``-H *.python.org`` 은 웹 액세스에 대한 제한을 한다. 그래서 단지 패키지는 ``python.org`` 도메인에 있는 머신으로부터 나열되고 다운로드 할 수 있는 패키지를 제공한다. 
+    glob 패턴은 대상 URL의 전체 사용자/호스트/포트 섹션과 일치해야한다. 예를 들어 ``* .python.org`` 는 ``http://python.org/foo`` 또는 ``http://www.python.org:8080/`` 과 같은 URL을 허용하지 않는다. 
+    쉼표로 구분하여 여러 패턴을 지정할 수 있다. 기본 패턴은 무엇이든 일치하는 ``*`` 이다.
 
-    In general, this option is mainly useful for blocking EasyInstall's web
-    access altogether (e.g. ``-Hlocalhost``), or to restrict it to an intranet
-    or other trusted site.  EasyInstall will do the best it can to satisfy
-    dependencies given your host restrictions, but of course can fail if it
-    can't find suitable packages.  EasyInstall displays all blocked URLs, so
-    that you can adjust your ``--allow-hosts`` setting if it is more strict
-    than you intended.  Some sites may wish to define a restrictive default
-    setting for this option in their `configuration files`_, and then manually
-    override the setting on the command line as needed.
+    일반적으로이 옵션은 EasyInstall의 웹 액세스를 완전히 차단 (예 : ``-Hlocalhost`` )하거나 인트라넷 또는 다른 신뢰할 수있는 사이트로 제한하는 데 주로 유용하다. EasyInstall은 호스트 제한 사항에 따라 종속성을 만족시킬 수있는 최선의 방법을 사용하지만 적절한 패키지를 찾지 못하면 실패 할 수도 있다.
+    EasyInstall은 차단된 모든 URL을 표시하므로 의도보다 더 엄격한 경우,  `--allow-hosts` 설정을 조정할 수 있다.
+    어떤 사이트에서는 `configuration files`_ 에 이 옵션에 대한 제한적인 기본 설정을 정의하고 필요에 따라 수동으로 설정을 덮어 쓸 수 있게 한다.
+
 
 ``--prefix=DIR`` (New in 0.6a10)
-    Use the specified directory as a base for computing the default
-    installation and script directories.  On Windows, the resulting default
-    directories will be ``prefix\\Lib\\site-packages`` and ``prefix\\Scripts``,
-    while on other platforms the defaults will be
-    ``prefix/lib/python2.X/site-packages`` (with the appropriate version
-    substituted) for libraries and ``prefix/bin`` for scripts.
+    지정된 디렉토리를 기본 설치 및 스크립트 디렉토리 계산을 위한 기반으로 사용해라. Windows의 경우, 기본 디렉토리는 ``prefix\\Lib\\site-packages`` 와 ``prefix\\Scripts`` 이다. 다른 플랫폼에서는 라이브러리에 대해서는 ``prefix/lib/python2.X/site-packages`` (적절한 버전으로 대체)를,  스크립트에 대해서는 ``prefix/bin`` 를 사용한다. 
+    
+    ``--prefix`` 옵션은 단지 기본 설치와 스크립트 디렉토리만 설정하고 커맨드 라인이나 구성 파일에 설정된 디렉토리를 덮어 쓰지 않는다는 것을 주의해라.
 
-    Note that the ``--prefix`` option only sets the *default* installation and
-    script directories, and does not override the ones set on the command line
-    or in a configuration file.
 
 ``--local-snapshots-ok, -l`` (New in 0.6c6)
-    Normally, EasyInstall prefers to only install *released* versions of
-    projects, not in-development ones, because such projects may not
-    have a currently-valid version number.  So, it usually only installs them
-    when their ``setup.py`` directory is explicitly passed on the command line.
+    일반적으로 EasyInstall은 현재 릴리스 된 버전의 프로젝트만 설치하는 것을 선호한다. 개발 중인 프로젝트는 현재 유효한 버전 번호가 없을 수 있기 때문에 EasyInstall은 해당 프로젝트를 설치하는 것을 선호한다. 그래서 보통 ``setup.py`` 디렉토리가 커맨드라인에서 명시적으로 전달될 때만 설치한다.
 
-    However, if this option is used, then any in-development projects that were
-    installed using the ``setup.py develop`` command, will be used to build
-    eggs, effectively upgrading the "in-development" project to a snapshot
-    release.  Normally, this option is used only in conjunction with the
-    ``--always-copy`` option to create a distributable snapshot of every egg
-    needed to run an application.
+    그러나, 이 옵션을 사용하면, ``setup.py develop`` 명령을 사용해서 설치된 개발 중인 프로젝트는 에그를 빌드할 것이다. 그리고 효율적으로 개발중인 프로젝트를 스냅샷 릴리즈로 효과적으로 업그레이드 할 것이다.
 
-    Note that if you use this option, you must make sure that there is a valid
-    version number (such as an SVN revision number tag) for any in-development
-    projects that may be used, as otherwise EasyInstall may not be able to tell
-    what version of the project is "newer" when future installations or
-    upgrades are attempted.
+    일반적으로, 이 옵션은 응용 프로그램을 실행하는 데 필요한 모든 에그의 배포 가능한 스냅샷을 만들기 위해 ``--always-copy`` 옵션과 결합해서 사용된다. 
 
+    이 옵션을 사용한다면, 개발 중인 프로젝트의 유효한 버전 넘버(예 : SVN 수정 번호 태그)가 있음을 확실히 해야한다. 그렇지 않으면 EasyInstall은 향후에 설치 또는 업그레이드를 시도할 때 어떤 프로젝트의 버전이 더 새로운 버전인지를 구별할 수 없다. 
+    
 
 .. _non-root installation:
 
-Custom Installation Locations
+커스텀 설치 위치 
 -----------------------------
 
-By default, EasyInstall installs python packages into Python's main ``site-packages`` directory,
-and manages them using a custom ``.pth`` file in that same directory.
+기본적으로 EasyInstall은 파이썬의 주요 ``site-packages`` 디렉토리에 파이썬 패키지를 설치하고 같은 디렉토리에있는 사용자 정의 ``.pth`` 파일을 사용하여 관리한다.
 
-Very often though, a user or developer wants ``easy_install`` to install and manage python packages
-in an alternative location, usually for one of 3 reasons:
+그러나 사용자 또는 개발자는 보통 easy_install을 설치하고 다른 위치에 파이썬 패키지를 설치하기를 원한다. 보통 3가지 이유 중 하나가 있다.:
 
-1. They don't have access to write to the main Python site-packages directory.
+1. 파이썬 메인 사이트 패키지 디렉토리에 쓸 수있는 권한이 없다.
 
-2. They want a user-specific stash of packages, that is not visible to other users.
+2. 다른 사용자가 볼 수없는 패키지에 대한 사용자 고유의 은닉을 원한다.
 
-3. They want to isolate a set of packages to a specific python application, usually to minimize
-   the possibility of version conflicts.
+3. 한 세트의 패키지를 특정 파이썬 응용 프로그램으로 격리하려고 한다. 보통 버전 충돌의 가능성을 최소화하기 위해서이다.
 
-Historically, there have been many approaches to achieve custom installation.
-The following section lists only the easiest and most relevant approaches [1]_.
+역사적으로 사용자 정의 설치를 수행하는 데는 여러 가지 방법이 있었다. 다음 섹션에서는 가장 쉽고 가장 관련있는 접근 방법을 나열한다.  [1]_.
 
-`Use the "--user" option`_
+`"--user" 옵션 사용`_
 
-`Use the "--user" option and customize "PYTHONUSERBASE"`_
+`"--user" 옵션 사용 및 "PYTHONUSERBASE" 커스터마이징`_
 
-`Use "virtualenv"`_
+`"virtualenv" 사용`_
 
-.. [1] There are older ways to achieve custom installation using various ``easy_install`` and ``setup.py install`` options, combined with ``PYTHONPATH`` and/or ``PYTHONUSERBASE`` alterations, but all of these are effectively deprecated by the User scheme brought in by `PEP-370`_ in Python 2.6.
+.. [1] ``easy_install` 과 ``setup.py install`` 옵션을 ``PYTHONPATH`` 및 ``PYTHONUSERBASE`` 변경과 결합하여 커스텀 설치를 하는 오래된 방법이 있다. 그러나 파이썬2.6에서 `PEP-370`_ 에 의해 가져온 사용자 체계에 의해 이들 모두는 추천되지 않는다. 
 
 .. _PEP-370: http://www.python.org/dev/peps/pep-0370/
 
 
-Use the "--user" option
+"--user" 옵션 사용
 ~~~~~~~~~~~~~~~~~~~~~~~
-With Python 2.6 came the User scheme for installation, which means that all
-python distributions support an alternative install location that is specific to a user [2]_ [3]_.
-The Default location for each OS is explained in the python documentation
-for the ``site.USER_BASE`` variable.  This mode of installation can be turned on by
-specifying the ``--user`` option to ``setup.py install`` or ``easy_install``.
-This approach serves the need to have a user-specific stash of packages.
+파이썬 2.6에서는 설치를 위한 사용자 스키마가 제공되었는데, 이는 모든 파이썬 배포판이 사용자에게 특정한 대체 설치 위치를 지원한다는 것을 의미한다 [2]_ [3]_.
+각 OS의 기본 위치는 ``site.USER_BASE`` 변수에 대한 파이썬 문서에 설명되어 있다. 
+이 설치 모드는 ``setup.py install`` 또는 ``easy_install`` 에 ``--user`` 옵션을 지정함으로써 가능하다. 
+이 접근법은 패키지에 대한 사용자 고유의 은닉을 필요로 한다. 
 
-.. [2] Prior to Python2.6, Mac OS X offered a form of the User scheme. That is now subsumed into the User scheme introduced in Python 2.6.
-.. [3] Prior to the User scheme, there was the Home scheme, which is still available, but requires more effort than the User scheme to get packages recognized.
 
-Use the "--user" option and customize "PYTHONUSERBASE"
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-The User scheme install location can be customized by setting the ``PYTHONUSERBASE`` environment
-variable, which updates the value of ``site.USER_BASE``.  To isolate packages to a specific
-application, simply set the OS environment of that application to a specific value of
-``PYTHONUSERBASE``, that contains just those packages.
+.. [2] 파이썬 2.6 이전에는 Mac OS X이 사용자 스키마의 한 형태를 제공했다. 지금은 Python 2.6에서 소개된 사용자 체계에 포함되었다.
+.. [3] 사용자 스키마 이전에는 여전히 사용할 수있는 홈 스키마가 있었지만 패키지를 인식하기 위해 사용자 스키마보다 많은 노력이 필요했다.
 
-Use "virtualenv"
-~~~~~~~~~~~~~~~~
-"virtualenv" is a 3rd-party python package that effectively "clones" a python installation, thereby
-creating an isolated location to install packages.  The evolution of "virtualenv" started before the existence
-of the User installation scheme.  "virtualenv" provides a version of ``easy_install`` that is
-scoped to the cloned python install and is used in the normal way. "virtualenv" does offer various features
-that the User installation scheme alone does not provide, e.g. the ability to hide the main python site-packages.
+"--user" 옵션 사용 및 "PYTHONUSERBASE" 커스터마이징
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+사용자 스키마 설치 위치는 ``site.USER_BASE`` 값을 업데이트하는 ``PYTHONUSERBASE``  환경 변수를 설정하여 커스터마이징 할 수 있다. 특정 애플리케이션에 패키지를 격리하려면 해당 응용 프로그램의 OS 환경을 해당 패키지만 포함된 ``PYTHONUSERBASE`` 의 특정 값으로 설정하기만 하면 된다. 
 
-Please refer to the `virtualenv`_ documentation for more details.
+"virtualenv" 사용
+~~~~~~~~~~~~~~~~~~~
+"virtualenv"는 파이썬 설치를 효과적으로 복제하는 써드파티 파이썬 패키지이고 이로 인해 설치 패키지에 고립된 위치를 만든다.
+"virtualenv"의 발전은 사용자 설치 계획이 있기 전에 시작되었다.
+"virtualenv"는 복제된 파이썬 설치에 범위내에 있고 정상적인 방법으로 사용되는 ``easy_install`` 버전을 제공한다.
+"virtualenv"는 사용자 설치 스키마가 제공하지 않는 다양한 기능을 제공합니다 (예 : 주요 파이썬 사이트 패키지를 숨길 수 있는 기능.)
+
+
+더 많은 정보를 위해서는 `virtualenv`_ 문서를 봐라.
 
 .. _virtualenv: https://pypi.python.org/pypi/virtualenv
 
 
 
-Package Index "API"
+패키지 인덱스 "API"
 -------------------
 
 Custom package indexes (and PyPI) must follow the following rules for
@@ -1081,8 +731,8 @@ EasyInstall to be able to look up and download packages:
    directory with a trailing ``/`` on the URL.
 
 
-Backward Compatibility
-~~~~~~~~~~~~~~~~~~~~~~
+이전 버전과의 호환성
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Package indexes that wish to support setuptools versions prior to 0.6b4 should
 also follow these rules:
@@ -1461,7 +1111,7 @@ History
    i.e., all non-alphanumeric runs must be condensed to single underscore
    characters.
 
- * Added the ``--editable`` option; see `Editing and Viewing Source Packages`_
+ * Added the ``--editable`` option; see `소스 패키지 수정 및 보기`_
    above for more info.  Also, slightly changed the behavior of the
    ``--build-directory`` option.
 

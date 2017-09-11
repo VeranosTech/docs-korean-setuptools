@@ -43,7 +43,7 @@ templates_path = ['_templates']
 source_suffix = '.txt'
 
 # The master toctree document.
-master_doc = 'index'
+master_doc = 'index_ko'
 
 # List of directories, relative to source directory, that shouldn't be searched
 # for source files.
@@ -66,7 +66,7 @@ html_theme_path = ['_theme']
 html_use_smartypants = True
 
 # Custom sidebar templates, maps document names to template names.
-html_sidebars = {'index': 'indexsidebar.html'}
+html_sidebars = {'index_ko': ['indexsidebar.html']}
 
 # If false, no module index is generated.
 html_use_modindex = False

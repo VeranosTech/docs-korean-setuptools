@@ -956,7 +956,7 @@ Extensible Applications and Frameworks
 ======================================
 
 
-.. _Entry Points:
+#.. _Entry Points:
 
 Dynamic Discovery of Services and Plugins
 -----------------------------------------

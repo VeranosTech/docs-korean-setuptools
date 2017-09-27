@@ -23,11 +23,11 @@ API를 제공한다. 또한 zip 파일 포맷 eggs 내에 있는 C 확장자 사
 
 Egg는 파이썬 모듈을 위한 배포 포맷으로 Java의 "jars"나 Ruby의 "gems", 또는 PEP 427로
 정의된 "wheel"과 개념적으로 유사하다. 하지만 순수 배포 포맷과는 달리 eggs는 임포트 위치로
-``sys.path``에 직접 추가되거나 설치될 수 있다. 이런 방식으로 설치되면 eggs 탐색가능하게 되며
+``sys.path``\ 에 직접 추가되거나 설치될 수 있다. 이런 방식으로 설치되면 eggs 탐색가능하게 되며
 이는 컨텐츠와 의존성을 명확하게 식별하는 메타데이터를 가진다는 의미다.
 또한 설치된 egg는 자동적으로 검색되고 간단한 서식의 요청("docutils의 PDF 지원을 사용하기 위해서
-필요한 모든 것을 가져다줘")에 대응해 ``sys.path``에 추가된다. 이 기능은 상호간에 충돌하는 배포판의
-버전을 동일한 파이썬 환경에 공존할 수 있게 만들어주면서, ``sys.path``의 컨텐츠를 조작하는 식으로
+필요한 모든 것을 가져다줘")에 대응해 ``sys.path``\ 에 추가된다. 이 기능은 상호간에 충돌하는 배포판의
+버전을 동일한 파이썬 환경에 공존할 수 있게 만들어주면서, ``sys.path``\ 의 컨텐츠를 조작하는 식으로
 개별적인 어플리케이션이 실행 시간에 필요한 버전을 작동하게 한다 (이것은 각 어플리케이션을 위한
 분리된 환경을 생성하는 가상환경식 접근법과는 다르다).
 
@@ -45,7 +45,7 @@ distribution
     특정한 릴리즈를 나타내는 파일 또는 파일들.
 
 importable distribution
-    ``sys.path``에 위치해 있으면 파이썬이 안에 포함한 모듈을 임포트할 수 있게 해주는 파일이나
+    ``sys.path``\ 에 위치해 있으면 파이썬이 안에 포함한 모듈을 임포트할 수 있게 해주는 파일이나
     디렉토리.
 
 pluggable distribution
@@ -107,10 +107,10 @@ eggs
 
 
 -------------
-API 레퍼런스
+API Reference
 -------------
 
-네임스페이스 패키지 지원
+Namespace Package Support
 =========================
 
 네임스페이스 패키지는 자신만의 직접적인 컨텐츠가 없이 다른 패키지와 모듈만 포함하고 있는 패키지다.
@@ -148,7 +148,7 @@ API 레퍼런스
 See the section below on `Supporting Custom Importers`_ for details.
 
 
-``WorkingSet`` 객체
+``WorkingSet`` Objects
 ======================
 
 ``WorkingSet`` 클래스틑 "유효한" 디스트리뷰션 집합에 접근할 수 있게 해준다. 일반적으로
@@ -184,7 +184,7 @@ See the section below on `Supporting Custom Importers`_ for details.
     import pkg_resources
 
 
-기본 ``WorkingSet`` 메소드
+Basic ``WorkingSet`` Methods
 ----------------------------
 
 아래의 ``WorkingSet`` 객체 메소드들은 디폴트 ``working_set`` 인스턴스에 적용할 수 있는
@@ -230,10 +230,10 @@ pkg_resources.require()``\ 를 ``pkg_resources.working_set.require()``\ 의
     만약 스크립트 실행 환경에서 더 많은 조정이 필요하다면 ``Distribution``\ 의 메서드인
     ``run_script()``\ 를 사용하길 원할 것이다.
 
-``iter_entry_points(group, name=None)`
+``iter_entry_points(group, name=None)``
 
     `name`\ 이 None이면, working set에 있는 모든 디스트리뷰션의 `group`의 모든 엔트리
-    포인트를 산출하고 아니면 `group`과 `name` 모두와 일치하는 엔트리포인트만 산출한다.
+    포인트를 산출하고 아니면 `group`\ 과 `name` 모두와 일치하는 엔트리포인트만 산출한다.
     엔트리 포인트는 디스트리뷰션이 working set에 나타나는 순서대로 유효한 디스트리뷰션에서
     산출된다. (전역 ``working_set``\ 의 경우 ``sys.path``\ 에 리스트 되어있는 순서와 같다.)
     개별 디스트리뷰션에 의해 선언되는 엔트리 포인트 사이에서는 특별한 순서가 존재하지 않는다.
@@ -241,7 +241,7 @@ pkg_resources.require()``\ 를 ``pkg_resources.working_set.require()``\ 의
     자세한 정보는 아래의 `Entry Points`_ 섹션을 참고하라.
 
 
-``WorkingSet`` 메소드와 특성
+``WorkingSet`` Methods and Attributes
 -------------------------------------
 
 이 메소드들은 특정한 working set의 컨텐츠를 조작하거나 질의하기 위해 사용된다.
@@ -292,7 +292,7 @@ pkg_resources.require()``\ 를 ``pkg_resources.working_set.require()``\ 의
 
     set에 유효한 디스트리뷰션을 아직 프로젝트의 경우에 `dist`\ 는 working set에 추가만 된다.
     성공적으로 추가되었으면 ``subscribe()`` 메서드에 등록된 모든 콜백이 호출된다.
-    (아래의 `변경 알람 받기`_ 참고)
+    (아래의 `Receiving Change Notifications`_ 참고)
 
     Note: ``add()``\ 는 ``require()`` 메서드에 의해서 자동적으로 호출되서 당신이
     일반적으로 이 메서드를 직접 사용할 필요는 없다.
@@ -308,7 +308,7 @@ pkg_resources.require()``\ 를 ``pkg_resources.working_set.require()``\ 의
     문제의 원인이 아니다.
 
 
-변경 알람 받기
+Receiving Change Notifications
 ------------------------------
 
 확장가능한 어플리케이션과 프레임워크는 (플러그인 구성 요소 같은) 새로운 디스트리뷰션이 working set에
@@ -330,7 +330,7 @@ pkg_resources.require()``\ 를 ``pkg_resources.working_set.require()``\ 의
 ``pkg_resources.working_set.subscribe()``.
 
 
-플러그인 찾기
+Locating Plugins
 ----------------
 
 확장성 있는 어플리케이션은 종종 엔트리포인트나 다른 메타데이터를 로드하고 싶은 플러그인 디렉토리 set이나
@@ -393,7 +393,7 @@ pkg_resources.require()``\ 를 ``pkg_resources.working_set.require()``\ 의
    버전 충돌로 인해서 사용중단될 것이다.
 
 
-``Environment`` 객체
+`Environment`` Objects
 =======================
 
 "environment" 는 ``Distribution``\ 의 집합으로, 현재 플랫폼에 있고 잠재적으로 임포트가
@@ -452,9 +452,9 @@ pkg_resources.require()``\ 를 ``pkg_resources.working_set.require()``\ 의
     적합한 플랫폼 문자열이나 파이썬 버전을 가지고 있지 않은 소스에 있는 디스트리뷰션은 무시된다.
 
 ``best_match(req, working_set, installer=None)``
-    `req`\ 가장 일치하고 ``working_set`\ 에서 사용할 수 있는 디스트리뷰션을 찾는다.
+    `req`\ 가장 일치하고 ``working_set``\ 에서 사용할 수 있는 디스트리뷰션을 찾는다.
 
-    적합한 디스트리뷰션이 활성화되어 있는지 확인하기 위해서 `working_set`의 ``find(req)``
+    적합한 디스트리뷰션이 활성화되어 있는지 확인하기 위해서 `working_set`\ 의 ``find(req)``
     메서드를 호출한다. (특정한 `working_set`\ 에서 적합하지 않은 버전의 프로젝트가 이미
     활성화되어 있으면 ``VersionConflict``\ 를 일으킬 수 있다.) 적합한 디스트리뷰션이
     활성화되어있지 않으면 이 메서드는 환경에서 `req`\ 의 ``Requirement``\ 를 충족하는
@@ -477,7 +477,7 @@ pkg_resources.require()``\ 를 ``pkg_resources.working_set.require()``\ 의
     ``add()``\ 를 호출하는 ``find_distributions()`` 함수의 축약형이다.
 
 
-``Requirement`` 객체
+``Requirement`` Objects
 =======================
 
 ``Requirement`` 객체는 몇몇 목적에 적합한 프로젝트의 버전을 표현한다. 이 객체 (또는
@@ -485,7 +485,7 @@ pkg_resources.require()``\ 를 ``pkg_resources.working_set.require()``\ 의
 ``pkg_resources`` API에서 사용된다.
 
 
-요구조건 파싱
+Requirements Parsing
 --------------------
 
 ``parse_requirements(s)``
@@ -528,7 +528,7 @@ pkg_resources.require()``\ 를 ``pkg_resources.working_set.require()``\ 의
     마커가 참이면 현재 환경에 설치될 것이다. 예를 들어, ``argparse;python_version<"2.7"``\
     로 지정하면 파이썬 2.7이나 3.3 환경에서는 설치 되지 않고 2.6 환경에서는 설치될 것이다.
 
-``Requirement`` 메서드와 특성
+``Requirement`` Methods and Attributes
 --------------------------------------
 
 ``__contains__(dist_or_version)``
@@ -565,7 +565,7 @@ pkg_resources.require()``\ 를 ``pkg_resources.working_set.require()``\ 의
 
 ``specs``
     ``(op,version)`` 튜플의 리스트, 오름차순 파싱된 버전 순서로 분류됨. 각 튜플의 `op`\ 는
-    비교 연산자이며 문자열로 나타난다. `version`은 (파싱되지 않은) 버전 숫자다.
+    비교 연산자이며 문자열로 나타난다. `version`\ 은 (파싱되지 않은) 버전 숫자다.
 
 ``marker``
     현재 환경에 대한 평가를 허용하는 ``packaging.markers.Marker`` 인스턴스. 마커 지정자가
@@ -574,8 +574,8 @@ pkg_resources.require()``\ 를 ``pkg_resources.working_set.require()``\ 의
 ``url``
     지정되면 요구조건을 다운로드 받을 위치.
 
-엔트리 포인트
-============
+Entry Points
+================
 
 엔트리 포인트는 다른 디스트리뷰션에 의해 사용되는 함수나 클래스 같은 파이썬 객체를 디스트리뷰션이
 "선언하기" 위해 사용되는 간단한 바업이다 확장가능한 어플리케이션과 프레임워크는
@@ -608,7 +608,7 @@ distutils 확장판으로 정의되는 커맨드를 찾기 위해서 사용된�
 가능한 방법에 포함될 수 있다.
 
 
-편의 API
+Convenience API
 ---------------
 
 다음의 함수에서 `dist`\ 인수는 ``Distribution``, ``Requirement`` 인스턴스나 요구조건을
@@ -632,7 +632,7 @@ distutils 확장판으로 정의되는 커맨드를 찾기 위해서 사용된�
     전체 엔트리 지도를 반환한다. 이 함수는 디스트리뷰션이 엔트리 포인트를 선언하지 않아도 항상
     사전을 반환한다. 만약 `group`\ 이 주어지면 사전은 엔트리 포인트 이름을 일치하는
     ``EntryPoint`` 객체에 맵핑한다. `group`\ 이 None이면 사전을 그룹 이름을 엔트리 포인트를
-    그룹에 있는 일치하는 ``EntryPoint``인스턴스에 매핑하는 사전에 매핑한다.
+    그룹에 있는 일치하는 ``EntryPoint``\ 인스턴스에 매핑하는 사전에 매핑한다.
 
 ``iter_entry_points(group, name=None)``
     `name`\ 에 매치되는 `group`\ 으로부터 엔트리 포인트 객체를 산출한다.
@@ -643,10 +643,10 @@ distutils 확장판으로 정의되는 커맨드를 찾기 위해서 사용된�
     순서대로 산출된다 (그러나, 틀정한 디스트리뷰션 내의 엔트리 포인트는 순서가 없다.)
 
     (이 API는 사실 전역 ``working_set`` 객체의 메서드다; 자세한 정보는 위 쪽에 있는
-    `기본 workingset 메서드`_\ 를 참고하라.)
+    `Basic WorkingSet Methods`_\ 를 참고하라.)
 
 
-생성ㄱ와 파싱
+Creating and Parsing
 --------------------
 
 ``EntryPoint(name, module_name, attrs=(), extras=(), dist=None)``
@@ -693,7 +693,7 @@ distutils 확장판으로 정의되는 커맨드를 찾기 위해서 사용된�
     엔트리 포인트는 지정된 디스트리뷰션에 링크될 것이다.
 
 
-``EntryPoint`` 객체
+``EntryPoint`` Objects
 ----------------------
 
 간단한 검사의 경우 ``EntryPoint`` 객체는 컨스트럭터 인수 이름과 정확히 일치하는 특성을 가지고 있다:
@@ -720,7 +720,7 @@ distutils 확장판으로 정의되는 커맨드를 찾기 위해서 사용된�
     ``EntryPoint.parse()``\ 에 전달될 수 있는 문자열이다.
 
 
-``Distribution`` 객체
+``Distribution`` Objects
 ========================
 
 ``Distribution`` 객체는 파이썬 코드의 집합을 나타내며 코드는 임포트 되지 않을 수도 있고,
@@ -728,7 +728,7 @@ distutils 확장판으로 정의되는 커맨드를 찾기 위해서 사용된�
 프로젝트에 의존하고 있는지 디스트리뷰션이 선언하는 엔트리 포인트가 무엇인지 등의 정보를 포함하고 있다.
 
 
-Distributions 생성 또는 획득하기
+Getting or Creating Distributions
 ---------------------------------
 
 일반적으로 당신은 `WorkingSet``\ 이나 ``Environment``\ 에서 ``Distribution`` 객체를
@@ -778,12 +778,12 @@ Distributions 생성 또는 획득하기
 ``Distribution(location,metadata,project_name,version,py_version,platform,precedence)``
     속성을 세팅해서 디스트리뷰션을 만든다. `py_version` (현재 파이썬 버전이
     디폴트 설정으로 되어있음)과 `precedence` (``EGG_DIST``\ 로 디폴트 설정; 자세한 정보는
-    아래 `Distribution 특성`_ 참고) 인수를 제외한 모든 인수는 선택적 이고 디폴트는
+    아래 `Distribution Attributes`_ 참고) 인수를 제외한 모든 인수는 선택적 이고 디폴트는
     None으로 되어 있다. ``from_filename()``\ 이나, ``from_location()``
     컨스트럭터를 사용하는 것이 모든 인수를 개별적으로 지정하는 것보다 쉽다.
 
 
-``Distribution`` 특성
+``Distribution`` Attributes
 ---------------------------
 
 location
@@ -818,7 +818,7 @@ parsed_version
     ``parsed_version``\ 는 디스트리뷰션의 ``version``\ 의 파싱된 형태를 나타내는
     객체다. ``dist.parsed_version``\ 는 ``parse_version(dist.version)``\ 를
     호출하는 쉬운 방법이다 디스트리뷰션을 버전에 따라 분류하거나 비교하기 위해 사용된다.
-    (``parse_version()`` 함수에 대한 자세한 정보는 아래의 `Utilities 파싱하기`_
+    (``parse_version()`` 함수에 대한 자세한 정보는 아래의 `Parsing Utilities`_
     섹션을 참고하라.) ``Distribution``\ 이 `version`\ 이나 손실된 버전 정보를
     전달해주는 `metadata` 없이 구성되었으면 ``parsed_version``\ 에 접근할 경우
     ``ValueError``\ 가 발생할 수 있다.
@@ -829,11 +829,11 @@ py_version
 
 platform
     디스트리뷰션이 목표로 했던 플랫폼을 나타내는 문자열, 디스트리뷰션이 "순수 파이썬"
-    교차 플랫폼인 경우 ``None``. 플랫폼 문자열에 대한 자세한 정보는 아래의
-    ``Platform Utilities`_\ 를 참고하라.
+    교차 플랫폼인 경우 ``None``\ . 플랫폼 문자열에 대한 자세한 정보는 아래의
+    ``Platform Utilities``_\ 를 참고하라.
 
 precedence
-    디스트리뷰션의 ``precedence``\ 는 같은 `project_name``\ 과 ``parsed_version``\ 을
+    디스트리뷰션의 ``precedence``\ 는 같은 ``project_name``\ 과 ``parsed_version``\ 을
     가진 두 디스트리뷰션의 상대적 순서를 결정하기 위해 사용된다. 디폴트 우선은
     ``pkg_resources.EGG_DIST``\ 이며 가장 높은(즉, 가장 선호되는) 우선이다.
     사전 정의된 우선순위의 전체 리스트는, 가장 선호되는 것부터 최소로 선호되는 것
@@ -846,8 +846,8 @@ precedence
 
 
 
-``Distribution`` 메서드
-------------------------
+``Distribution`` Methods
+-----------------------------
 
 ``activate(path=None)``
     디스트리션이 `path`\ 에서 임포트 가능하게 한다. `path`\ 가 None이면 대신에
@@ -926,11 +926,11 @@ precedence
 위임돼서 디스트리뷰션은 리소스나 메타데이터가 없이 나타날 것이다. 이 위임 방식은
 커스텀 임포터를 지원하거나 적절한 `IResourceProvider`_ 구현을 생성해서
 새로운 배포 포맷이 간단하게 작동되도록 하기 위해 사용된다; 아래의
-`커스텀 임포터 지원하기`_\ 를 참고하라.
+`Supporting Custom Importers`_\ 를 참고하라.
 
 
 ``ResourceManager`` API
-=======================
+===========================
 
 ``ResourceManager`` 클래스는 자원이 파일과 디렉토리로 존재하든 특정 종류로 압축 되었든
 패키지 리소스에 대한 일관된 접근을 제공한다.
@@ -995,7 +995,7 @@ Basic Resource Access
 부적절한 메서드를 사용하는 것은 플랫폼이나 포함된 디스트리뷰션의 포맷에 따라서 정의되지
 않은 동작이나 예외를 일으킨다.
 
-리소스 추출
+Resource Extraction
 -------------------
 
 ``resource_filename(package_or_requirement, resource_name)``
@@ -1034,8 +1034,8 @@ Basic Resource Access
     ``atexit`` 함수로 등록해야 한다.
 
 
-"Provider" 인터페이스
---------------------
+"Provider" Interface
+-------------------------
 
 새로운 배포 아카이브 포맷을 위해서 ``IResourceProvider``, ``IMetadataProvider``\ 을
 구현하고 있는 중이면 자료 추출 기느을 파일 시스템과 결합시키기 위해서
@@ -1072,8 +1072,8 @@ Basic Resource Access
     의해 다시 명명될 것이다.
 
 
-메타데이터 API
-=============
+Metadata API
+=================
 
 메타데이터 API는 접속가능한 디스트리뷰션에 묶여있는 메타데이터 리소스에 접근하기 위해
 사용된다. 메타데이터 리소스는 가상 파일 또는 디렉토리로, "plugins"에 연결하는 확장
@@ -1103,7 +1103,7 @@ Basic Resource Access
     메타데이터를 원하는 경우, 패키지가 아니라 *프로젝트*\ 에 요청할 필요가 있다.
 
 
-``IMetadataProvider`` 메서드
+``IMetadataProvider`` Methods
 -----------------------------
 
 ``IMetadataProvider`` 또는 ``IResourceProvider`` 인스턴스를 시행하는 오브젝트에서
@@ -1174,7 +1174,7 @@ Exceptions
         추출을 실패하게 한 예외 인스턴스
 
 
-커스텀 importers 지원하기
+Supporting Custom Importers
 ===========================
 
 기본적으로, ``pkg_resources``\ 는 일반 파일시스템 임포트와 ``zipimport`` importers를
@@ -1252,7 +1252,7 @@ IResourceProvider
 하위 클래스로 분뷰하고 싶을 수도 있다.
 
 
-빌트인 리소스 제공자
+Built-in Resource Providers
 ---------------------------
 
 ``pkg_resources``\ 는 적절한 곳에서 자동적으로 사용되는 몇 가지 제공자 클래스를

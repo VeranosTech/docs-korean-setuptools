@@ -16,7 +16,7 @@ Setuptools는 아래를 포함하는 파이썬 프로젝트 패키징을 편리�
    :maxdepth: 2
 
    setuptools_ko
-   easy_install
+   easy_install_ko
    pkg_resources_ko
    python3
    development

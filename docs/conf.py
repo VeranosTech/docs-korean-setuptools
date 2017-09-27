@@ -40,7 +40,7 @@ extensions = ['jaraco.packaging.sphinx', 'rst.linker', 'sphinx.ext.autosectionla
 templates_path = ['_templates']
 
 # The suffix of source filenames.
-source_suffix = '.txt'
+source_suffix = '.rst'
 
 # The master toctree document.
 master_doc = 'index_ko'

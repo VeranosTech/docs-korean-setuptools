@@ -1,0 +1,150 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Release Process &#8212; setuptools 36.2.7 documentation</title>
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '36.2.7',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Roadmap" href="roadmap.html" />
+    <link rel="prev" title="Developer’s Guide for Setuptools" href="developer-guide.html" /> 
+  </head>
+  <body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="roadmap.html" title="Roadmap"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="developer-guide.html" title="Developer’s Guide for Setuptools"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index_ko.html">setuptools 36.2.7 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="development.html" accesskey="U">Development on Setuptools</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="release-process">
+<h1>Release Process<a class="headerlink" href="#release-process" title="Permalink to this headline">¶</a></h1>
+<p>In order to allow for rapid, predictable releases, Setuptools uses a
+mechanical technique for releases, enacted by Travis following a
+successful build of a tagged release per
+<a class="reference external" href="https://docs.travis-ci.com/user/deployment/pypi">PyPI deployment</a>.</p>
+<p>Prior to cutting a release, please check that the CHANGES.rst reflects
+the summary of changes since the last release.
+Ideally, these changelog entries would have been added
+along with the changes, but it’s always good to check.
+Think about it from the
+perspective of a user not involved with the development–what would
+that person want to know about what has changed–or from the
+perspective of your future self wanting to know when a particular
+change landed.</p>
+<p>To cut a release, install and run <code class="docutils literal"><span class="pre">bump2version</span> <span class="pre">{part}</span></code> where <code class="docutils literal"><span class="pre">part</span></code>
+is major, minor, or patch based on the scope of the changes in the
+release. Then, push the commits to the master branch. If tests pass,
+the release will be uploaded to PyPI (from the Python 3.6 tests).</p>
+<div class="section" id="release-frequency">
+<h2>Release Frequency<a class="headerlink" href="#release-frequency" title="Permalink to this headline">¶</a></h2>
+<p>Some have asked why Setuptools is released so frequently. Because Setuptools
+uses a mechanical release process, it’s very easy to make releases whenever the
+code is stable (tests are passing). As a result, the philosophy is to release
+early and often.</p>
+<p>While some find the frequent releases somewhat surprising, they only empower
+the user. Although releases are made frequently, users can choose the frequency
+at which they use those releases. If instead Setuptools contributions were only
+released in batches, the user would be constrained to only use Setuptools when
+those official releases were made. With frequent releases, the user can govern
+exactly how often he wishes to update.</p>
+<p>Frequent releases also then obviate the need for dev or beta releases in most
+cases. Because releases are made early and often, bugs are discovered and
+corrected quickly, in many cases before other users have yet to encounter them.</p>
+</div>
+<div class="section" id="release-managers">
+<h2>Release Managers<a class="headerlink" href="#release-managers" title="Permalink to this headline">¶</a></h2>
+<p>Additionally, anyone with push access to the master branch has access to cut
+releases.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index_ko.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Release Process</a><ul>
+<li><a class="reference internal" href="#release-frequency">Release Frequency</a></li>
+<li><a class="reference internal" href="#release-managers">Release Managers</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="developer-guide.html"
+                        title="previous chapter">Developer’s Guide for Setuptools</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="roadmap.html"
+                        title="next chapter">Roadmap</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/releases.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="roadmap.html" title="Roadmap"
+             >next</a></li>
+        <li class="right" >
+          <a href="developer-guide.html" title="Developer’s Guide for Setuptools"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index_ko.html">setuptools 36.2.7 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="development.html" >Development on Setuptools</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright Python Packaging Authority.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.3.
+    </div>
+  </body>
+</html>

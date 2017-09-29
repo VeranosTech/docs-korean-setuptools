@@ -1,6 +1,5 @@
 # syntax: glob
 bin
-build
 dist
 include
 lib

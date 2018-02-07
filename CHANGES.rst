@@ -1,3 +1,172 @@
+v38.5.1
+-------
+
+* #1271: Revert to Cython legacy ``build_ext`` behavior for
+  compatibility.
+
+v38.5.0
+-------
+
+* #1229: Expand imports in ``build_ext`` to refine detection of
+  Cython availability.
+
+* #1270: When Cython is available, ``build_ext`` now uses the
+  new_build_ext.
+
+v38.4.1
+-------
+
+* #1257: In bdist_egg.scan_module, fix ValueError on Python 3.7.
+
+v38.4.0
+-------
+
+* #1231: Removed warning when PYTHONDONTWRITEBYTECODE is enabled.
+
+v38.3.0
+-------
+
+* #1210: Add support for PEP 345 Project-URL metadata.
+* #1207: Add support for ``long_description_type`` to setup.cfg
+  declarative config as intended and documented.
+
+v38.2.5
+-------
+
+* #1232: Fix trailing slash handling in ``pkg_resources.ZipProvider``.
+
+v38.2.4
+-------
+
+* #1220: Fix `data_files` handling when installing from wheel.
+
+v38.2.3
+-------
+
+* fix Travis' Python 3.3 job.
+
+v38.2.2
+-------
+
+* #1214: fix handling of namespace packages when installing
+  from a wheel.
+
+v38.2.1
+-------
+
+* #1212: fix encoding handling of metadata when installing
+  from a wheel.
+
+v38.2.0
+-------
+
+* #1200: easy_install now support installing from wheels:
+  they will be installed as standalone unzipped eggs.
+
+v38.1.0
+-------
+
+* #1208: Improve error message when failing to locate scripts
+  in egg-info metadata.
+
+v38.0.0
+-------
+
+* #458: In order to support deterministic builds, Setuptools no
+  longer allows packages to declare ``install_requires`` as
+  unordered sequences (sets or dicts).
+
+v37.0.0
+-------
+
+* #878: Drop support for Python 2.6. Python 2.6 users should
+  rely on 'setuptools < 37dev'.
+
+v36.8.0
+-------
+
+* #1190: In SSL support for package index operations, use SNI
+  where available.
+
+v36.7.3
+-------
+
+* #1175: Bug fixes to ``build_meta`` module.
+
+v36.7.2
+-------
+
+* #701: Fixed duplicate test discovery on Python 3.
+
+v36.7.1
+-------
+
+* #1193: Avoid test failures in bdist_egg when
+  PYTHONDONTWRITEBYTECODE is set.
+
+v36.7.0
+-------
+
+* #1054: Support ``setup_requires`` in ``setup.cfg`` files.
+
+v36.6.1
+-------
+
+* #1132: Removed redundant and costly serialization/parsing step
+  in ``EntryPoint.__init__``.
+
+* #844: ``bdist_egg --exclude-source-files`` now tested and works
+  on Python 3.
+
+v36.6.0
+-------
+
+* #1143: Added ``setuptools.build_meta`` module, an implementation
+  of PEP-517 for Setuptools-defined packages.
+
+* #1143: Added ``dist_info`` command for producing dist_info
+  metadata.
+
+v36.5.0
+-------
+
+* #170: When working with Mercurial checkouts, use Windows-friendly
+  syntax for suppressing output.
+
+* Inspired by #1134, performed substantial refactoring of
+  ``pkg_resources.find_on_path`` to facilitate an optimization
+  for paths with many non-version entries.
+
+v36.4.0
+-------
+
+* #1075: Add new ``Description-Content-Type`` metadata field. `See here for
+  documentation on how to use this field.
+  <https://packaging.python.org/specifications/#description-content-type>`_
+
+* #1068: Sort files and directories when building eggs for
+  deterministic order.
+
+* #196: Remove caching of easy_install command in fetch_build_egg.
+  Fixes issue where ``pytest-runner-N.N`` would satisfy the installation
+  of ``pytest``.
+
+* #1129: Fix working set dependencies handling when replacing conflicting
+  distributions (e.g. when using ``setup_requires`` with a conflicting
+  transitive dependency, fix #1124).
+
+* #1133: Improved handling of README files extensions and added
+  Markdown to the list of searched READMES.
+
+* #1135: Improve performance of pkg_resources import by not invoking
+  ``access`` or ``stat`` and using ``os.listdir`` instead.
+
+v36.3.0
+-------
+
+* #1131: Make possible using several files within ``file:`` directive
+  in metadata.long_description in ``setup.cfg``.
+
 v36.2.7
 -------
 

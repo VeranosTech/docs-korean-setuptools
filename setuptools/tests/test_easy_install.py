@@ -33,7 +33,6 @@ import setuptools.tests.server
 from setuptools.tests import fail_on_ascii
 import pkg_resources
 
-from .py26compat import tarfile_open
 from . import contexts
 from .textwrap import DALS
 
@@ -183,6 +182,51 @@ class TestEasyInstallTest:
         monkeypatch.setitem(os.environ, 'PYTHONPATH', str(target))
         cmd.ensure_finalized()
         cmd.easy_install(sdist_unicode)
+
+    @pytest.fixture
+    def sdist_script(self, tmpdir):
+        files = [
+            (
+                'setup.py',
+                DALS("""
+                    import setuptools
+                    setuptools.setup(
+                        name="setuptools-test-script",
+                        version="1.0",
+                        scripts=["mypkg_script"],
+                    )
+                    """),
+            ),
+            (
+                u'mypkg_script',
+                DALS("""
+                     #/usr/bin/python
+                     print('mypkg_script')
+                     """),
+            ),
+        ]
+        sdist_name = 'setuptools-test-script-1.0.zip'
+        sdist = str(tmpdir / sdist_name)
+        make_sdist(sdist, files)
+        return sdist
+
+    @pytest.mark.skipif(not sys.platform.startswith('linux'),
+                        reason="Test can only be run on Linux")
+    def test_script_install(self, sdist_script, tmpdir, monkeypatch):
+        """
+        Check scripts are installed.
+        """
+        dist = Distribution({'script_args': ['easy_install']})
+        target = (tmpdir / 'target').ensure_dir()
+        cmd = ei.easy_install(
+            dist,
+            install_dir=str(target),
+            args=['x'],
+        )
+        monkeypatch.setitem(os.environ, 'PYTHONPATH', str(target))
+        cmd.ensure_finalized()
+        cmd.easy_install(sdist_script)
+        assert (target / 'mypkg_script').exists()
 
 
 class TestPTHFileWriter:
@@ -381,7 +425,15 @@ class TestSetupRequires:
                 """))])
             yield dist_path
 
-    def test_setup_requires_overrides_version_conflict(self):
+    use_setup_cfg = (
+        (),
+        ('dependency_links',),
+        ('setup_requires',),
+        ('dependency_links', 'setup_requires'),
+    )
+
+    @pytest.mark.parametrize('use_setup_cfg', use_setup_cfg)
+    def test_setup_requires_overrides_version_conflict(self, use_setup_cfg):
         """
         Regression test for distribution issue 323:
         https://bitbucket.org/tarek/distribute/issues/323
@@ -397,7 +449,7 @@ class TestSetupRequires:
 
         with contexts.save_pkg_resources_state():
             with contexts.tempdir() as temp_dir:
-                test_pkg = create_setup_requires_package(temp_dir)
+                test_pkg = create_setup_requires_package(temp_dir, use_setup_cfg=use_setup_cfg)
                 test_setup_py = os.path.join(test_pkg, 'setup.py')
                 with contexts.quiet() as (stdout, stderr):
                     # Don't even need to install the package, just
@@ -406,9 +458,10 @@ class TestSetupRequires:
 
                 lines = stdout.readlines()
                 assert len(lines) > 0
-                assert lines[-1].strip(), 'test_pkg'
+                assert lines[-1].strip() == 'test_pkg'
 
-    def test_setup_requires_override_nspkg(self):
+    @pytest.mark.parametrize('use_setup_cfg', use_setup_cfg)
+    def test_setup_requires_override_nspkg(self, use_setup_cfg):
         """
         Like ``test_setup_requires_overrides_version_conflict`` but where the
         ``setup_requires`` package is part of a namespace package that has
@@ -423,7 +476,7 @@ class TestSetupRequires:
                 # extracted path to sys.path so foo.bar v0.1 is importable
                 foobar_1_dir = os.path.join(temp_dir, 'foo.bar-0.1')
                 os.mkdir(foobar_1_dir)
-                with tarfile_open(foobar_1_archive) as tf:
+                with tarfile.open(foobar_1_archive) as tf:
                     tf.extractall(foobar_1_dir)
                 sys.path.insert(1, foobar_1_dir)
 
@@ -446,7 +499,8 @@ class TestSetupRequires:
                 """)
 
                 test_pkg = create_setup_requires_package(
-                    temp_dir, 'foo.bar', '0.2', make_nspkg_sdist, template)
+                    temp_dir, 'foo.bar', '0.2', make_nspkg_sdist, template,
+                    use_setup_cfg=use_setup_cfg)
 
                 test_setup_py = os.path.join(test_pkg, 'setup.py')
 
@@ -463,6 +517,38 @@ class TestSetupRequires:
                 lines = stdout.readlines()
                 assert len(lines) > 0
                 assert lines[-1].strip() == 'test_pkg'
+
+    @pytest.mark.parametrize('use_setup_cfg', use_setup_cfg)
+    def test_setup_requires_with_attr_version(self, use_setup_cfg):
+        def make_dependency_sdist(dist_path, distname, version):
+            make_sdist(dist_path, [
+                ('setup.py',
+                 DALS("""
+                      import setuptools
+                      setuptools.setup(
+                          name={name!r},
+                          version={version!r},
+                          py_modules=[{name!r}],
+                      )
+                      """.format(name=distname, version=version))),
+                (distname + '.py',
+                 DALS("""
+                      version = 42
+                      """
+                     ))])
+        with contexts.save_pkg_resources_state():
+            with contexts.tempdir() as temp_dir:
+                test_pkg = create_setup_requires_package(
+                    temp_dir, setup_attrs=dict(version='attr: foobar.version'),
+                    make_package=make_dependency_sdist,
+                    use_setup_cfg=use_setup_cfg+('version',),
+                )
+                test_setup_py = os.path.join(test_pkg, 'setup.py')
+                with contexts.quiet() as (stdout, stderr):
+                    run_setup(test_setup_py, ['--version'])
+                lines = stdout.readlines()
+                assert len(lines) > 0
+                assert lines[-1].strip() == '42'
 
 
 def make_trivial_sdist(dist_path, distname, version):
@@ -521,7 +607,7 @@ def make_sdist(dist_path, files):
     listed in ``files`` as ``(filename, content)`` tuples.
     """
 
-    with tarfile_open(dist_path, 'w:gz') as dist:
+    with tarfile.open(dist_path, 'w:gz') as dist:
         for filename, content in files:
             file_bytes = io.BytesIO(content.encode('utf-8'))
             file_info = tarfile.TarInfo(name=filename)
@@ -532,7 +618,8 @@ def make_sdist(dist_path, files):
 
 def create_setup_requires_package(path, distname='foobar', version='0.1',
                                   make_package=make_trivial_sdist,
-                                  setup_py_template=None):
+                                  setup_py_template=None, setup_attrs={},
+                                  use_setup_cfg=()):
     """Creates a source tree under path for a trivial test package that has a
     single requirement in setup_requires--a tarball for that requirement is
     also created and added to the dependency_links argument.
@@ -547,10 +634,38 @@ def create_setup_requires_package(path, distname='foobar', version='0.1',
         'setup_requires': ['%s==%s' % (distname, version)],
         'dependency_links': [os.path.abspath(path)]
     }
+    test_setup_attrs.update(setup_attrs)
 
     test_pkg = os.path.join(path, 'test_pkg')
-    test_setup_py = os.path.join(test_pkg, 'setup.py')
     os.mkdir(test_pkg)
+
+    if use_setup_cfg:
+        test_setup_cfg = os.path.join(test_pkg, 'setup.cfg')
+        options = []
+        metadata = []
+        for name in use_setup_cfg:
+            value = test_setup_attrs.pop(name)
+            if name in 'name version'.split():
+                section = metadata
+            else:
+                section = options
+            if isinstance(value, (tuple, list)):
+                value = ';'.join(value)
+            section.append('%s: %s' % (name, value))
+        with open(test_setup_cfg, 'w') as f:
+            f.write(DALS(
+                """
+                [metadata]
+                {metadata}
+                [options]
+                {options}
+                """
+            ).format(
+                options='\n'.join(options),
+                metadata='\n'.join(metadata),
+            ))
+
+    test_setup_py = os.path.join(test_pkg, 'setup.py')
 
     if setup_py_template is None:
         setup_py_template = DALS("""\

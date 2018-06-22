@@ -1,21 +1,21 @@
 ==================================================
-Building and Distributing Packages with Setuptools
+Setuptools를 사용한 패키지 빌드와 배포
 ==================================================
 
-``Setuptools`` 는 개발자가 Python 패키지, 특히 다른 패키지에 dependency가 있는 패키지를 보다
+``Setuptools``\ 는 개발자가 Python 패키지, 특히 다른 패키지에 의존성이 있는 패키지를 보다
 쉽게 ​​빌드하고 배포 할 수 있게 해주는 Python 2.6 이상의 ``distutils`` 의 향상된 기능 모음이다.
 
-``setuptools`` 를 사용하여 빌드되고 배포되는 패키지는 사용자에게는 ``distutils`` 에 기반한 일반적인
+``setuptools``\ 를 사용하여 빌드되고 배포되는 패키지는 사용자에게는 ``distutils``\ 에 기반한 일반적인
 Python 패키지처럼 보이게 된다. 사용자는 setuptools를 설치하거나 사용할 필요가 없으므로 배포판에
 setuptools 패키지를 포함 할 필요가 없다. 하나의 `bootstrap module`_ (12K .py 파일)을
 포함시키면 사용자가 패키지를 소스에서 빌드할 시, 적절한 버전이 이미 설치되어 있지 않으면 패키지는 자동으로
-``setuptools`` 를 다운로드하여 설치하게 된다.
+``setuptools`` \ 를 다운로드하여 설치하게 된다.
 
 .. _bootstrap module: https://bootstrap.pypa.io/ez_setup.py
 
 주요 기능:
 
-* `EasyInstall tool <easy_install.html>`_ 를 사용하여 빌드 단계에서 자동으로 dependency를
+* `EasyInstall tool <easy_install.html>`_\ 를 사용하여 빌드 단계에서 자동으로 dependency를
   검색/다운로드/설치/업그레이드. HTTP, FTP, Subversion, SourceForge를 지원하며 PyPI에서
   링크된 웹페이지들을 자동으로 스캔하여 다운로드 링크를 찾는다. 이는 현재 Python에서 CPAN에 가장
   가까운 물건이다.
@@ -41,7 +41,7 @@ setuptools 패키지를 포함 할 필요가 없다. 하나의 `bootstrap module
 
 * PyPI 업로드 지원. 소스 배포판과 egg를 PyPI에 업로드
 
-* ``development mode`` 로 프로젝트 배포. ``sys.path`` 에서 사용할 수 있지만 소스
+* ``development mode``\ 로 프로젝트 배포. ``sys.path`` 에서 사용할 수 있지만 소스
   checkout에서도 직접 편집 할 수 있다.
 
 * 새로운 command나 ``setup()`` argument로 distutils를 쉽게 확장 할 수 있으며, 코드를
@@ -56,11 +56,11 @@ setuptools 패키지를 포함 할 필요가 없다. 하나의 `bootstrap module
 
 
 -----------------
-Developer's Guide
+개발자 가이드
 -----------------
 
 
-Installing ``setuptools``
+``setuptools`` 설치
 =========================
 
 `EasyInstall Installation Instructions`_ 를 따라 setuptools의 현재 stable 버전을
@@ -79,8 +79,8 @@ Installing ``setuptools``
 된다.
 
 
-Basic Use
-=========
+기초적인 사용법
+===========================
 
 setuptools의 기본 사용을 위해서는 distutils 대신에 setuptools에서 import한다. 다음은
 setuptools를 사용하는 간단한 설치 스크립트이다::
@@ -138,7 +138,7 @@ setuptools를 사용하는 간단한 설치 스크립트이다::
 하는지, 그리고 프로젝트에서 사용 할 수 있는 다양한 방법을 설명한다.
 
 
-Specifying Your Project's Version
+프로젝트 버전 정의
 ---------------------------------
 
 Setuptools는 대부분의 버전 관리 체계에서 잘 작동 할 수 있다. 그러나 setuptools와 EasyInstall이
@@ -209,8 +209,8 @@ revision 41475를 나타낸다. ``dev`` 는 출시 전 태그이므로, 이 버�
 * The `egg_info`_ command
 
 
-New and Changed ``setup()`` Keywords
-====================================
+``setup()`` 키워드에서 변경된 점
+============================================================
 
 ``setup()`` 에 대한 다음의 키워드 argument는 ``setuptools`` 에 의해 추가되거나 변경되었다.
 모두 선택 사항이며, 관련된 ``setuptools`` 기능을 필요로 하지 않는다면 제공 할 필요는 없다.
@@ -339,8 +339,8 @@ New and Changed ``setup()`` Keywords
     2to3 변환 중에 사용할 추가 fixer를 검색해야 할 module 목록. 자세한 것은 :doc:`python3` 를 참조.
 
 
-Using ``find_packages()``
--------------------------
+``find_packages()`` 명령
+----------------------------------------
 
 For simple projects, it's usually easy enough to manually add packages to
 the ``packages`` argument of ``setup()``.  However, for very large projects
@@ -384,7 +384,7 @@ remember to modify your setup script whenever your project grows additional
 top-level packages or subpackages.
 
 
-Automatic Script Creation
+스크립트 자동 생성
 =========================
 
 Packaging and installing scripts can be a bit awkward with the distutils.  For
@@ -435,8 +435,8 @@ on "entry points" in general, see the section below on `Dynamic Discovery of
 Services and Plugins`_.
 
 
-"Eggsecutable" Scripts
-----------------------
+"Eggsecutable" 스크립트
+--------------------------------
 
 Occasionally, there are situations where it's desirable to make an ``.egg``
 file directly executable.  You can do this by including an entry point such
@@ -472,7 +472,7 @@ error if the ``.egg`` file has been renamed or is invoked via a symlink that
 changes its base name.
 
 
-Declaring Dependencies
+의존성 선언
 ======================
 
 ``setuptools`` supports automatically installing dependencies when a package is
@@ -536,8 +536,8 @@ development work on it.  (See `"Development Mode"`_ below for more details on
 using ``setup.py develop``.)
 
 
-Dependencies that aren't in PyPI
---------------------------------
+PyPI에서 의존 패키지를 찾을 수 없을 때
+--------------------------------------------------
 
 If your project depends on packages that aren't registered in PyPI, you may
 still be able to depend on them, as long as they are available for download
@@ -2211,7 +2211,7 @@ Configuring setup() using setup.cfg files
 
 .. note:: New in 30.3.0 (8 Dec 2016).
 
-.. important:: ``setup.py`` with ``setup()`` function call is still required even 
+.. important:: ``setup.py`` with ``setup()`` function call is still required even
                 if your configuration resides in ``setup.cfg``.
 
 ``Setuptools`` allows using configuration files (usually `setup.cfg`)

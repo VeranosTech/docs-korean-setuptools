@@ -16,12 +16,14 @@ from .files import build_files
 from .textwrap import DALS
 from . import contexts
 
+__metaclass__ = type
+
 
 class Environment(str):
     pass
 
 
-class TestEggInfo(object):
+class TestEggInfo:
 
     setup_script = DALS("""
         from setuptools import setup
@@ -128,11 +130,11 @@ class TestEggInfo(object):
 
         self._validate_content_order(content, expected_order)
 
-    def test_egg_base_installed_egg_info(self, tmpdir_cwd, env):
+    def test_expected_files_produced(self, tmpdir_cwd, env):
         self._create_project()
 
-        self._run_install_command(tmpdir_cwd, env)
-        actual = self._find_egg_info_files(env.paths['lib'])
+        self._run_egg_info_command(tmpdir_cwd, env)
+        actual = os.listdir('foo.egg-info')
 
         expected = [
             'PKG-INFO',
@@ -154,8 +156,8 @@ class TestEggInfo(object):
                 'usage.rst': "Run 'hi'",
             }
         })
-        self._run_install_command(tmpdir_cwd, env)
-        egg_info_dir = self._find_egg_info_files(env.paths['lib']).base
+        self._run_egg_info_command(tmpdir_cwd, env)
+        egg_info_dir = os.path.join('.', 'foo.egg-info')
         sources_txt = os.path.join(egg_info_dir, 'SOURCES.txt')
         with open(sources_txt) as f:
             assert 'docs/usage.rst' in f.read().split('\n')
@@ -181,7 +183,7 @@ class TestEggInfo(object):
     )
     invalid_marker = "<=>++"
 
-    class RequiresTestHelper(object):
+    class RequiresTestHelper:
 
         @staticmethod
         def parametrize(*test_list, **format_dict):
@@ -233,15 +235,27 @@ class TestEggInfo(object):
         '''
         install_requires_deterministic
 
-        install_requires=["fake-factory==0.5.2", "pytz"]
+        install_requires=["wheel>=0.5", "pytest"]
 
         [options]
         install_requires =
-            fake-factory==0.5.2
-            pytz
+            wheel>=0.5
+            pytest
 
-        fake-factory==0.5.2
-        pytz
+        wheel>=0.5
+        pytest
+        ''',
+
+        '''
+        install_requires_ordered
+
+        install_requires=["pytest>=3.0.2,!=10.9999"]
+
+        [options]
+        install_requires =
+            pytest>=3.0.2,!=10.9999
+
+        pytest!=10.9999,>=3.0.2
         ''',
 
         '''
@@ -382,7 +396,7 @@ class TestEggInfo(object):
             self, tmpdir_cwd, env, requires, use_setup_cfg,
             expected_requires, install_cmd_kwargs):
         self._setup_script_with_requires(requires, use_setup_cfg)
-        self._run_install_command(tmpdir_cwd, env, **install_cmd_kwargs)
+        self._run_egg_info_command(tmpdir_cwd, env, **install_cmd_kwargs)
         egg_info_dir = os.path.join('.', 'foo.egg-info')
         requires_txt = os.path.join(egg_info_dir, 'requires.txt')
         if os.path.exists(requires_txt):
@@ -402,14 +416,14 @@ class TestEggInfo(object):
         req = 'install_requires={"fake-factory==0.5.2", "pytz"}'
         self._setup_script_with_requires(req)
         with pytest.raises(AssertionError):
-            self._run_install_command(tmpdir_cwd, env)
+            self._run_egg_info_command(tmpdir_cwd, env)
 
     def test_extras_require_with_invalid_marker(self, tmpdir_cwd, env):
         tmpl = 'extras_require={{":{marker}": ["barbazquux"]}},'
         req = tmpl.format(marker=self.invalid_marker)
         self._setup_script_with_requires(req)
         with pytest.raises(AssertionError):
-            self._run_install_command(tmpdir_cwd, env)
+            self._run_egg_info_command(tmpdir_cwd, env)
         assert glob.glob(os.path.join(env.paths['lib'], 'barbazquux*')) == []
 
     def test_extras_require_with_invalid_marker_in_req(self, tmpdir_cwd, env):
@@ -417,8 +431,43 @@ class TestEggInfo(object):
         req = tmpl.format(marker=self.invalid_marker)
         self._setup_script_with_requires(req)
         with pytest.raises(AssertionError):
-            self._run_install_command(tmpdir_cwd, env)
+            self._run_egg_info_command(tmpdir_cwd, env)
         assert glob.glob(os.path.join(env.paths['lib'], 'barbazquux*')) == []
+
+    def test_provides_extra(self, tmpdir_cwd, env):
+        self._setup_script_with_requires(
+            'extras_require={"foobar": ["barbazquux"]},')
+        environ = os.environ.copy().update(
+            HOME=env.paths['home'],
+        )
+        code, data = environment.run_setup_py(
+            cmd=['egg_info'],
+            pypath=os.pathsep.join([env.paths['lib'], str(tmpdir_cwd)]),
+            data_stream=1,
+            env=environ,
+        )
+        egg_info_dir = os.path.join('.', 'foo.egg-info')
+        with open(os.path.join(egg_info_dir, 'PKG-INFO')) as pkginfo_file:
+            pkg_info_lines = pkginfo_file.read().split('\n')
+        assert 'Provides-Extra: foobar' in pkg_info_lines
+        assert 'Metadata-Version: 2.1' in pkg_info_lines
+
+    def test_doesnt_provides_extra(self, tmpdir_cwd, env):
+        self._setup_script_with_requires(
+            '''install_requires=["spam ; python_version<'3.6'"]''')
+        environ = os.environ.copy().update(
+            HOME=env.paths['home'],
+        )
+        environment.run_setup_py(
+            cmd=['egg_info'],
+            pypath=os.pathsep.join([env.paths['lib'], str(tmpdir_cwd)]),
+            data_stream=1,
+            env=environ,
+        )
+        egg_info_dir = os.path.join('.', 'foo.egg-info')
+        with open(os.path.join(egg_info_dir, 'PKG-INFO')) as pkginfo_file:
+            pkg_info_text = pkginfo_file.read()
+        assert 'Provides-Extra:' not in pkg_info_text
 
     def test_long_description_content_type(self, tmpdir_cwd, env):
         # Test that specifying a `long_description_content_type` keyword arg to
@@ -444,6 +493,7 @@ class TestEggInfo(object):
             pkg_info_lines = pkginfo_file.read().split('\n')
         expected_line = 'Description-Content-Type: text/markdown'
         assert expected_line in pkg_info_lines
+        assert 'Metadata-Version: 2.1' in pkg_info_lines
 
     def test_project_urls(self, tmpdir_cwd, env):
         # Test that specifying a `project_urls` dict to the `setup`
@@ -493,15 +543,6 @@ class TestEggInfo(object):
         assert 'Requires-Python: >=2.7.12' in pkg_info_lines
         assert 'Metadata-Version: 1.2' in pkg_info_lines
 
-    def test_python_requires_install(self, tmpdir_cwd, env):
-        self._setup_script_with_requires(
-            """python_requires='>=1.2.3',""")
-        self._run_install_command(tmpdir_cwd, env)
-        egg_info_dir = self._find_egg_info_files(env.paths['lib']).base
-        pkginfo = os.path.join(egg_info_dir, 'PKG-INFO')
-        with open(pkginfo) as f:
-            assert 'Requires-Python: >=1.2.3' in f.read().split('\n')
-
     def test_manifest_maker_warning_suppression(self):
         fixtures = [
             "standard file not found: should have one of foo.py, bar.py",
@@ -511,17 +552,13 @@ class TestEggInfo(object):
         for msg in fixtures:
             assert manifest_maker._should_suppress_warning(msg)
 
-    def _run_install_command(self, tmpdir_cwd, env, cmd=None, output=None):
+    def _run_egg_info_command(self, tmpdir_cwd, env, cmd=None, output=None):
         environ = os.environ.copy().update(
             HOME=env.paths['home'],
         )
         if cmd is None:
             cmd = [
-                'install',
-                '--home', env.paths['home'],
-                '--install-lib', env.paths['lib'],
-                '--install-scripts', env.paths['scripts'],
-                '--install-data', env.paths['data'],
+                'egg_info',
             ]
         code, data = environment.run_setup_py(
             cmd=cmd,
@@ -533,18 +570,3 @@ class TestEggInfo(object):
             raise AssertionError(data)
         if output:
             assert output in data
-
-    def _find_egg_info_files(self, root):
-        class DirList(list):
-            def __init__(self, files, base):
-                super(DirList, self).__init__(files)
-                self.base = base
-
-        results = (
-            DirList(filenames, dirpath)
-            for dirpath, dirnames, filenames in os.walk(root)
-            if os.path.basename(dirpath) == 'EGG-INFO'
-        )
-        # expect exactly one result
-        result, = results
-        return result

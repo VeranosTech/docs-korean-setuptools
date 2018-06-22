@@ -7,8 +7,11 @@
 .. image:: https://img.shields.io/travis/pypa/setuptools/master.svg?label=Linux%20build%20%40%20Travis%20CI
    :target: https://travis-ci.org/pypa/setuptools
 
-.. image:: https://img.shields.io/appveyor/ci/jaraco/setuptools/master.svg?label=Windows%20build%20%40%20Appveyor
-   :target: https://ci.appveyor.com/project/jaraco/setuptools/branch/master
+.. image:: https://img.shields.io/appveyor/ci/pypa/setuptools/master.svg?label=Windows%20build%20%40%20Appveyor
+   :target: https://ci.appveyor.com/project/pypa/setuptools/branch/master
+
+.. image:: https://img.shields.io/codecov/c/github/pypa/setuptools/master.svg
+   :target: https://codecov.io/gh/pypa/setuptools
 
 .. image:: https://img.shields.io/pypi/pyversions/setuptools.svg
 
@@ -17,7 +20,9 @@ See the `Installation Instructions
 User's Guide for instructions on installing, upgrading, and uninstalling
 Setuptools.
 
-The project is `maintained at GitHub <https://github.com/pypa/setuptools>`_.
+The project is `maintained at GitHub <https://github.com/pypa/setuptools>`_
+by the `Setuptools Developers
+<https://github.com/orgs/pypa/teams/setuptools-developers>`_.
 
 Questions and comments should be directed to the `distutils-sig
 mailing list <http://mail.python.org/pipermail/distutils-sig/>`_.

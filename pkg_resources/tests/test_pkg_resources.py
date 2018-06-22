@@ -13,15 +13,13 @@ import distutils.dist
 import distutils.command.install_egg_info
 
 from pkg_resources.extern.six.moves import map
+from pkg_resources.extern.six import text_type, string_types
 
 import pytest
 
 import pkg_resources
 
-try:
-    unicode
-except NameError:
-    unicode = str
+__metaclass__ = type
 
 
 def timestamp(dt):
@@ -35,7 +33,7 @@ def timestamp(dt):
         return time.mktime(dt.timetuple())
 
 
-class EggRemover(unicode):
+class EggRemover(text_type):
     def __call__(self):
         if self in sys.path:
             sys.path.remove(self)
@@ -43,7 +41,7 @@ class EggRemover(unicode):
             os.remove(self)
 
 
-class TestZipProvider(object):
+class TestZipProvider:
     finalizers = []
 
     ref_time = datetime.datetime(2013, 5, 12, 13, 25, 0)
@@ -132,13 +130,13 @@ class TestZipProvider(object):
         manager.cleanup_resources()
 
 
-class TestResourceManager(object):
+class TestResourceManager:
     def test_get_cache_path(self):
         mgr = pkg_resources.ResourceManager()
         path = mgr.get_cache_path('foo')
         type_ = str(type(path))
         message = "Unexpected type from get_cache_path: " + type_
-        assert isinstance(path, (unicode, str)), message
+        assert isinstance(path, string_types), message
 
 
 class TestIndependence:
@@ -154,14 +152,16 @@ class TestIndependence:
         lines = (
             'import pkg_resources',
             'import sys',
-            'assert "setuptools" not in sys.modules, '
-                '"setuptools was imported"',
+            (
+                'assert "setuptools" not in sys.modules, '
+                '"setuptools was imported"'
+            ),
         )
         cmd = [sys.executable, '-c', '; '.join(lines)]
         subprocess.check_call(cmd)
 
 
-class TestDeepVersionLookupDistutils(object):
+class TestDeepVersionLookupDistutils:
     @pytest.fixture
     def env(self, tmpdir):
         """

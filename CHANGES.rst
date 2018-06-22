@@ -1,3 +1,81 @@
+v39.2.0
+-------
+
+* #1359: Support using "file:" to load a PEP 440-compliant package version from
+  a text file.
+* #1360: Fixed issue with a mismatch between the name of the package and the
+  name of the .dist-info file in wheel files
+* #1364: Add `__dir__()` implementation to `pkg_resources.Distribution()` that
+  includes the attributes in the `_provider` instance variable.
+* #1365: Take the package_dir option into account when loading the version from
+  a module attribute.
+* #1353: Added coverage badge to README.
+* #1356: Made small fixes to the developer guide documentation.
+* #1357: Fixed warnings in documentation builds and started enforcing that the
+  docs build without warnings in tox.
+* #1376: Updated release process docs.
+* #1343: The ``setuptools`` specific ``long_description_content_type``,
+  ``project_urls`` and ``provides_extras`` fields are now set consistently
+  after any ``distutils`` ``setup_keywords`` calls, allowing them to override
+  values.
+* #1352: Added ``tox`` environment for documentation builds.
+* #1354: Added ``towncrier`` for changelog managment.
+* #1355: Add PR template.
+* #1368: Fixed tests which failed without network connectivity.
+* #1369: Added unit tests for PEP 425 compatibility tags support.
+* #1372: Stop testing Python 3.3 in Travis CI, now that the latest version of
+  ``wheel`` no longer installs on it.
+
+v39.1.0
+-------
+
+* #1340: Update all PyPI URLs to reflect the switch to the
+  new Warehouse codebase.
+* #1337: In ``pkg_resources``, now support loading resources
+  for modules loaded by the ``SourcelessFileLoader``.
+* #1332: Silence spurious wheel related warnings on Windows.
+
+v39.0.1
+-------
+
+* #1297: Restore Unicode handling for Maintainer fields in
+  metadata.
+
+v39.0.0
+-------
+
+* #1296: Setuptools now vendors its own direct dependencies, no
+  longer relying on the dependencies as vendored by pkg_resources.
+
+* #296: Removed long-deprecated support for iteration on
+  Version objects as returned by ``pkg_resources.parse_version``.
+  Removed the ``SetuptoolsVersion`` and
+  ``SetuptoolsLegacyVersion`` names as well. They should not
+  have been used, but if they were, replace with
+  ``Version`` and ``LegacyVersion`` from ``packaging.version``.
+
+v38.7.0
+-------
+
+* #1288: Add support for maintainer in PKG-INFO.
+
+v38.6.1
+-------
+
+* #1292: Avoid generating ``Provides-Extra`` in metadata when
+  no extra is present (but environment markers are).
+
+v38.6.0
+-------
+
+* #1286: Add support for Metadata 2.1 (PEP 566).
+
+v38.5.2
+-------
+
+* #1285: Fixed RuntimeError in pkg_resources.parse_requirements
+  on Python 3.7 (stemming from PEP 479).
+
 v38.5.1
 -------
 
@@ -1761,7 +1839,7 @@ process to fail and PyPI uploads no longer accept files for 13.0.
 * Issue #313: Removed built-in support for subversion. Projects wishing to
   retain support for subversion will need to use a third party library. The
   extant implementation is being ported to `setuptools_svn
-  <https://pypi.python.org/pypi/setuptools_svn>`_.
+  <https://pypi.org/project/setuptools_svn/>`_.
 * Issue #315: Updated setuptools to hide its own loaded modules during
   installation of another package. This change will enable setuptools to
   upgrade (or downgrade) itself even when its own metadata and implementation
@@ -2266,7 +2344,7 @@ process to fail and PyPI uploads no longer accept files for 13.0.
 * Address security vulnerability in SSL match_hostname check as reported in
   Python #17997.
 * Prefer `backports.ssl_match_hostname
-  <https://pypi.python.org/pypi/backports.ssl_match_hostname>`_ for backport
+  <https://pypi.org/project/backports.ssl_match_hostname/>`_ for backport
   implementation if present.
 * Correct NameError in ``ssl_support`` module (``socket.error``).
 

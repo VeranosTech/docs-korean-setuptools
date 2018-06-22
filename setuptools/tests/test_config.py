@@ -1,7 +1,8 @@
 import contextlib
 import pytest
 from distutils.errors import DistutilsOptionError, DistutilsFileError
-from setuptools.dist import Distribution
+from mock import patch
+from setuptools.dist import Distribution, _Distribution
 from setuptools.config import ConfigHandler, read_configuration
 
 
@@ -10,13 +11,15 @@ class ErrConfigHandler(ConfigHandler):
 
 
 def make_package_dir(name, base_dir):
-    dir_package = base_dir.mkdir(name)
+    dir_package = base_dir
+    for dir_name in name.split('/'):
+        dir_package = dir_package.mkdir(dir_name)
     init_file = dir_package.join('__init__.py')
     init_file.write('')
     return dir_package, init_file
 
 
-def fake_env(tmpdir, setup_cfg, setup_py=None):
+def fake_env(tmpdir, setup_cfg, setup_py=None, package_path='fake_package'):
 
     if setup_py is None:
         setup_py = (
@@ -28,7 +31,7 @@ def fake_env(tmpdir, setup_cfg, setup_py=None):
     config = tmpdir.join('setup.cfg')
     config.write(setup_cfg)
 
-    package_dir, init_file = make_package_dir('fake_package', tmpdir)
+    package_dir, init_file = make_package_dir(package_path, tmpdir)
 
     init_file.write(
         'VERSION = (1, 2, 3)\n'
@@ -267,6 +270,68 @@ class TestMetadata:
         )
         with get_dist(tmpdir) as dist:
             assert dist.metadata.version == '2016.11.26'
+
+    def test_version_file(self, tmpdir):
+
+        _, config = fake_env(
+            tmpdir,
+            '[metadata]\n'
+            'version = file: fake_package/version.txt\n'
+        )
+        tmpdir.join('fake_package', 'version.txt').write('1.2.3\n')
+
+        with get_dist(tmpdir) as dist:
+            assert dist.metadata.version == '1.2.3'
+
+        tmpdir.join('fake_package', 'version.txt').write('1.2.3\n4.5.6\n')
+        with pytest.raises(DistutilsOptionError):
+            with get_dist(tmpdir) as dist:
+                _ = dist.metadata.version
+
+    def test_version_with_package_dir_simple(self, tmpdir):
+
+        _, config = fake_env(
+            tmpdir,
+            '[metadata]\n'
+            'version = attr: fake_package_simple.VERSION\n'
+            '[options]\n'
+            'package_dir =\n'
+            '    = src\n',
+            package_path='src/fake_package_simple'
+        )
+
+        with get_dist(tmpdir) as dist:
+            assert dist.metadata.version == '1.2.3'
+
+    def test_version_with_package_dir_rename(self, tmpdir):
+
+        _, config = fake_env(
+            tmpdir,
+            '[metadata]\n'
+            'version = attr: fake_package_rename.VERSION\n'
+            '[options]\n'
+            'package_dir =\n'
+            '    fake_package_rename = fake_dir\n',
+            package_path='fake_dir'
+        )
+
+        with get_dist(tmpdir) as dist:
+            assert dist.metadata.version == '1.2.3'
+
+    def test_version_with_package_dir_complex(self, tmpdir):
+
+        _, config = fake_env(
+            tmpdir,
+            '[metadata]\n'
+            'version = attr: fake_package_complex.VERSION\n'
+            '[options]\n'
+            'package_dir =\n'
+            '    fake_package_complex = src/fake_dir\n',
+            package_path='src/fake_dir'
+        )
+
+        with get_dist(tmpdir) as dist:
+            assert dist.metadata.version == '1.2.3'
 
     def test_unknown_meta_item(self, tmpdir):
 
@@ -546,6 +611,7 @@ class TestOptions:
                 'pdf': ['ReportLab>=1.2', 'RXP'],
                 'rest': ['docutils>=0.3', 'pack==1.1,==1.3']
             }
+            assert dist.metadata.provides_extras == set(['pdf', 'rest'])
 
     def test_entry_points(self, tmpdir):
         _, config = fake_env(
@@ -580,3 +646,43 @@ class TestOptions:
 
         with get_dist(tmpdir) as dist:
             assert dist.entry_points == expected
+
+saved_dist_init = _Distribution.__init__
+class TestExternalSetters:
+    # During creation of the setuptools Distribution() object, we call
+    # the init of the parent distutils Distribution object via
+    # _Distribution.__init__ ().
+    #
+    # It's possible distutils calls out to various keyword
+    # implementations (i.e. distutils.setup_keywords entry points)
+    # that may set a range of variables.
+    #
+    # This wraps distutil's Distribution.__init__ and simulates
+    # pbr or something else setting these values.
+    def _fake_distribution_init(self, dist, attrs):
+        saved_dist_init(dist, attrs)
+        # see self._DISTUTUILS_UNSUPPORTED_METADATA
+        setattr(dist.metadata, 'long_description_content_type',
+                'text/something')
+        # Test overwrite setup() args
+        setattr(dist.metadata, 'project_urls', {
+            'Link One': 'https://example.com/one/',
+            'Link Two': 'https://example.com/two/',
+        })
+        return None
+
+    @patch.object(_Distribution, '__init__', autospec=True)
+    def test_external_setters(self,  mock_parent_init, tmpdir):
+        mock_parent_init.side_effect = self._fake_distribution_init
+
+        dist = Distribution(attrs={
+            'project_urls': {
+                'will_be': 'ignored'
+            }
+        })
+
+        assert dist.metadata.long_description_content_type == 'text/something'
+        assert dist.metadata.project_urls == {
+            'Link One': 'https://example.com/one/',
+            'Link Two': 'https://example.com/two/',
+        }

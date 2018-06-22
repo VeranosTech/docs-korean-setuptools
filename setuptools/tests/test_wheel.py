@@ -9,17 +9,22 @@ import contextlib
 import glob
 import inspect
 import os
+import shutil
 import subprocess
 import sys
+import zipfile
 
 import pytest
 
 from pkg_resources import Distribution, PathMetadata, PY_MAJOR
+from setuptools.extern.packaging.utils import canonicalize_name
 from setuptools.wheel import Wheel
 
 from .contexts import tempdir
 from .files import build_files
 from .textwrap import DALS
+
+__metaclass__ = type
 
 
 WHEEL_INFO_TESTS = (
@@ -92,39 +97,49 @@ def build_wheel(extra_file_defs=None, **kwargs):
         yield glob.glob(os.path.join(source_dir, 'dist', '*.whl'))[0]
 
 
-def tree(root):
-    def depth(path):
-        return len(path.split(os.path.sep))
-    def prefix(path_depth):
-        if not path_depth:
-            return ''
-        return '|  ' * (path_depth - 1) + '|-- '
-    lines = []
-    root_depth = depth(root)
+def tree_set(root):
+    contents = set()
     for dirpath, dirnames, filenames in os.walk(root):
-        dirnames.sort()
-        filenames.sort()
-        dir_depth = depth(dirpath) - root_depth
-        if dir_depth > 0:
-            lines.append('%s%s/' % (prefix(dir_depth - 1),
-                                    os.path.basename(dirpath)))
-        for f in filenames:
-            lines.append('%s%s' % (prefix(dir_depth), f))
-    return '\n'.join(lines) + '\n'
+        for filename in filenames:
+            contents.add(os.path.join(os.path.relpath(dirpath, root),
+                                      filename))
+    return contents
 
 
-def _check_wheel_install(filename, install_dir, install_tree,
+def flatten_tree(tree):
+    """Flatten nested dicts and lists into a full list of paths"""
+    output = set()
+    for node, contents in tree.items():
+        if isinstance(contents, dict):
+            contents = flatten_tree(contents)
+
+        for elem in contents:
+            if isinstance(elem, dict):
+                output |= {os.path.join(node, val)
+                           for val in flatten_tree(elem)}
+            else:
+                output.add(os.path.join(node, elem))
+    return output
+
+
+def format_install_tree(tree):
+    return {x.format(
+        py_version=PY_MAJOR,
+        platform=get_platform(),
+        shlib_ext=get_config_var('EXT_SUFFIX') or get_config_var('SO'))
+            for x in tree}
+
+
+def _check_wheel_install(filename, install_dir, install_tree_includes,
                          project_name, version, requires_txt):
     w = Wheel(filename)
     egg_path = os.path.join(install_dir, w.egg_name())
     w.install_as_egg(egg_path)
-    if install_tree is not None:
-        install_tree = install_tree.format(
-            py_version=PY_MAJOR,
-            platform=get_platform(),
-            shlib_ext=get_config_var('EXT_SUFFIX') or get_config_var('SO')
-        )
-        assert install_tree == tree(install_dir)
+    if install_tree_includes is not None:
+        install_tree = format_install_tree(install_tree_includes)
+        exp = tree_set(install_dir)
+        assert install_tree.issubset(exp), (install_tree - exp)
+
     metadata = PathMetadata(egg_path, os.path.join(egg_path, 'EGG-INFO'))
     dist = Distribution.from_filename(egg_path, metadata=metadata)
     assert dist.project_name == project_name
@@ -135,7 +150,7 @@ def _check_wheel_install(filename, install_dir, install_tree,
         assert requires_txt == dist.get_metadata('requires.txt').lstrip()
 
 
-class Record(object):
+class Record:
 
     def __init__(self, id, **kwargs):
         self._id = id
@@ -157,20 +172,17 @@ WHEEL_INSTALL_TESTS = (
         setup_kwargs=dict(
             packages=['foo'],
         ),
-        install_tree=DALS(
-            '''
-            foo-1.0-py{py_version}.egg/
-            |-- EGG-INFO/
-            |  |-- DESCRIPTION.rst
-            |  |-- PKG-INFO
-            |  |-- RECORD
-            |  |-- WHEEL
-            |  |-- metadata.json
-            |  |-- top_level.txt
-            |-- foo/
-            |  |-- __init__.py
-            '''
-        ),
+        install_tree=flatten_tree({
+            'foo-1.0-py{py_version}.egg': {
+                'EGG-INFO': [
+                    'PKG-INFO',
+                    'RECORD',
+                    'WHEEL',
+                    'top_level.txt'
+                ],
+                'foo': ['__init__.py']
+            }
+        }),
     ),
 
     dict(
@@ -192,20 +204,19 @@ WHEEL_INSTALL_TESTS = (
         setup_kwargs=dict(
             data_files=[('data_dir', ['data.txt'])],
         ),
-        install_tree=DALS(
-            '''
-            foo-1.0-py{py_version}.egg/
-            |-- EGG-INFO/
-            |  |-- DESCRIPTION.rst
-            |  |-- PKG-INFO
-            |  |-- RECORD
-            |  |-- WHEEL
-            |  |-- metadata.json
-            |  |-- top_level.txt
-            |-- data_dir/
-            |  |-- data.txt
-            '''
-        ),
+        install_tree=flatten_tree({
+            'foo-1.0-py{py_version}.egg': {
+                'EGG-INFO': [
+                    'PKG-INFO',
+                    'RECORD',
+                    'WHEEL',
+                    'top_level.txt'
+                ],
+                'data_dir': [
+                    'data.txt'
+                ]
+            }
+        }),
     ),
 
     dict(
@@ -262,19 +273,17 @@ WHEEL_INSTALL_TESTS = (
                        sources=['extension.c'])
             ],
         ),
-        install_tree=DALS(
-            '''
-            foo-1.0-py{py_version}-{platform}.egg/
-            |-- extension{shlib_ext}
-            |-- EGG-INFO/
-            |  |-- DESCRIPTION.rst
-            |  |-- PKG-INFO
-            |  |-- RECORD
-            |  |-- WHEEL
-            |  |-- metadata.json
-            |  |-- top_level.txt
-            '''
-        ),
+        install_tree=flatten_tree({
+            'foo-1.0-py{py_version}-{platform}.egg': [
+                'extension{shlib_ext}',
+                {'EGG-INFO': [
+                    'PKG-INFO',
+                    'RECORD',
+                    'WHEEL',
+                    'top_level.txt',
+                ]},
+            ]
+        }),
     ),
 
     dict(
@@ -288,19 +297,17 @@ WHEEL_INSTALL_TESTS = (
         setup_kwargs=dict(
             headers=['header.h'],
         ),
-        install_tree=DALS(
-            '''
-            foo-1.0-py{py_version}.egg/
-            |-- header.h
-            |-- EGG-INFO/
-            |  |-- DESCRIPTION.rst
-            |  |-- PKG-INFO
-            |  |-- RECORD
-            |  |-- WHEEL
-            |  |-- metadata.json
-            |  |-- top_level.txt
-            '''
-        ),
+        install_tree=flatten_tree({
+            'foo-1.0-py{py_version}.egg': [
+                'header.h',
+                {'EGG-INFO': [
+                    'PKG-INFO',
+                    'RECORD',
+                    'WHEEL',
+                    'top_level.txt',
+                ]},
+            ]
+        }),
     ),
 
     dict(
@@ -322,38 +329,37 @@ WHEEL_INSTALL_TESTS = (
         setup_kwargs=dict(
             scripts=['script.py', 'script.sh'],
         ),
-        install_tree=DALS(
-            '''
-            foo-1.0-py{py_version}.egg/
-            |-- EGG-INFO/
-            |  |-- DESCRIPTION.rst
-            |  |-- PKG-INFO
-            |  |-- RECORD
-            |  |-- WHEEL
-            |  |-- metadata.json
-            |  |-- top_level.txt
-            |  |-- scripts/
-            |  |  |-- script.py
-            |  |  |-- script.sh
-            '''
-        ),
+        install_tree=flatten_tree({
+            'foo-1.0-py{py_version}.egg': {
+                'EGG-INFO': [
+                    'PKG-INFO',
+                    'RECORD',
+                    'WHEEL',
+                    'top_level.txt',
+                    {'scripts': [
+                        'script.py',
+                        'script.sh'
+                    ]}
+
+                ]
+            }
+        })
     ),
 
     dict(
         id='requires1',
         install_requires='foobar==2.0',
-        install_tree=DALS(
-            '''
-            foo-1.0-py{py_version}.egg/
-            |-- EGG-INFO/
-            |  |-- DESCRIPTION.rst
-            |  |-- PKG-INFO
-            |  |-- RECORD
-            |  |-- WHEEL
-            |  |-- metadata.json
-            |  |-- requires.txt
-            |  |-- top_level.txt
-            '''),
+        install_tree=flatten_tree({
+            'foo-1.0-py{py_version}.egg': {
+                'EGG-INFO': [
+                    'PKG-INFO',
+                    'RECORD',
+                    'WHEEL',
+                    'requires.txt',
+                    'top_level.txt',
+                ]
+            }
+        }),
         requires_txt=DALS(
             '''
             foobar==2.0
@@ -425,23 +431,22 @@ WHEEL_INSTALL_TESTS = (
             namespace_packages=['foo'],
             packages=['foo.bar'],
         ),
-        install_tree=DALS(
-            '''
-            foo-1.0-py{py_version}.egg/
-            |-- foo-1.0-py{py_version}-nspkg.pth
-            |-- EGG-INFO/
-            |  |-- DESCRIPTION.rst
-            |  |-- PKG-INFO
-            |  |-- RECORD
-            |  |-- WHEEL
-            |  |-- metadata.json
-            |  |-- namespace_packages.txt
-            |  |-- top_level.txt
-            |-- foo/
-            |  |-- __init__.py
-            |  |-- bar/
-            |  |  |-- __init__.py
-            '''),
+        install_tree=flatten_tree({
+            'foo-1.0-py{py_version}.egg': [
+                'foo-1.0-py{py_version}-nspkg.pth',
+                {'EGG-INFO': [
+                    'PKG-INFO',
+                    'RECORD',
+                    'WHEEL',
+                    'namespace_packages.txt',
+                    'top_level.txt',
+                ]},
+                {'foo': [
+                    '__init__.py',
+                    {'bar': ['__init__.py']},
+                ]},
+            ]
+        }),
     ),
 
     dict(
@@ -462,22 +467,22 @@ WHEEL_INSTALL_TESTS = (
             packages=['foo'],
             data_files=[('foo/data_dir', ['foo/data_dir/data.txt'])],
         ),
-        install_tree=DALS(
-            '''
-            foo-1.0-py{py_version}.egg/
-            |-- EGG-INFO/
-            |  |-- DESCRIPTION.rst
-            |  |-- PKG-INFO
-            |  |-- RECORD
-            |  |-- WHEEL
-            |  |-- metadata.json
-            |  |-- top_level.txt
-            |-- foo/
-            |  |-- __init__.py
-            |  |-- data_dir/
-            |  |  |-- data.txt
-            '''
-        ),
+        install_tree=flatten_tree({
+            'foo-1.0-py{py_version}.egg': {
+                'EGG-INFO': [
+                    'PKG-INFO',
+                    'RECORD',
+                    'WHEEL',
+                    'top_level.txt',
+                ],
+                'foo': [
+                    '__init__.py',
+                    {'data_dir': [
+                        'data.txt',
+                    ]}
+                ]
+            }
+        }),
     ),
 
 )
@@ -506,3 +511,33 @@ def test_wheel_install(params):
         _check_wheel_install(filename, install_dir,
                              install_tree, project_name,
                              version, requires_txt)
+
+
+def test_wheel_install_pep_503():
+    project_name = 'Foo_Bar'    # PEP 503 canonicalized name is "foo-bar"
+    version = '1.0'
+    with build_wheel(
+        name=project_name,
+        version=version,
+    ) as filename, tempdir() as install_dir:
+        new_filename = filename.replace(project_name,
+                                        canonicalize_name(project_name))
+        shutil.move(filename, new_filename)
+        _check_wheel_install(new_filename, install_dir, None,
+                             canonicalize_name(project_name),
+                             version, None)
+
+
+def test_wheel_no_dist_dir():
+    project_name = 'nodistinfo'
+    version = '1.0'
+    wheel_name = '{0}-{1}-py2.py3-none-any.whl'.format(project_name, version)
+    with tempdir() as source_dir:
+        wheel_path = os.path.join(source_dir, wheel_name)
+        # create an empty zip file
+        zipfile.ZipFile(wheel_path, 'w').close()
+        with tempdir() as install_dir:
+            with pytest.raises(ValueError):
+                _check_wheel_install(wheel_path, install_dir, None,
+                                     project_name,
+                                     version, None)

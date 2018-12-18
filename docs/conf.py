@@ -152,3 +152,7 @@ link_files = {
         ],
     ),
 }
+
+locale_dirs = ['locale/']
+gettext_compact = False
+

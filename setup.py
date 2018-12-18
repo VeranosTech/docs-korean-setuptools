@@ -191,5 +191,5 @@ setup_params = dict(
 if __name__ == '__main__':
     # allow setup.py to run from another directory
     here and os.chdir(here)
-    require_metadata()
+    # require_metadata()
     dist = setuptools.setup(**setup_params)

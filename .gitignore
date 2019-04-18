@@ -19,3 +19,5 @@ setuptools.egg-info
 .cache
 .idea/
 .pytest_cache/
+
+*.mo

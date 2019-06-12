@@ -1,0 +1,569 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="ko">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Setuptools 문서 &#8212; setuptools 40.6.3 documentation</title>
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <script type="text/javascript" src="_static/translations.js"></script>
+    <link rel="search" title="검색" href="search.html" />
+    <link rel="next" title="Setuptools로 패키지 빌드하고 배포" href="setuptools.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>탐색</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="setuptools.html" title="Setuptools로 패키지 빌드하고 배포"
+             accesskey="N">다음</a></li>
+        <li class="nav-item nav-item-0"><a href="#">setuptools 40.6.3 documentation</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="welcome-to-setuptools-documentation">
+<h1>Setuptools 문서<a class="headerlink" href="#welcome-to-setuptools-documentation" title="제목 주소">¶</a></h1>
+<p>Setuptools는 파이썬 프로젝트 패키징을 편리하게 만들기 위해 설계된 라이브러리이다. 다음과 같은 기능을 갖추고 있고 안정적으로 관리되고 있다.</p>
+<blockquote>
+<div><ul class="simple">
+<li>파이썬 패키지와 모듈 정의</li>
+<li>배포 패키지 메타 데이터</li>
+<li>테스트 후크</li>
+<li>프로젝트 설치</li>
+<li>플랫폼별 세부사항</li>
+<li>파이썬 3 지원</li>
+</ul>
+</div></blockquote>
+<p>문서 목차</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="setuptools.html">Setuptools로 패키지 빌드하고 배포</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="setuptools.html#developer-s-guide">개발자 가이드</a></li>
+<li class="toctree-l2"><a class="reference internal" href="setuptools.html#command-reference">Command Reference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="setuptools.html#configuring-setup-using-setup-cfg-files">Configuring setup() using setup.cfg files</a></li>
+<li class="toctree-l2"><a class="reference internal" href="setuptools.html#extending-and-reusing-setuptools">Extending and Reusing Setuptools</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="pkg_resources.html">Package Discovery and Resource Access using <code class="docutils literal notranslate"><span class="pre">pkg_resources</span></code></a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pkg_resources.html#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pkg_resources.html#api-reference">API Reference</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="python3.html">Supporting both Python 2 and Python 3 with Setuptools</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="python3.html#using-2to3">Using 2to3</a></li>
+<li class="toctree-l2"><a class="reference internal" href="python3.html#distributing-python-3-modules">Distributing Python 3 modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="python3.html#advanced-features">Advanced features</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="development.html">Development on Setuptools</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="developer-guide.html">Developer's Guide for Setuptools</a></li>
+<li class="toctree-l2"><a class="reference internal" href="formats.html">The Internal Structure of Python Eggs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="releases.html">Release Process</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="roadmap.html">Roadmap</a></li>
+<li class="toctree-l1"><a class="reference internal" href="easy_install.html">Deprecated: Easy Install</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="easy_install.html#using-easy-install">Using &quot;Easy Install&quot;</a></li>
+<li class="toctree-l2"><a class="reference internal" href="easy_install.html#reference-manual">Reference Manual</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="history.html">History</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="history.html#v40-6-3">v40.6.3</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#v40-6-2">v40.6.2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#v40-6-1">v40.6.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#v40-6-0">v40.6.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#v40-5-0">v40.5.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#v40-4-3">v40.4.3</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#v40-4-2">v40.4.2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#v40-4-1">v40.4.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#v40-4-0">v40.4.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#v40-3-0">v40.3.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#v40-2-0">v40.2.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#v40-1-1">v40.1.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#v40-1-0">v40.1.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#v40-0-0">v40.0.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#v39-2-0">v39.2.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#v39-1-0">v39.1.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#v39-0-1">v39.0.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#v39-0-0">v39.0.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#v38-7-0">v38.7.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#v38-6-1">v38.6.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#v38-6-0">v38.6.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#v38-5-2">v38.5.2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#v38-5-1">v38.5.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#v38-5-0">v38.5.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#v38-4-1">v38.4.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#v38-4-0">v38.4.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#v38-3-0">v38.3.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#v38-2-5">v38.2.5</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#v38-2-4">v38.2.4</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#v38-2-3">v38.2.3</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#v38-2-2">v38.2.2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#v38-2-1">v38.2.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#v38-2-0">v38.2.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#v38-1-0">v38.1.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#v38-0-0">v38.0.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#v37-0-0">v37.0.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#v36-8-0">v36.8.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#v36-7-3">v36.7.3</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#v36-7-2">v36.7.2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#v36-7-1">v36.7.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#v36-7-0">v36.7.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#v36-6-1">v36.6.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#v36-6-0">v36.6.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#v36-5-0">v36.5.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#v36-4-0">v36.4.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#v36-3-0">v36.3.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#v36-2-7">v36.2.7</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#v36-2-6">v36.2.6</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#v36-2-5">v36.2.5</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#v36-2-4">v36.2.4</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#v36-2-3">v36.2.3</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#v36-2-2">v36.2.2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#v36-2-1">v36.2.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#v36-2-0">v36.2.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#v36-1-1">v36.1.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#v36-1-0">v36.1.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#v36-0-1">v36.0.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#v36-0-0">v36.0.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#v35-0-2">v35.0.2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#v35-0-1">v35.0.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#v35-0-0">v35.0.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#v34-4-1">v34.4.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#v34-4-0">v34.4.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#v34-3-3">v34.3.3</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#v34-3-2">v34.3.2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#v34-3-1">v34.3.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#v34-3-0">v34.3.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#v34-2-0">v34.2.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#v34-1-1">v34.1.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#v34-1-0">v34.1.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#v34-0-3">v34.0.3</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#v34-0-2">v34.0.2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#v34-0-1">v34.0.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#v34-0-0">v34.0.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#v33-1-1">v33.1.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#v33-1-0">v33.1.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#v33-0-0">v33.0.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#v32-3-1">v32.3.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#v32-3-0">v32.3.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#v32-2-0">v32.2.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#v32-1-3">v32.1.3</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#v32-1-2">v32.1.2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#v32-1-1">v32.1.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#v32-1-0">v32.1.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#v32-0-0">v32.0.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#v31-0-1">v31.0.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#v31-0-0">v31.0.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#v30-4-0">v30.4.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#v30-3-0">v30.3.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#v30-2-1">v30.2.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#v30-2-0">v30.2.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#v30-1-0">v30.1.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#v30-0-0">v30.0.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#v29-0-1">v29.0.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#v29-0-0">v29.0.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#v28-8-0">v28.8.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#v28-7-1">v28.7.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#v28-7-0">v28.7.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#v28-6-1">v28.6.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#v28-6-0">v28.6.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#v28-5-0">v28.5.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#v28-4-0">v28.4.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#v28-3-0">v28.3.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#v28-1-0">v28.1.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#v28-0-0">v28.0.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#v27-3-1">v27.3.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#v27-3-0">v27.3.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#v27-2-0">v27.2.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#v27-1-2">v27.1.2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#v27-1-1">v27.1.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#v27-1-0">v27.1.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#v27-0-0">v27.0.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#v26-1-1">v26.1.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#v26-1-0">v26.1.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#v26-0-0">v26.0.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#v25-4-0">v25.4.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#v25-3-0">v25.3.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#v25-2-0">v25.2.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#v25-1-6">v25.1.6</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#v25-1-5">v25.1.5</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#v25-1-4">v25.1.4</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#v25-1-3">v25.1.3</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#v25-1-2">v25.1.2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#v25-1-1">v25.1.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#v25-1-0">v25.1.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#v25-0-2">v25.0.2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#v25-0-1">v25.0.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#v25-0-0">v25.0.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#v24-3-1">v24.3.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#v24-3-0">v24.3.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#v24-2-1">v24.2.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#v24-2-0">v24.2.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#v24-1-1">v24.1.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#v24-1-0">v24.1.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#v24-0-3">v24.0.3</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#v24-0-2">v24.0.2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#v24-0-1">v24.0.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#v24-0-0">v24.0.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#v23-2-1">v23.2.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#v23-1-0">v23.1.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#v23-0-0">v23.0.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#v22-0-5">v22.0.5</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#v22-0-4">v22.0.4</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#v22-0-3">v22.0.3</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#v22-0-2">v22.0.2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#v22-0-1">v22.0.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#v22-0-0">v22.0.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#v21-2-2">v21.2.2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#v21-2-1">v21.2.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#v21-2-0">v21.2.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#v21-1-0">v21.1.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#v21-0-0">v21.0.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#v20-10-0">v20.10.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#v20-9-0">v20.9.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#v20-8-1">v20.8.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#v20-8-0">v20.8.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#v20-7-0">v20.7.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#v20-6-8">v20.6.8</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#v20-6-7">v20.6.7</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#v20-6-6">v20.6.6</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#v20-6-0">v20.6.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id330">20.5</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id332">20.4</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id333">20.3.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id334">20.3</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id336">20.2.2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id337">20.2.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id338">20.2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id343">20.1.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id344">20.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id345">20.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id346">19.7</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id347">19.6.2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id348">19.6.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id349">19.6</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id350">19.5</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id351">19.4.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id353">19.4</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id354">19.3</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id355">19.2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id356">19.1.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id357">19.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id358">19.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id359">18.8.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id360">18.8</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id361">18.7.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id363">18.7</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id365">18.6.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id366">18.6</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id367">18.5</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id368">18.4</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id369">18.3.2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id370">18.3.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id371">18.3</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id372">18.2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id373">18.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id374">18.0.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id375">18.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id376">17.1.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id377">17.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id378">17.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id379">16.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id380">15.2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id381">15.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id382">15.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id383">14.3.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id385">14.3</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id386">14.2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id387">14.1.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id388">14.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id389">14.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id390">13.0.2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id391">13.0.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id392">13.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id393">12.4</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id395">12.3</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id396">12.2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id397">12.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id398">12.0.5</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id400">12.0.4</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id401">12.0.3</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id402">12.0.2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id403">12.0.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id404">12.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id405">11.3.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id406">11.3</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id407">11.2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id408">11.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id409">11.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id411">10.2.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id412">10.2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id413">10.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id414">10.0.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id415">10.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id416">9.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id417">9.0.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id418">9.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id419">8.4</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id420">8.3</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id421">8.2.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id422">8.2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id423">8.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id425">8.0.4</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id426">8.0.3</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id428">8.0.2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id430">8.0.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id432">8.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id434">7.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id436">6.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id438">6.0.2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id440">6.0.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id441">6.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id443">5.8</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id444">5.7</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id445">5.6</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id446">5.5.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id447">5.5</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id449">5.4.2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id450">5.4.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id451">5.4</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id453">5.3</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id454">5.2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id455">5.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id456">5.0.2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id457">5.0.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id458">5.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#and-3-8-1-and-4-0-1">3.7.1 and 3.8.1 and 4.0.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id460">4.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id461">3.8</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id462">3.7</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id463">3.6</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id464">3.5.2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id466">3.5.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id467">3.5</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id469">3.4.4</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id470">3.4.3</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id471">3.4.2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id473">3.4.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id474">3.4</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id475">3.3</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id476">3.2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id477">3.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id478">3.0.2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id479">3.0.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id480">3.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id481">2.2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id483">2.1.2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id484">2.1.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id486">2.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id487">2.0.2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id488">2.0.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id489">2.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id490">1.4.2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id491">1.4.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id492">1.4</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id493">1.3.2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id494">1.3.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id495">1.3</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id496">1.2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id497">1.1.7</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id498">1.1.6</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id499">1.1.5</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id500">1.1.4</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id501">1.1.3</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id502">1.1.2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id504">1.1.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id505">1.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id506">1.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id509">0.9.8</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id510">0.9.7</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id511">0.9.6</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id512">0.9.5</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id513">0.9.4</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id514">0.9.3</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id515">0.9.2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id517">0.9.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id518">0.9</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id519">0.8</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id520">0.7.8</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id521">0.7.7</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id523">0.7.6</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id525">0.7.5</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id527">0.7.4</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id528">0.7.3</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id529">0.7.2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id530">0.7.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id531">0.7</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#b4">0.7b4</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id534">0.6.49</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id536">0.6.48</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id537">0.6.47</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id538">0.6.46</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id540">0.6.45</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id541">0.6.44</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id542">0.6.43</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id543">0.6.42</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id545">0.6.41</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id546">0.6.40</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id547">0.6.39</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id549">0.6.38</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id550">0.6.37</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id551">0.6.36</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id552">0.6.35</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id553">0.6.34</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id554">0.6.33</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id556">0.6.32</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id557">0.6.31</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id559">0.6.30</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id560">0.6.29</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id564">0.6.28</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id566">0.6.27</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id568">0.6.26</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id569">0.6.25</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id570">0.6.24</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id571">0.6.23</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id573">0.6.21</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id575">0.6.20</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id576">0.6.19</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id577">0.6.18</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id578">0.6.17</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id580">0.6.16</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id581">0.6.15</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id582">0.6.14</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id584">0.6.13</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id585">0.6.12</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id586">0.6.11</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id587">0.6.10</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id588">0.6.9</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id590">0.6.8</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id591">0.6.7</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id592">0.6.6</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id593">0.6.5</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id594">0.6.4</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id595">0.6.3</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id596">0.6.2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id599">0.6.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id602">0.6</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#c9">0.6c9</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#c7">0.6c7</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#c6">0.6c6</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#c5">0.6c5</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#c4">0.6c4</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#c3">0.6c3</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#c2">0.6c2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#c1">0.6c1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id608">0.6b4</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#b3">0.6b3</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#b2">0.6b2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#b1">0.6b1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#a11">0.6a11</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#a10">0.6a10</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#a9">0.6a9</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#a8">0.6a8</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#a7">0.6a7</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#a6">0.6a6</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#a5">0.6a5</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#a3">0.6a3</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#a2">0.6a2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#a1">0.6a1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#a12">0.5a12</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id609">0.5a11</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id610">0.5a10</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id611">0.5a9</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id612">0.5a8</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id613">0.5a7</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id614">0.5a6</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id615">0.5a5</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#a4">0.5a4</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id616">0.5a3</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id617">0.5a2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id618">0.5a1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id619">0.4a4</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id620">0.4a3</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id621">0.4a2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id622">0.4a1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id623">0.3a4</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id624">0.3a3</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id625">0.3a2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id626">0.3a1</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="history.html#credits">Credits</a></li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>다음 항목</h4>
+  <p class="topless"><a href="setuptools.html"
+                        title="다음 장">Setuptools로 패키지 빌드하고 배포</a></p>
+  <div role="note" aria-label="source link">
+    <h3>현재 문서</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/index.txt"
+            rel="nofollow">소스 코드를 보려면</a></li>
+    </ul>
+   </div><h3>Download</h3>
+
+<p>Current version: <b>40.6.3</b></p>
+<p>Get Setuptools from the <a href="https://pypi.org/project/setuptools/"> Python Package Index</a>
+
+<h3>Questions? Suggestions? Contributions?</h3>
+
+<p>Visit the <a href="https://github.com/pypa/setuptools">Setuptools project page</a> </p>
+
+<h3 class="donation">Professional support</h3>
+
+<p>
+Professionally-supported setuptools is available with the
+<a href="https://tidelift.com/subscription/pkg/pypi-setuptools?utm_source=pypi-setuptools&utm_medium=readme">Tidelift Subscription</a>.
+</p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>빠른 검색</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="바로 가기" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>탐색</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="setuptools.html" title="Setuptools로 패키지 빌드하고 배포"
+             >다음</a></li>
+        <li class="nav-item nav-item-0"><a href="#">setuptools 40.6.3 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright Python Packaging Authority.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.4.
+    </div>
+  </body>
+</html>

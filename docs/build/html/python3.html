@@ -1,0 +1,188 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="ko">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Supporting both Python 2 and Python 3 with Setuptools &#8212; setuptools 40.6.3 documentation</title>
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <script type="text/javascript" src="_static/translations.js"></script>
+    <link rel="search" title="검색" href="search.html" />
+    <link rel="next" title="Development on Setuptools" href="development.html" />
+    <link rel="prev" title="Package Discovery and Resource Access using pkg_resources" href="pkg_resources.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>탐색</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="development.html" title="Development on Setuptools"
+             accesskey="N">다음</a></li>
+        <li class="right" >
+          <a href="pkg_resources.html" title="Package Discovery and Resource Access using pkg_resources"
+             accesskey="P">이전</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">setuptools 40.6.3 documentation</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="supporting-both-python-2-and-python-3-with-setuptools">
+<h1>Supporting both Python 2 and Python 3 with Setuptools<a class="headerlink" href="#supporting-both-python-2-and-python-3-with-setuptools" title="제목 주소">¶</a></h1>
+<p>Starting with Distribute version 0.6.2 and Setuptools 0.7, the Setuptools
+project supported Python 3. Installing and
+using setuptools for Python 3 code works exactly the same as for Python 2
+code.</p>
+<p>Setuptools provides a facility to invoke 2to3 on the code as a part of the
+build process, by setting the keyword parameter <code class="docutils literal notranslate"><span class="pre">use_2to3</span></code> to True, but
+the Setuptools project strongly recommends instead developing a unified codebase
+using <a class="reference external" href="https://pypi.org/project/six/">six</a>,
+<a class="reference external" href="https://pypi.org/project/future/">future</a>, or another compatibility
+library.</p>
+<div class="section" id="using-2to3">
+<h2>Using 2to3<a class="headerlink" href="#using-2to3" title="제목 주소">¶</a></h2>
+<p>Setuptools attempts to make the porting process easier by automatically
+running
+2to3 as a part of running tests. To do so, you need to configure the
+setup.py so that you can run the unit tests with <code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">setup.py</span> <span class="pre">test</span></code>.</p>
+<p>See <a class="reference internal" href="setuptools.html#test"><span class="std std-ref">test - Build package and run a unittest suite</span></a> for more information on this.</p>
+<p>Once you have the tests running under Python 2, you can add the use_2to3
+keyword parameters to setup(), and start running the tests under Python 3.
+The test command will now first run the build command during which the code
+will be converted with 2to3, and the tests will then be run from the build
+directory, as opposed from the source directory as is normally done.</p>
+<p>Setuptools will convert all Python files, and also all doctests in Python
+files. However, if you have doctests located in separate text files, these
+will not automatically be converted. By adding them to the
+<code class="docutils literal notranslate"><span class="pre">convert_2to3_doctests</span></code> keyword parameter Setuptools will convert them as
+well.</p>
+<p>By default, the conversion uses all fixers in the <code class="docutils literal notranslate"><span class="pre">lib2to3.fixers</span></code> package.
+To use additional fixers, the parameter <code class="docutils literal notranslate"><span class="pre">use_2to3_fixers</span></code> can be set
+to a list of names of packages containing fixers. To exclude fixers, the
+parameter <code class="docutils literal notranslate"><span class="pre">use_2to3_exclude_fixers</span></code> can be set to fixer names to be
+skipped.</p>
+<p>An example setup.py might look something like this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">setuptools</span> <span class="k">import</span> <span class="n">setup</span>
+
+<span class="n">setup</span><span class="p">(</span>
+    <span class="n">name</span><span class="o">=</span><span class="s1">&#39;your.module&#39;</span><span class="p">,</span>
+    <span class="n">version</span><span class="o">=</span><span class="s1">&#39;1.0&#39;</span><span class="p">,</span>
+    <span class="n">description</span><span class="o">=</span><span class="s1">&#39;This is your awesome module&#39;</span><span class="p">,</span>
+    <span class="n">author</span><span class="o">=</span><span class="s1">&#39;You&#39;</span><span class="p">,</span>
+    <span class="n">author_email</span><span class="o">=</span><span class="s1">&#39;your@email&#39;</span><span class="p">,</span>
+    <span class="n">package_dir</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;&#39;</span><span class="p">:</span> <span class="s1">&#39;src&#39;</span><span class="p">},</span>
+    <span class="n">packages</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;your&#39;</span><span class="p">,</span> <span class="s1">&#39;you.module&#39;</span><span class="p">],</span>
+    <span class="n">test_suite</span><span class="o">=</span><span class="s1">&#39;your.module.tests&#39;</span><span class="p">,</span>
+    <span class="n">use_2to3</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">convert_2to3_doctests</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;src/your/module/README.txt&#39;</span><span class="p">],</span>
+    <span class="n">use_2to3_fixers</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;your.fixers&#39;</span><span class="p">],</span>
+    <span class="n">use_2to3_exclude_fixers</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;lib2to3.fixes.fix_import&#39;</span><span class="p">],</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<div class="section" id="differential-conversion">
+<h3>Differential conversion<a class="headerlink" href="#differential-conversion" title="제목 주소">¶</a></h3>
+<p>Note that a file will only be copied and converted during the build process
+if the source file has been changed. If you add a file to the doctests
+that should be converted, it will not be converted the next time you run
+the tests, since it hasn't been modified. You need to remove it from the
+build directory. Also if you run the build, install or test commands before
+adding the use_2to3 parameter, you will have to remove the build directory
+before you run the test command, as the files otherwise will seem updated,
+and no conversion will happen.</p>
+<p>In general, if code doesn't seem to be converted, deleting the build directory
+and trying again is a good safeguard against the build directory getting
+&quot;out of sync&quot; with the source directory.</p>
+</div>
+</div>
+<div class="section" id="distributing-python-3-modules">
+<h2>Distributing Python 3 modules<a class="headerlink" href="#distributing-python-3-modules" title="제목 주소">¶</a></h2>
+<p>You can distribute your modules with Python 3 support in different ways. A
+normal source distribution will work, but can be slow in installing, as the
+2to3 process will be run during the install. But you can also distribute
+the module in binary format, such as a binary egg. That egg will contain the
+already converted code, and hence no 2to3 conversion is needed during install.</p>
+</div>
+<div class="section" id="advanced-features">
+<h2>Advanced features<a class="headerlink" href="#advanced-features" title="제목 주소">¶</a></h2>
+<p>If you don't want to run the 2to3 conversion on the doctests in Python files,
+you can turn that off by setting <code class="docutils literal notranslate"><span class="pre">setuptools.use_2to3_on_doctests</span> <span class="pre">=</span> <span class="pre">False</span></code>.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Supporting both Python 2 and Python 3 with Setuptools</a><ul>
+<li><a class="reference internal" href="#using-2to3">Using 2to3</a><ul>
+<li><a class="reference internal" href="#differential-conversion">Differential conversion</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#distributing-python-3-modules">Distributing Python 3 modules</a></li>
+<li><a class="reference internal" href="#advanced-features">Advanced features</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>이전 항목</h4>
+  <p class="topless"><a href="pkg_resources.html"
+                        title="이전 장">Package Discovery and Resource Access using <code class="docutils literal notranslate"><span class="pre">pkg_resources</span></code></a></p>
+  <h4>다음 항목</h4>
+  <p class="topless"><a href="development.html"
+                        title="다음 장">Development on Setuptools</a></p>
+  <div role="note" aria-label="source link">
+    <h3>현재 문서</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/python3.txt"
+            rel="nofollow">소스 코드를 보려면</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>빠른 검색</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="바로 가기" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>탐색</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="development.html" title="Development on Setuptools"
+             >다음</a></li>
+        <li class="right" >
+          <a href="pkg_resources.html" title="Package Discovery and Resource Access using pkg_resources"
+             >이전</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">setuptools 40.6.3 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright Python Packaging Authority.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.4.
+    </div>
+  </body>
+</html>

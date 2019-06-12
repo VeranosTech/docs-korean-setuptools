@@ -1,0 +1,142 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) Python Packaging Authority
+# This file is distributed under the same license as the setuptools package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: setuptools 40.6.3\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2018-12-18 15:12+0900\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../docs/developer-guide.txt:3
+msgid "Developer's Guide for Setuptools"
+msgstr ""
+
+#: ../../docs/developer-guide.txt:5
+msgid "If you want to know more about contributing on Setuptools, this is the place."
+msgstr ""
+
+#: ../../docs/developer-guide.txt:9
+msgid "**Table of Contents**"
+msgstr ""
+
+#: ../../docs/developer-guide.txt:13
+msgid "Recommended Reading"
+msgstr ""
+
+#: ../../docs/developer-guide.txt:15
+msgid "Please read `How to write the perfect pull request <https://blog.jaraco.com/how-to-write-perfect-pull-request/>`_ for some tips on contributing to open source projects. Although the article is not authoritative, it was authored by the maintainer of Setuptools, so reflects his opinions and will improve the likelihood of acceptance and quality of contribution."
+msgstr ""
+
+#: ../../docs/developer-guide.txt:24
+msgid "Project Management"
+msgstr ""
+
+#: ../../docs/developer-guide.txt:26
+msgid "Setuptools is maintained primarily in Github at `this home <https://github.com/pypa/setuptools>`_. Setuptools is maintained under the Python Packaging Authority (PyPA) with several core contributors. All bugs for Setuptools are filed and the canonical source is maintained in Github."
+msgstr ""
+
+#: ../../docs/developer-guide.txt:31
+msgid "User support and discussions are done through the issue tracker (for specific) issues, through the distutils-sig mailing list, or on IRC (Freenode) at #pypa."
+msgstr ""
+
+#: ../../docs/developer-guide.txt:35
+msgid "Discussions about development happen on the pypa-dev mailing list or on `Gitter <https://gitter.im/pypa/setuptools>`_."
+msgstr ""
+
+#: ../../docs/developer-guide.txt:40
+msgid "Authoring Tickets"
+msgstr ""
+
+#: ../../docs/developer-guide.txt:42
+msgid "Before authoring any source code, it's often prudent to file a ticket describing the motivation behind making changes. First search to see if a ticket already exists for your issue. If not, create one. Try to think from the perspective of the reader. Explain what behavior you expected, what you got instead, and what factors might have contributed to the unexpected behavior. In Github, surround a block of code or traceback with the triple backtick \"\\`\\`\\`\" so that it is formatted nicely."
+msgstr ""
+
+#: ../../docs/developer-guide.txt:50
+msgid "Filing a ticket provides a forum for justification, discussion, and clarification. The ticket provides a record of the purpose for the change and any hard decisions that were made. It provides a single place for others to reference when trying to understand why the software operates the way it does or why certain changes were made."
+msgstr ""
+
+#: ../../docs/developer-guide.txt:56
+msgid "Setuptools makes extensive use of hyperlinks to tickets in the changelog so that system integrators and other users can get a quick summary, but then jump to the in-depth discussion about any subject referenced."
+msgstr ""
+
+#: ../../docs/developer-guide.txt:62
+msgid "Making a pull request"
+msgstr ""
+
+#: ../../docs/developer-guide.txt:64
+msgid "When making a pull request, please include a short summary of the changes and a reference to any issue tickets that the PR is intended to solve. All PRs with code changes should include tests. All changes should include a changelog entry."
+msgstr ""
+
+#: ../../docs/developer-guide.txt:69
+msgid "``setuptools`` uses `towncrier <https://pypi.org/project/towncrier/>`_ for changelog managment, so when making a PR, please add a news fragment in the ``changelog.d/`` folder. Changelog files are written in Restructured Text and should be a 1 or 2 sentence description of the substantive changes in the PR. They should be named ``<pr_number>.<category>.rst``, where the categories are:"
+msgstr ""
+
+#: ../../docs/developer-guide.txt:75
+msgid "``change``: Any backwards compatible code change"
+msgstr ""
+
+#: ../../docs/developer-guide.txt:76
+msgid "``breaking``: Any backwards-compatibility breaking change"
+msgstr ""
+
+#: ../../docs/developer-guide.txt:77
+msgid "``doc``: A change to the documentation"
+msgstr ""
+
+#: ../../docs/developer-guide.txt:78
+msgid "``misc``: Changes internal to the repo like CI, test and build changes"
+msgstr ""
+
+#: ../../docs/developer-guide.txt:79
+msgid "``deprecation``: For deprecations of an existing feature of behavior"
+msgstr ""
+
+#: ../../docs/developer-guide.txt:81
+msgid "A pull request may have more than one of these components, for example a code change may introduce a new feature that deprecates an old feature, in which case two fragments should be added. It is not necessary to make a separate documentation fragment for documentation changes accompanying the relevant code changes. See the following for an example news fragment:"
+msgstr ""
+
+#: ../../docs/developer-guide.txt:94
+msgid "Testing"
+msgstr ""
+
+#: ../../docs/developer-guide.txt:96
+msgid "The primary tests are run using tox. To run the tests, first create the metadata needed to run the tests::"
+msgstr ""
+
+#: ../../docs/developer-guide.txt:101
+msgid "Then make sure you have tox installed, and invoke it::"
+msgstr ""
+
+#: ../../docs/developer-guide.txt:105
+msgid "Under continuous integration, additional tests may be run. See the ``.travis.yml`` file for full details on the tests run under Travis-CI."
+msgstr ""
+
+#: ../../docs/developer-guide.txt:110
+msgid "Semantic Versioning"
+msgstr ""
+
+#: ../../docs/developer-guide.txt:112
+msgid "Setuptools follows ``semver``."
+msgstr ""
+
+#: ../../docs/developer-guide.txt:118
+msgid "Building Documentation"
+msgstr ""
+
+#: ../../docs/developer-guide.txt:120
+msgid "Setuptools relies on the `Sphinx`_ system for building documentation. The `published documentation`_ is hosted on Read the Docs."
+msgstr ""
+
+#: ../../docs/developer-guide.txt:123
+msgid "To build the docs locally, use tox::"
+msgstr ""
+

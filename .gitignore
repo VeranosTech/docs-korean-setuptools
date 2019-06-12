@@ -21,3 +21,5 @@ setuptools.egg-info
 .pytest_cache/
 
 *.mo
+!build/
+!env/

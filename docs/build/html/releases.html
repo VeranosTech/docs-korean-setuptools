@@ -1,0 +1,159 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="ko">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Release Process &#8212; setuptools 40.6.3 documentation</title>
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <script type="text/javascript" src="_static/translations.js"></script>
+    <link rel="search" title="검색" href="search.html" />
+    <link rel="next" title="Roadmap" href="roadmap.html" />
+    <link rel="prev" title="The Internal Structure of Python Eggs" href="formats.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>탐색</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="roadmap.html" title="Roadmap"
+             accesskey="N">다음</a></li>
+        <li class="right" >
+          <a href="formats.html" title="The Internal Structure of Python Eggs"
+             accesskey="P">이전</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">setuptools 40.6.3 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="development.html" accesskey="U">Development on Setuptools</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="release-process">
+<h1>Release Process<a class="headerlink" href="#release-process" title="제목 주소">¶</a></h1>
+<p>In order to allow for rapid, predictable releases, Setuptools uses a
+mechanical technique for releases, enacted by Travis following a
+successful build of a tagged release per
+<a class="reference external" href="https://docs.travis-ci.com/user/deployment/pypi">PyPI deployment</a>.</p>
+<p>Prior to cutting a release, please use <a class="reference external" href="https://pypi.org/project/towncrier/">towncrier</a> to update
+<code class="docutils literal notranslate"><span class="pre">CHANGES.rst</span></code> to summarize the changes since the last release.
+To update the changelog:</p>
+<ol class="arabic simple">
+<li>Install towncrier via <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">towncrier</span></code> if not already installed.</li>
+<li>Preview the new <code class="docutils literal notranslate"><span class="pre">CHANGES.rst</span></code> entry by running
+<code class="docutils literal notranslate"><span class="pre">towncrier</span> <span class="pre">--draft</span> <span class="pre">--version</span> <span class="pre">{new.version.number}</span></code> (enter the desired
+version number for the next release).  If any changes are needed, make
+them and generate a new preview until the output is acceptable.  Run
+<code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">add</span></code> for any modified files.</li>
+<li>Run <code class="docutils literal notranslate"><span class="pre">towncrier</span> <span class="pre">--version</span> <span class="pre">{new.version.number}</span></code> to stage the changelog
+updates in git.</li>
+<li>Verify that there are no remaining <code class="docutils literal notranslate"><span class="pre">changelog.d/*.rst</span></code> files.  If a
+file was named incorrectly, it may be ignored by towncrier.</li>
+<li>Review the updated <code class="docutils literal notranslate"><span class="pre">CHANGES.rst</span></code> file.  If any changes are needed,
+make the edits and stage them via <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">add</span> <span class="pre">CHANGES.rst</span></code>.</li>
+</ol>
+<p>Once the changelog edits are staged and ready to commit, cut a release by
+installing and running <code class="docutils literal notranslate"><span class="pre">bump2version</span> <span class="pre">--allow-dirty</span> <span class="pre">{part}</span></code> where <code class="docutils literal notranslate"><span class="pre">part</span></code>
+is major, minor, or patch based on the scope of the changes in the
+release. Then, push the commits to the master branch:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ git push origin master
+$ git push --tags
+</pre></div>
+</div>
+<p>If tests pass, the release will be uploaded to PyPI (from the Python 3.6
+tests).</p>
+<div class="section" id="release-frequency">
+<h2>Release Frequency<a class="headerlink" href="#release-frequency" title="제목 주소">¶</a></h2>
+<p>Some have asked why Setuptools is released so frequently. Because Setuptools
+uses a mechanical release process, it's very easy to make releases whenever the
+code is stable (tests are passing). As a result, the philosophy is to release
+early and often.</p>
+<p>While some find the frequent releases somewhat surprising, they only empower
+the user. Although releases are made frequently, users can choose the frequency
+at which they use those releases. If instead Setuptools contributions were only
+released in batches, the user would be constrained to only use Setuptools when
+those official releases were made. With frequent releases, the user can govern
+exactly how often he wishes to update.</p>
+<p>Frequent releases also then obviate the need for dev or beta releases in most
+cases. Because releases are made early and often, bugs are discovered and
+corrected quickly, in many cases before other users have yet to encounter them.</p>
+</div>
+<div class="section" id="release-managers">
+<h2>Release Managers<a class="headerlink" href="#release-managers" title="제목 주소">¶</a></h2>
+<p>Additionally, anyone with push access to the master branch has access to cut
+releases.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Release Process</a><ul>
+<li><a class="reference internal" href="#release-frequency">Release Frequency</a></li>
+<li><a class="reference internal" href="#release-managers">Release Managers</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>이전 항목</h4>
+  <p class="topless"><a href="formats.html"
+                        title="이전 장">The Internal Structure of Python Eggs</a></p>
+  <h4>다음 항목</h4>
+  <p class="topless"><a href="roadmap.html"
+                        title="다음 장">Roadmap</a></p>
+  <div role="note" aria-label="source link">
+    <h3>현재 문서</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/releases.txt"
+            rel="nofollow">소스 코드를 보려면</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>빠른 검색</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="바로 가기" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>탐색</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="roadmap.html" title="Roadmap"
+             >다음</a></li>
+        <li class="right" >
+          <a href="formats.html" title="The Internal Structure of Python Eggs"
+             >이전</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">setuptools 40.6.3 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="development.html" >Development on Setuptools</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright Python Packaging Authority.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.4.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,54 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) Python Packaging Authority
+# This file is distributed under the same license as the setuptools package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: setuptools 40.6.3\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2018-12-18 15:12+0900\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../docs/index.txt:2
+msgid "Welcome to Setuptools' documentation!"
+msgstr ""
+
+#: ../../docs/index.txt:4
+msgid "Setuptools is a fully-featured, actively-maintained, and stable library designed to facilitate packaging Python projects, where packaging includes:"
+msgstr ""
+
+#: ../../docs/index.txt:7
+msgid "Python package and module definitions"
+msgstr ""
+
+#: ../../docs/index.txt:8
+msgid "Distribution package metadata"
+msgstr ""
+
+#: ../../docs/index.txt:9
+msgid "Test hooks"
+msgstr ""
+
+#: ../../docs/index.txt:10
+msgid "Project installation"
+msgstr ""
+
+#: ../../docs/index.txt:11
+msgid "Platform-specific details"
+msgstr ""
+
+#: ../../docs/index.txt:12
+msgid "Python 3 support"
+msgstr ""
+
+#: ../../docs/index.txt:14
+msgid "Documentation content:"
+msgstr ""
+

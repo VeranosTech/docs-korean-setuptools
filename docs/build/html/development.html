@@ -1,0 +1,124 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="ko">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Development on Setuptools &#8212; setuptools 40.6.3 documentation</title>
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <script type="text/javascript" src="_static/translations.js"></script>
+    <link rel="search" title="검색" href="search.html" />
+    <link rel="next" title="Developer&#39;s Guide for Setuptools" href="developer-guide.html" />
+    <link rel="prev" title="Supporting both Python 2 and Python 3 with Setuptools" href="python3.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>탐색</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="developer-guide.html" title="Developer&#39;s Guide for Setuptools"
+             accesskey="N">다음</a></li>
+        <li class="right" >
+          <a href="python3.html" title="Supporting both Python 2 and Python 3 with Setuptools"
+             accesskey="P">이전</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">setuptools 40.6.3 documentation</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="development-on-setuptools">
+<h1>Development on Setuptools<a class="headerlink" href="#development-on-setuptools" title="제목 주소">¶</a></h1>
+<p>Setuptools is maintained by the Python community under the Python Packaging
+Authority (PyPA) and led by Jason R. Coombs.</p>
+<p>This document describes the process by which Setuptools is developed.
+This document assumes the reader has some passing familiarity with
+<em>using</em> setuptools, the <code class="docutils literal notranslate"><span class="pre">pkg_resources</span></code> module, and EasyInstall.  It
+does not attempt to explain basic concepts like inter-project
+dependencies, nor does it contain detailed lexical syntax for most
+file formats.  Neither does it explain concepts like &quot;namespace
+packages&quot; or &quot;resources&quot; in any detail, as all of these subjects are
+covered at length in the setuptools developer's guide and the
+<code class="docutils literal notranslate"><span class="pre">pkg_resources</span></code> reference manual.</p>
+<p>Instead, this is <strong>internal</strong> documentation for how those concepts and
+features are <em>implemented</em> in concrete terms.  It is intended for people
+who are working on the setuptools code base, who want to be able to
+troubleshoot setuptools problems, want to write code that reads the file
+formats involved, or want to otherwise tinker with setuptools-generated
+files and directories.</p>
+<p>Note, however, that these are all internal implementation details and
+are therefore subject to change; stick to the published API if you don't
+want to be responsible for keeping your code from breaking when
+setuptools changes.  You have been warned.</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="developer-guide.html">Developer's Guide for Setuptools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="formats.html">The Internal Structure of Python Eggs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="releases.html">Release Process</a></li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>이전 항목</h4>
+  <p class="topless"><a href="python3.html"
+                        title="이전 장">Supporting both Python 2 and Python 3 with Setuptools</a></p>
+  <h4>다음 항목</h4>
+  <p class="topless"><a href="developer-guide.html"
+                        title="다음 장">Developer's Guide for Setuptools</a></p>
+  <div role="note" aria-label="source link">
+    <h3>현재 문서</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/development.txt"
+            rel="nofollow">소스 코드를 보려면</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>빠른 검색</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="바로 가기" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>탐색</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="developer-guide.html" title="Developer&#39;s Guide for Setuptools"
+             >다음</a></li>
+        <li class="right" >
+          <a href="python3.html" title="Supporting both Python 2 and Python 3 with Setuptools"
+             >이전</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">setuptools 40.6.3 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright Python Packaging Authority.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.4.
+    </div>
+  </body>
+</html>

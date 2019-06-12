@@ -1,0 +1,254 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="ko">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>ez_setup distribution guide &#8212; setuptools 40.6.3 documentation</title>
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <script type="text/javascript" src="_static/translations.js"></script>
+    <link rel="search" title="검색" href="search.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>탐색</h3>
+      <ul>
+        <li class="nav-item nav-item-0"><a href="index.html">setuptools 40.6.3 documentation</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="ez-setup-distribution-guide">
+<h1><code class="docutils literal notranslate"><span class="pre">ez_setup</span></code> distribution guide<a class="headerlink" href="#ez-setup-distribution-guide" title="제목 주소">¶</a></h1>
+<div class="section" id="using-setuptools-without-bundling-it">
+<h2>Using <code class="docutils literal notranslate"><span class="pre">setuptools</span></code>...  Without bundling it!<a class="headerlink" href="#using-setuptools-without-bundling-it" title="제목 주소">¶</a></h2>
+<div class="admonition warning">
+<p class="first admonition-title">경고</p>
+<p class="last"><strong>ez_setup</strong> is deprecated in favor of PIP with <strong>PEP-518</strong> support.</p>
+</div>
+<p>Your users might not have <code class="docutils literal notranslate"><span class="pre">setuptools</span></code> installed on their machines, or even
+if they do, it might not be the right version.  Fixing this is easy; just
+download <a class="reference external" href="https://bootstrap.pypa.io/ez_setup.py">ez_setup.py</a>, and put it in the same directory as your <code class="docutils literal notranslate"><span class="pre">setup.py</span></code>
+script.  (Be sure to add it to your revision control system, too.)  Then add
+these two lines to the very top of your setup script, before the script imports
+anything from setuptools:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">ez_setup</span>
+<span class="n">ez_setup</span><span class="o">.</span><span class="n">use_setuptools</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>That's it.  The <code class="docutils literal notranslate"><span class="pre">ez_setup</span></code> module will automatically download a matching
+version of <code class="docutils literal notranslate"><span class="pre">setuptools</span></code> from PyPI, if it isn't present on the target system.
+Whenever you install an updated version of setuptools, you should also update
+your projects' <code class="docutils literal notranslate"><span class="pre">ez_setup.py</span></code> files, so that a matching version gets installed
+on the target machine(s).</p>
+<p>(By the way, if you need to distribute a specific version of <code class="docutils literal notranslate"><span class="pre">setuptools</span></code>,
+you can specify the exact version and base download URL as parameters to the
+<code class="docutils literal notranslate"><span class="pre">use_setuptools()</span></code> function.  See the function's docstring for details.)</p>
+</div>
+<div class="section" id="what-your-users-should-know">
+<h2>What Your Users Should Know<a class="headerlink" href="#what-your-users-should-know" title="제목 주소">¶</a></h2>
+<p>In general, a setuptools-based project looks just like any distutils-based
+project -- as long as your users have an internet connection and are installing
+to <code class="docutils literal notranslate"><span class="pre">site-packages</span></code>, that is.  But for some users, these conditions don't
+apply, and they may become frustrated if this is their first encounter with
+a setuptools-based project.  To keep these users happy, you should review the
+following topics in your project's installation instructions, if they are
+relevant to your project and your target audience isn't already familiar with
+setuptools and <code class="docutils literal notranslate"><span class="pre">easy_install</span></code>.</p>
+<dl class="docutils">
+<dt>Network Access</dt>
+<dd>If your project is using <code class="docutils literal notranslate"><span class="pre">ez_setup</span></code>, you should inform users of the
+need to either have network access, or to preinstall the correct version of
+setuptools using the <a class="reference external" href="easy_install.html">EasyInstall installation instructions</a>.  Those
+instructions also have tips for dealing with firewalls as well as how to
+manually download and install setuptools.</dd>
+<dt>Custom Installation Locations</dt>
+<dd>You should inform your users that if they are installing your project to
+somewhere other than the main <code class="docutils literal notranslate"><span class="pre">site-packages</span></code> directory, they should
+first install setuptools using the instructions for <a class="reference external" href="easy_install.html">Custom Installation
+Locations</a>, before installing your project.</dd>
+<dt>Your Project's Dependencies</dt>
+<dd><p class="first">If your project depends on other projects that may need to be downloaded
+from PyPI or elsewhere, you should list them in your installation
+instructions, or tell users how to find out what they are.  While most
+users will not need this information, any users who don't have unrestricted
+internet access may have to find, download, and install the other projects
+manually.  (Note, however, that they must still install those projects
+using <code class="docutils literal notranslate"><span class="pre">easy_install</span></code>, or your project will not know they are installed,
+and your setup script will try to download them again.)</p>
+<p class="last">If you want to be especially friendly to users with limited network access,
+you may wish to build eggs for your project and its dependencies, making
+them all available for download from your site, or at least create a page
+with links to all of the needed eggs.  In this way, users with limited
+network access can manually download all the eggs to a single directory,
+then use the <code class="docutils literal notranslate"><span class="pre">-f</span></code> option of <code class="docutils literal notranslate"><span class="pre">easy_install</span></code> to specify the directory
+to find eggs in.  Users who have full network access can just use <code class="docutils literal notranslate"><span class="pre">-f</span></code>
+with the URL of your download page, and <code class="docutils literal notranslate"><span class="pre">easy_install</span></code> will find all the
+needed eggs using your links directly.  This is also useful when your
+target audience isn't able to compile packages (e.g. most Windows users)
+and your package or some of its dependencies include C code.</p>
+</dd>
+<dt>Revision Control System Users and Co-Developers</dt>
+<dd><p class="first">Users and co-developers who are tracking your in-development code using
+a revision control system should probably read this manual's sections
+regarding such development.  Alternately, you may wish to create a
+quick-reference guide containing the tips from this manual that apply to
+your particular situation.  For example, if you recommend that people use
+<code class="docutils literal notranslate"><span class="pre">setup.py</span> <span class="pre">develop</span></code> when tracking your in-development code, you should let
+them know that this needs to be run after every update or commit.</p>
+<p class="last">Similarly, if you remove modules or data files from your project, you
+should remind them to run <code class="docutils literal notranslate"><span class="pre">setup.py</span> <span class="pre">clean</span> <span class="pre">--all</span></code> and delete any obsolete
+<code class="docutils literal notranslate"><span class="pre">.pyc</span></code> or <code class="docutils literal notranslate"><span class="pre">.pyo</span></code>.  (This tip applies to the distutils in general, not
+just setuptools, but not everybody knows about them; be kind to your users
+by spelling out your project's best practices rather than leaving them
+guessing.)</p>
+</dd>
+<dt>Creating System Packages</dt>
+<dd><p class="first">Some users want to manage all Python packages using a single package
+manager, and sometimes that package manager isn't <code class="docutils literal notranslate"><span class="pre">easy_install</span></code>!
+Setuptools currently supports <code class="docutils literal notranslate"><span class="pre">bdist_rpm</span></code>, <code class="docutils literal notranslate"><span class="pre">bdist_wininst</span></code>, and
+<code class="docutils literal notranslate"><span class="pre">bdist_dumb</span></code> formats for system packaging.  If a user has a locally-
+installed &quot;bdist&quot; packaging tool that internally uses the distutils
+<code class="docutils literal notranslate"><span class="pre">install</span></code> command, it should be able to work with <code class="docutils literal notranslate"><span class="pre">setuptools</span></code>.  Some
+examples of &quot;bdist&quot; formats that this should work with include the
+<code class="docutils literal notranslate"><span class="pre">bdist_nsi</span></code> and <code class="docutils literal notranslate"><span class="pre">bdist_msi</span></code> formats for Windows.</p>
+<p>However, packaging tools that build binary distributions by running
+<code class="docutils literal notranslate"><span class="pre">setup.py</span> <span class="pre">install</span></code> on the command line or as a subprocess will require
+modification to work with setuptools.  They should use the
+<code class="docutils literal notranslate"><span class="pre">--single-version-externally-managed</span></code> option to the <code class="docutils literal notranslate"><span class="pre">install</span></code> command,
+combined with the standard <code class="docutils literal notranslate"><span class="pre">--root</span></code> or <code class="docutils literal notranslate"><span class="pre">--record</span></code> options.
+See the <a class="reference internal" href="#install-command">install command</a> documentation below for more details.  The
+<code class="docutils literal notranslate"><span class="pre">bdist_deb</span></code> command is an example of a command that currently requires
+this kind of patching to work with setuptools.</p>
+<p>Please note that building system packages may require you to install
+some system software, for example <code class="docutils literal notranslate"><span class="pre">bdist_rpm</span></code> requires the <code class="docutils literal notranslate"><span class="pre">rpmbuild</span></code>
+command to be installed.</p>
+<p class="last">If you or your users have a problem building a usable system package for
+your project, please report the problem via the mailing list so that
+either the &quot;bdist&quot; tool in question or setuptools can be modified to
+resolve the issue.</p>
+</dd>
+</dl>
+<p>Your users might not have <code class="docutils literal notranslate"><span class="pre">setuptools</span></code> installed on their machines, or even
+if they do, it might not be the right version.  Fixing this is easy; just
+download <a class="reference external" href="https://bootstrap.pypa.io/ez_setup.py">ez_setup.py</a>, and put it in the same directory as your <code class="docutils literal notranslate"><span class="pre">setup.py</span></code>
+script.  (Be sure to add it to your revision control system, too.)  Then add
+these two lines to the very top of your setup script, before the script imports
+anything from setuptools:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">ez_setup</span>
+<span class="n">ez_setup</span><span class="o">.</span><span class="n">use_setuptools</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>That's it.  The <code class="docutils literal notranslate"><span class="pre">ez_setup</span></code> module will automatically download a matching
+version of <code class="docutils literal notranslate"><span class="pre">setuptools</span></code> from PyPI, if it isn't present on the target system.
+Whenever you install an updated version of setuptools, you should also update
+your projects' <code class="docutils literal notranslate"><span class="pre">ez_setup.py</span></code> files, so that a matching version gets installed
+on the target machine(s).</p>
+<p>(By the way, if you need to distribute a specific version of <code class="docutils literal notranslate"><span class="pre">setuptools</span></code>,
+you can specify the exact version and base download URL as parameters to the
+<code class="docutils literal notranslate"><span class="pre">use_setuptools()</span></code> function.  See the function's docstring for details.)</p>
+</div>
+</div>
+<div class="section" id="install-run-easy-install-or-old-style-installation">
+<span id="install-command"></span><h1><code class="docutils literal notranslate"><span class="pre">install</span></code> - Run <code class="docutils literal notranslate"><span class="pre">easy_install</span></code> or old-style installation<a class="headerlink" href="#install-run-easy-install-or-old-style-installation" title="제목 주소">¶</a></h1>
+<p>The setuptools <code class="docutils literal notranslate"><span class="pre">install</span></code> command is basically a shortcut to run the
+<code class="docutils literal notranslate"><span class="pre">easy_install</span></code> command on the current project.  However, for convenience
+in creating &quot;system packages&quot; of setuptools-based projects, you can also
+use this option:</p>
+<dl class="docutils">
+<dt><code class="docutils literal notranslate"><span class="pre">--single-version-externally-managed</span></code></dt>
+<dd>This boolean option tells the <code class="docutils literal notranslate"><span class="pre">install</span></code> command to perform an &quot;old style&quot;
+installation, with the addition of an <code class="docutils literal notranslate"><span class="pre">.egg-info</span></code> directory so that the
+installed project will still have its metadata available and operate
+normally.  If you use this option, you <em>must</em> also specify the <code class="docutils literal notranslate"><span class="pre">--root</span></code>
+or <code class="docutils literal notranslate"><span class="pre">--record</span></code> options (or both), because otherwise you will have no way
+to identify and remove the installed files.</dd>
+</dl>
+<p>This option is automatically in effect when <code class="docutils literal notranslate"><span class="pre">install</span></code> is invoked by another
+distutils command, so that commands like <code class="docutils literal notranslate"><span class="pre">bdist_wininst</span></code> and <code class="docutils literal notranslate"><span class="pre">bdist_rpm</span></code>
+will create system packages of eggs.  It is also automatically in effect if
+you specify the <code class="docutils literal notranslate"><span class="pre">--root</span></code> option.</p>
+</div>
+<div class="section" id="install-egg-info-install-an-egg-info-directory-in-site-packages">
+<h1><code class="docutils literal notranslate"><span class="pre">install_egg_info</span></code> - Install an <code class="docutils literal notranslate"><span class="pre">.egg-info</span></code> directory in <code class="docutils literal notranslate"><span class="pre">site-packages</span></code><a class="headerlink" href="#install-egg-info-install-an-egg-info-directory-in-site-packages" title="제목 주소">¶</a></h1>
+<p>Setuptools runs this command as part of <code class="docutils literal notranslate"><span class="pre">install</span></code> operations that use the
+<code class="docutils literal notranslate"><span class="pre">--single-version-externally-managed</span></code> options.  You should not invoke it
+directly; it is documented here for completeness and so that distutils
+extensions such as system package builders can make use of it.  This command
+has only one option:</p>
+<dl class="docutils">
+<dt><code class="docutils literal notranslate"><span class="pre">--install-dir=DIR,</span> <span class="pre">-d</span> <span class="pre">DIR</span></code></dt>
+<dd>The parent directory where the <code class="docutils literal notranslate"><span class="pre">.egg-info</span></code> directory will be placed.
+Defaults to the same as the <code class="docutils literal notranslate"><span class="pre">--install-dir</span></code> option specified for the
+<code class="docutils literal notranslate"><span class="pre">install_lib</span></code> command, which is usually the system <code class="docutils literal notranslate"><span class="pre">site-packages</span></code>
+directory.</dd>
+</dl>
+<p>This command assumes that the <code class="docutils literal notranslate"><span class="pre">egg_info</span></code> command has been given valid options
+via the command line or <code class="docutils literal notranslate"><span class="pre">setup.cfg</span></code>, as it will invoke the <code class="docutils literal notranslate"><span class="pre">egg_info</span></code>
+command and use its options to locate the project's source <code class="docutils literal notranslate"><span class="pre">.egg-info</span></code>
+directory.</p>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#"><code class="docutils literal notranslate"><span class="pre">ez_setup</span></code> distribution guide</a><ul>
+<li><a class="reference internal" href="#using-setuptools-without-bundling-it">Using <code class="docutils literal notranslate"><span class="pre">setuptools</span></code>...  Without bundling it!</a></li>
+<li><a class="reference internal" href="#what-your-users-should-know">What Your Users Should Know</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#install-run-easy-install-or-old-style-installation"><code class="docutils literal notranslate"><span class="pre">install</span></code> - Run <code class="docutils literal notranslate"><span class="pre">easy_install</span></code> or old-style installation</a></li>
+<li><a class="reference internal" href="#install-egg-info-install-an-egg-info-directory-in-site-packages"><code class="docutils literal notranslate"><span class="pre">install_egg_info</span></code> - Install an <code class="docutils literal notranslate"><span class="pre">.egg-info</span></code> directory in <code class="docutils literal notranslate"><span class="pre">site-packages</span></code></a></li>
+</ul>
+
+  <div role="note" aria-label="source link">
+    <h3>현재 문서</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/ez_setup.txt"
+            rel="nofollow">소스 코드를 보려면</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>빠른 검색</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="바로 가기" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>탐색</h3>
+      <ul>
+        <li class="nav-item nav-item-0"><a href="index.html">setuptools 40.6.3 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright Python Packaging Authority.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.4.
+    </div>
+  </body>
+</html>
